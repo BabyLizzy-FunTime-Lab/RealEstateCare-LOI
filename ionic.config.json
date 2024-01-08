@@ -1,0 +1,7 @@
+{
+  "name": "RealEstateCare-LOI",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
