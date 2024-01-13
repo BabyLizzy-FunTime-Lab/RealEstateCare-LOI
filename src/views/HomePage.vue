@@ -1,56 +1,47 @@
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <base-layout>
+      <div class="tile-container">
+        <TileButton
+            router-direction="forward"
+            name="Scheduled" path="/scheduled"
+            icon="/icons/tile-buttons/scheduled-icon.png"/>
+        <TileButton
+            router-direction="forward"
+            name="Completed" path="/completed"
+            icon="/icons/tile-buttons/completed-icon.png"/>
+        <TileButton
+            router-direction="forward"
+            name="Knowledge base" path="/knowledge-base"
+            icon="/icons/tile-buttons/knowledge-base-icon.png"/>
+        <TileButton
+            router-direction="forward"
+            name="Settings" path="/settings"
+            icon="/icons/tile-buttons/settings-icon.png"/>
       </div>
-    </ion-content>
-  </ion-page>
+    </base-layout>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script>
+import {IonNavLink} from "@ionic/vue";
+import TileButton from "@/components/home/TileButton.vue";
+export default {
+  name: "HomePage",
+  components: {
+    TileButton,
+    IonNavLink
+  },
+}
 </script>
 
-<style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+<style scoped lang="scss">
+.tile-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: .2em;
+  padding-bottom: .5em;
+  padding-left: .2em;
+  padding-right: .2em;
+  height: 100%;
 }
 </style>
