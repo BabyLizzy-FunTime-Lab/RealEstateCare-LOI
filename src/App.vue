@@ -4,6 +4,6 @@
   </ion-app>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 </script>
