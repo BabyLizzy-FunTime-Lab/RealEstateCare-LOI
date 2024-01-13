@@ -33,7 +33,7 @@ npm install axios
 ## CSS Pre-processor
 Uses sass for better CSS. (Installed with "npm install")
 ```sh
-npm add -D sass
+npm install -D sass
 ```
 
 ## Dummy data

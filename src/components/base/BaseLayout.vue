@@ -1,7 +1,6 @@
 <script>
 import {IonPage, IonButtons, IonImg,
-  IonLabel, IonButton, IonIcon,
-  IonContent, IonHeader, IonTitle,
+  IonButton, IonContent, IonHeader,
   IonToolbar, IonFooter, IonProgressBar, IonAvatar} from "@ionic/vue";
 import { build, search, alertCircle } from 'ionicons/icons';
 import BottomToolbarButton from "@/components/toolbar/BottomToolbarButton.vue";
@@ -11,8 +10,8 @@ import LoginForm from "@/components/login/LoginForm.vue";
 export default {
   name: "BaseLayout",
   components: {
-    BottomToolbarButton, IonPage, IonButtons, IonImg, IonLabel,
-    IonButton, IonIcon, IonContent, IonTitle, IonHeader, IonToolbar,
+    BottomToolbarButton, IonPage, IonButtons, IonImg,
+    IonButton, IonContent, IonHeader, IonToolbar,
     IonFooter, LoginForm, IonProgressBar, IonAvatar},
   setup() {
     return { alertCircle, build, search };
