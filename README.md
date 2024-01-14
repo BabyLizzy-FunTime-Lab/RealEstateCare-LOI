@@ -1,10 +1,11 @@
+![Logo](public/logos/real-estate-care-logo.png)
 # Project Title: Real Estate Care
 
 ### Description
-This project is build with Ionic/vue.
+This project is build with [Ionic/vue](https://ionicframework.com/docs/vue/overview).
 
 ## State Management
-State Management is done with Pinia.
+State Management is done with [Pinia](https://pinia.vuejs.org/).
 
 ## Typescript disabled
 This project was build with plain JS.
@@ -25,7 +26,7 @@ ionic serve
 ```
 
 ## HTTP Client
-Uses axios for api calls. (installed with "npm install")
+Uses [axios](https://axios-http.com/docs/intro) for api calls. (installed with "npm install")
 ```sh
 npm install axios
 ```
@@ -37,8 +38,8 @@ npm install -D sass
 ```
 
 ## Dummy data
-- Data db: Uses my-json-server for dummy data.<br/>https://my-json-server.typicode.com/
-- Media db: Images are stored in cloudinary.
+- Data db: Uses [my-json-server](https://my-json-server.typicode.com/) for dummy data.
+- Media db: Images and PDF's are stored in [Cloudinary](https://cloudinary.com/).
 
 
 
