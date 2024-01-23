@@ -22,13 +22,11 @@
 </template>
 
 <script>
-import {IonNavLink} from "@ionic/vue";
 import TileButton from "@/components/home/TileButton.vue";
 export default {
   name: "HomePage",
   components: {
     TileButton,
-    IonNavLink
   },
 }
 </script>

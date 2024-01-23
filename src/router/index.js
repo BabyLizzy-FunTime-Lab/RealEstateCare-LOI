@@ -10,6 +10,31 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: HomePage
+  },
+  {
+    path: '/scheduled',
+    name: 'Scheduled',
+    component: () => import('../views/homePageTileViews/ScheduledView.vue')
+  },
+  {
+    path: '/completed',
+    name: 'Completed',
+    component: () => import('../views/homePageTileViews/CompletedView.vue')
+  },
+  {
+    path: '/knowledge-base',
+    name: 'Knowledge-Base',
+    component: () => import('../views/homePageTileViews/KnowledgeBaseView.vue')
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('../views/homePageTileViews/SettingsView.vue')
+  },
+  {
+    path: '/user-info',
+    name: 'User-Info',
+    component: () => import('../views/topToolbarViews/UserInfo.vue')
   }
 ]
 

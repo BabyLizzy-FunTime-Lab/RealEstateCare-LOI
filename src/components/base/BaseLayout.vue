@@ -48,7 +48,7 @@ export default {
                     :src="loginStore.getUserAvatar" />
               </ion-avatar>
             </ion-button>
-            <ion-button router-link="/search">
+            <ion-button router-link="/">
               <ion-img
                   class="toolbar__icon"
                   src="/icons/toolbar/toolbar-bell-icon.png"
@@ -72,9 +72,9 @@ export default {
     <ion-footer>
       <ion-toolbar class="toolbar--bottom">
         <ion-buttons>
-          <bottom-toolbar-button label="Active Task" :icon="build" path="/active-task"/>
-          <bottom-toolbar-button label="Search" :icon="search" path="/search"/>
-          <bottom-toolbar-button label="Information" :icon="alertCircle" path="/information"/>
+          <bottom-toolbar-button label="Active Task" :icon="build" path="/scheduled"/>
+          <bottom-toolbar-button label="Search" :icon="search" path="/completed"/>
+          <bottom-toolbar-button label="Information" :icon="alertCircle" path="/knowledge-base"/>
         </ion-buttons>
       </ion-toolbar>
     </ion-footer>
