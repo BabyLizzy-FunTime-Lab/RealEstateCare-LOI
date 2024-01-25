@@ -1,10 +1,10 @@
 <template>
 <base-layout>
   <base-list-layout list-header-name="User Information">
-    <ion-avatar slot="">
+    <ion-avatar>
       <ion-img alt="Icon-Image of the user." :src="loginStore.getUserAvatar"/>
     </ion-avatar>
-    <ion-item v-for="(value, key) in loginStore.getUserInfo">
+    <ion-item v-for="(value, key) in loginStore.getUserInfo" :key="value">
       <ion-label>{{ key.toUpperCase() }}:</ion-label>
       {{ value }}
     </ion-item>

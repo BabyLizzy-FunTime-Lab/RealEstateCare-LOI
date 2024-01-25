@@ -1,19 +1,19 @@
 <template>
     <base-layout>
       <div class="tile-container">
-        <TileButton
+        <BaseTileButton
             router-direction="forward"
             name="Scheduled" path="/scheduled"
             icon="/icons/tile-buttons/scheduled-icon.png"/>
-        <TileButton
+        <BaseTileButton
             router-direction="forward"
             name="Completed" path="/completed"
             icon="/icons/tile-buttons/completed-icon.png"/>
-        <TileButton
+        <BaseTileButton
             router-direction="forward"
             name="Knowledge base" path="/knowledge-base"
             icon="/icons/tile-buttons/knowledge-base-icon.png"/>
-        <TileButton
+        <BaseTileButton
             router-direction="forward"
             name="Settings" path="/settings"
             icon="/icons/tile-buttons/settings-icon.png"/>
@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import TileButton from "@/components/home/TileButton.vue";
+import BaseTileButton from "@/components/base/BaseTileButton.vue";
 export default {
   name: "HomePage",
   components: {
-    TileButton,
+    BaseTileButton,
   },
 }
 </script>

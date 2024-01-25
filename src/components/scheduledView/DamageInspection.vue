@@ -1,8 +1,7 @@
 <script>
 import {
-  IonItem, IonList, IonLabel, IonInput,
-  IonText, IonTextarea, IonDatetime,
-  IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
+  IonItem, IonLabel, IonInput, IonTextarea, IonDatetime, IonDatetimeButton, IonModal,
+  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
@@ -10,10 +9,9 @@ import {useInspectionStore} from "@/stores/InspectionStore.js";
 export default {
   name: "DamageInspection",
   components: {
-    IonButton, BaseAccordionLayout, IonLabel,
-    IonList, IonInput, IonItem, IonText,
-    IonTextarea, IonDatetime, IonDatetimeButton,
-    IonModal, IonRadioGroup, IonRadio, IonSelect, IonSelectOption},
+    IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
+    IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect, IonSelectOption
+  },
   data() {
     return {
       inspectionStore: useInspectionStore(),
@@ -30,6 +28,57 @@ export default {
         images: []
       }
     }
+  },
+  props: {
+    id: {
+      type: String,
+      default: "",
+      required: false
+    },
+    inspectorId: {
+      type: String,
+      default: "",
+      required: false
+    },
+    location: {
+      type: String,
+      default: "",
+      required: false
+    },
+    new_damage: {
+      type: String,
+      default: "",
+      required: false
+    },
+    complete_date: {
+      type: String,
+      default: new Date().toISOString(),
+      required: false
+    },
+    selected_damage_category: {
+      type: String,
+      default: "",
+      required: false
+    },
+    damage_category: {
+      type: String,
+      default: "",
+      required: false
+    },
+    emergency: {
+      type: String,
+      default: "",
+      required: false
+    },
+    description: {
+      type: String,
+      default: "",
+      required: false
+    },
+    images: {
+      default: [],
+      required: false
+    },
   },
   methods: {
     saveData() {
@@ -56,7 +105,7 @@ export default {
                v-model="inspectionInputData.location"
                placeholder="Input address"
                label-placement="floating"
-               type="text"/>
+               type="text">{{this.location}}</ion-input>
   </ion-item>
   <ion-item slot="content">
     <ion-label>New Damage?</ion-label>

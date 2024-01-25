@@ -1,3 +1,5 @@
+<!--This is the base layout for the entire app.
+It gets imported in the main.js file together with the basic theme/variables css-->
 <script>
 import {IonPage, IonButtons, IonImg,
   IonButton, IonContent, IonHeader,
