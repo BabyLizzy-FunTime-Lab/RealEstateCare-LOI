@@ -4,30 +4,12 @@ import {
   IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
-import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "DamageInspection",
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect, IonSelectOption
-  },
-  data() {
-    return {
-      inspectionStore: useInspectionStore(),
-      inspectionInputData: {
-        id: "",
-        inspectorId: "",
-        location: "",
-        new_damage: "",
-        complete_date: new Date().toISOString(),
-        selected_damage_category: "",
-        damage_category: "",
-        emergency: "",
-        description: "",
-        images: []
-      }
-    }
   },
   props: {
     id: {
@@ -105,7 +87,7 @@ export default {
                v-model="inspectionInputData.location"
                placeholder="Input address"
                label-placement="floating"
-               type="text">{{this.location}}</ion-input>
+               type="text" />
   </ion-item>
   <ion-item slot="content">
     <ion-label>New Damage?</ion-label>
