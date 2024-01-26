@@ -4,12 +4,15 @@ import {
   IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+
 
 export default {
   name: "DamageInspection",
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
-    IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect, IonSelectOption
+    IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
+    IonSelectOption, BaseButton
   },
   props: {
     id: {
@@ -63,7 +66,6 @@ export default {
     },
     saveData: {
       type: Function,
-      required: false
     }
   },
 }
@@ -133,6 +135,7 @@ export default {
     <ion-label>Photos</ion-label>
     <ion-button color="primary">Take Photo</ion-button>
   </ion-item>
+  <BaseButton slot="content" name="Save" @click="saveData"/>
 </base-accordion-layout>
 </template>
 

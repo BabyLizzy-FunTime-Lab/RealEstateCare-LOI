@@ -1,17 +1,12 @@
 <script>
 import {IonAccordion, IonItem, IonLabel} from "@ionic/vue";
-import BaseButton from "@/components/base/BaseButton.vue";
 
 export default {
   name: "BaseAccordionLayout",
-  components: {IonItem, IonLabel, IonAccordion, BaseButton},
+  components: {IonItem, IonLabel, IonAccordion,},
   props: {
     headerName: String,
     accordionValue: String,
-    onSaveClick: {
-      type: Function,
-      required: false
-    }
   }
 }
 </script>
@@ -22,7 +17,6 @@ export default {
       <ion-label>{{ headerName }}</ion-label>
     </ion-item>
     <slot></slot>
-    <BaseButton slot="content" name="Save" @click="onSaveClick"/>
   </ion-accordion>
 </template>
 

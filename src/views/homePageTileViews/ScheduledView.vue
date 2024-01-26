@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       inspectionStore: useInspectionStore(),
-      inspectionInputData: {
+      damageInspectionData: {
         id: "",
         inspectorId: "",
         location: "",
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     saveData() {
-      let data = this.inspectionInputData;
+      let data = this.damageInspectionData;
       delete data.selected_damage_category;
       // new data gets added a new id.
       delete data.id;
@@ -40,7 +40,7 @@ export default {
       console.log("Saving Damage Inspection data...");
     },
     setDamageType() {
-      this.inspectionInputData.damage_category = this.inspectionInputData.selected_damage_category;
+      this.damageInspectionData.damage_category = this.damageInspectionData.selected_damage_category;
     },
   }
 }
@@ -50,7 +50,7 @@ export default {
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
-        <DamageInspection/>
+        <DamageInspection id="{{this.damageInspectionData.id}}" />
         <BacklogMaintenance/>
         <TechnicalInstallationInspection/>
         <Modifications/>
