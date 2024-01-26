@@ -27,6 +27,21 @@ export default {
         images: []
       }
     }
+  },
+  methods: {
+    saveData() {
+      let data = this.inspectionInputData;
+      delete data.selected_damage_category;
+      // new data gets added a new id.
+      delete data.id;
+      console.log(data);
+      // the inspectorId is added by the saveDamageInspections function.
+      this.inspectionStore.saveDamageInspections();
+      console.log("Saving Damage Inspection data...");
+    },
+    setDamageType() {
+      this.inspectionInputData.damage_category = this.inspectionInputData.selected_damage_category;
+    },
   }
 }
 </script>
