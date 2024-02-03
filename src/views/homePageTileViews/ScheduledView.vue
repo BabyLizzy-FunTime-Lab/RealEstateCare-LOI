@@ -36,7 +36,7 @@ export default {
       delete data.id;
       console.log(data);
       // the inspectorId is added by the saveDamageInspections function.
-      this.inspectionStore.saveDamageInspections();
+      // this.inspectionStore.saveDamageInspections();
       console.log("Saving Damage Inspection data...");
     },
     setDamageType() {
@@ -50,7 +50,20 @@ export default {
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
-        <DamageInspection id="{{this.damageInspectionData.id}}" />
+        <DamageInspection
+            id="{{this.damageInspectionData.id}}"
+            inspector-id="{{this.damageInspectionData.inspectorId}}"
+            location="{{this.damageInspectionData.location}}"
+            new_damage="{{this.damageInspectionData.new_damage}}"
+            complete_date="{{this.damageInspectionData.complete_date}}"
+            selected_damage_category="{{this.damageInspectionData.selected_damage_category}}"
+            damage_category="{{this.damageInspectionData.damage_category}}"
+            emergency="{{this.damageInspectionData.emergency}}"
+            description="{{this.damageInspectionData.description}}"
+            images="{{this.damageInspectionData.images}}"
+            :save-data="saveData"
+            :set-damage-type="setDamageType"
+        />
         <BacklogMaintenance/>
         <TechnicalInstallationInspection/>
         <Modifications/>

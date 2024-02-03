@@ -17,48 +17,30 @@ export default {
   props: {
     id: {
       type: String,
-      default: "",
-      required: false
     },
     inspectorId: {
       type: String,
-      default: "",
-      required: false
     },
     location: {
       type: String,
-      default: "",
-      required: false
     },
     new_damage: {
       type: String,
-      default: "",
-      required: false
     },
     complete_date: {
       type: String,
-      default: new Date().toISOString(),
-      required: false
     },
     selected_damage_category: {
       type: String,
-      default: "",
-      required: false
     },
     damage_category: {
       type: String,
-      default: "",
-      required: false
     },
     emergency: {
       type: String,
-      default: "",
-      required: false
     },
     description: {
       type: String,
-      default: "",
-      required: false
     },
     images: {
       default: [],
@@ -66,13 +48,15 @@ export default {
     },
     saveData: {
       type: Function,
+    },
+    setDamageType: {
+      type: Function
     }
   },
 }
 </script>
 
 <template>
-<!--<base-accordion-layout header-name="Damage Inspection" accordion-value="first" :on-save-click="saveData">-->
   <base-accordion-layout header-name="Damage Inspection" accordion-value="first">
   <ion-item slot="content">
     <ion-input label="Location"
@@ -100,10 +84,8 @@ export default {
     </ion-modal>
   </ion-item>
   <ion-item slot="content">
-<!--    <ion-select v-bind="selected_damage_category"-->
-<!--                label="Damage Type" placeholder="Select" :ioChange="setDamageType">-->
     <ion-select v-bind="selected_damage_category"
-                label="Damage Type" placeholder="Select">
+                label="Damage Type" placeholder="Select" :ioChange="setDamageType">
       <ion-select-option value="deliberately">Deliberately</ion-select-option>
       <ion-select-option value="wear">Wear</ion-select-option>
       <ion-select-option value="violence">Violence</ion-select-option>
