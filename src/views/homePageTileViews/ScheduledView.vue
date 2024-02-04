@@ -53,8 +53,8 @@ export default {
         <DamageInspection
             id="{{this.damageInspectionData.id}}"
             inspector-id="{{this.damageInspectionData.inspectorId}}"
-            location="{{this.damageInspectionData.location}}"
-            new_damage="{{this.damageInspectionData.new_damage}}"
+            :location="this.damageInspectionData.location"
+            :new_damage="this.damageInspectionData.new_damage"
             complete_date="{{this.damageInspectionData.complete_date}}"
             selected_damage_category="{{this.damageInspectionData.selected_damage_category}}"
             damage_category="{{this.damageInspectionData.damage_category}}"
