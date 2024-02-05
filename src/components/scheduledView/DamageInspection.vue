@@ -14,13 +14,23 @@ export default {
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
     IonSelectOption, BaseButton
   },
+  data() {
+    return {
+      inspectionInputData: {
+        id: "",
+        inspectorId: "",
+        location: "derp",
+        new_damage: "",
+        complete_date: new Date().toISOString(),
+        selected_damage_category: "",
+        damage_category: "",
+        emergency: "",
+        description: "",
+        images: []
+      }
+    }
+  },
   props: {
-    id: {
-      type: String,
-    },
-    inspectorId: {
-      type: String,
-    },
     location: {
       type: String,
     },
@@ -53,6 +63,13 @@ export default {
       type: Function
     }
   },
+  methods: {
+    emitInputChange() {
+      this.$emit('location-change', this.inspectionInputData.location);
+      console.log(this.inspectionInputData.location);
+    }
+  },
+  emits: ['location-change']
 }
 </script>
 
@@ -61,6 +78,8 @@ export default {
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"
+               v-model="inspectionInputData.location"
+               @change="emitInputChange"
                placeholder="Input address"
                label-placement="floating"
                type="text" />

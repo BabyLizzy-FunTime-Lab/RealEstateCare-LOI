@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       inspectionStore: useInspectionStore(),
-      damageInspectionData: {
+      damageInspection: {
         id: "",
         inspectorId: "",
         location: "",
@@ -25,8 +25,12 @@ export default {
         emergency: "",
         description: "",
         images: []
-      }
+      },
+      damageInspectionData: Object
     }
+  },
+  mounted() {
+    this.damageInspectionData = this.inspectionStore.getDamageInspectionStagingData
   },
   methods: {
     saveData() {
@@ -42,6 +46,11 @@ export default {
     setDamageType() {
       this.damageInspectionData.damage_category = this.damageInspectionData.selected_damage_category;
     },
+    setLocation(value) {
+      this.damageInspectionData.location = value;
+      console.log(value);
+      console.log(this.damageInspectionData.location);
+    }
   }
 }
 </script>
@@ -51,16 +60,15 @@ export default {
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
         <DamageInspection
-            id="{{this.damageInspectionData.id}}"
-            inspector-id="{{this.damageInspectionData.inspectorId}}"
-            :location="this.damageInspectionData.location"
-            :new_damage="this.damageInspectionData.new_damage"
-            complete_date="{{this.damageInspectionData.complete_date}}"
-            selected_damage_category="{{this.damageInspectionData.selected_damage_category}}"
-            damage_category="{{this.damageInspectionData.damage_category}}"
-            emergency="{{this.damageInspectionData.emergency}}"
-            description="{{this.damageInspectionData.description}}"
-            images="{{this.damageInspectionData.images}}"
+            :location="this.damageInspectionData.locationInput"
+            @location-change="setLocation(event)"
+            :new_damage="this.damageInspectionData.newDamageInput"
+            :complete_date="this.damageInspectionData.dateInput"
+            :selected_damage_category="this.damageInspectionData.selectedDamageTypeOption"
+            :damage_category="this.damageInspectionData.damageTypeInput"
+            :emergency="this.damageInspectionData.emergencyInput"
+            :description="this.damageInspectionData.commentsInput"
+            :images="this.damageInspectionData.images"
             :save-data="saveData"
             :set-damage-type="setDamageType"
         />

@@ -16,13 +16,14 @@ export const useInspectionStore = defineStore('inspections', {
             inventory_of_changes_result: [],
             damageInspection: {
                 inspectorId: "",
-                locationInput: "",
+                locationInput: "herp",
                 newDamageInput: "",
                 dateInput: new Date().toISOString(),
                 selectedDamageTypeOption: "",
                 damageTypeInput: "",
                 emergencyInput: "",
-                commentsInput: ""
+                commentsInput: "",
+                images: []
             },
             backlogMaintenance: {
                 inspectorId: "",
@@ -121,6 +122,8 @@ export const useInspectionStore = defineStore('inspections', {
         }
     },
     getters: {
-
+        getDamageInspectionStagingData(state) {
+            return state.damageInspection;
+        }
     }
 })
