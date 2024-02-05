@@ -19,7 +19,7 @@ export default {
       inspectionInputData: {
         id: "",
         inspectorId: "",
-        location: "derp",
+        location: "",
         new_damage: "",
         complete_date: new Date().toISOString(),
         selected_damage_category: "",
@@ -64,9 +64,8 @@ export default {
     }
   },
   methods: {
-    emitInputChange() {
-      this.$emit('location-change', this.inspectionInputData.location);
-      console.log(this.inspectionInputData.location);
+    emitInputChange($event, inputName) {
+      this.$emit(inputName, $event);
     }
   },
   emits: ['location-change']
@@ -78,8 +77,7 @@ export default {
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"
-               v-model="inspectionInputData.location"
-               @change="emitInputChange"
+               @input="emitInputChange($event, 'location-change')"
                placeholder="Input address"
                label-placement="floating"
                type="text" />

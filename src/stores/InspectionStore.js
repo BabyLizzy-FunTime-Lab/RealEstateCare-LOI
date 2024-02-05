@@ -16,7 +16,7 @@ export const useInspectionStore = defineStore('inspections', {
             inventory_of_changes_result: [],
             damageInspection: {
                 inspectorId: "",
-                locationInput: "herp",
+                locationInput: "",
                 newDamageInput: "",
                 dateInput: new Date().toISOString(),
                 selectedDamageTypeOption: "",

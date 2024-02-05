@@ -46,10 +46,9 @@ export default {
     setDamageType() {
       this.damageInspectionData.damage_category = this.damageInspectionData.selected_damage_category;
     },
-    setLocation(value) {
-      this.damageInspectionData.location = value;
-      console.log(value);
-      console.log(this.damageInspectionData.location);
+    setLocation($event) {
+      this.damageInspectionData.locationInput = $event.target.value;
+      console.log("from child: " + $event.target.value);
     }
   }
 }
@@ -61,7 +60,7 @@ export default {
       <ion-accordion-group :multiple="true">
         <DamageInspection
             :location="this.damageInspectionData.locationInput"
-            @location-change="setLocation(event)"
+            @location-change="setLocation($event)"
             :new_damage="this.damageInspectionData.newDamageInput"
             :complete_date="this.damageInspectionData.dateInput"
             :selected_damage_category="this.damageInspectionData.selectedDamageTypeOption"
