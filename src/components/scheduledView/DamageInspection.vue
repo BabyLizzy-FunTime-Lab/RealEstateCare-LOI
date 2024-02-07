@@ -64,11 +64,11 @@ export default {
     }
   },
   methods: {
-    emitInputChange($event, inputName) {
-      this.$emit(inputName, $event);
+    emitInputChange($event, inputUpdate) {
+      this.$emit(inputUpdate, $event);
     }
   },
-  emits: ['location-change']
+  emits: ['update:location']
 }
 </script>
 
@@ -77,7 +77,7 @@ export default {
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"
-               @input="emitInputChange($event, 'location-change')"
+               @input="emitInputChange($event, 'update:location')"
                placeholder="Input address"
                label-placement="floating"
                type="text" />

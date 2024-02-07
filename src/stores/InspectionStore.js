@@ -14,7 +14,7 @@ export const useInspectionStore = defineStore('inspections', {
             backlog_maintenance_result: [],
             technical_installation_inspections_result: [],
             inventory_of_changes_result: [],
-            damageInspection: {
+            damageInspectionStagingData: {
                 inspectorId: "",
                 locationInput: "",
                 newDamageInput: "",
@@ -98,32 +98,23 @@ export const useInspectionStore = defineStore('inspections', {
                     this.loadingStatus = false
                 })
         },
-        saveDamageInspections(state) {
-            console.log(loginStore.getUserInfo.id);
-        },
-        setDamageInspections() {
-
-        },
-        setBacklogMaintenance() {
-
-        },
-        setModifications() {
-
-        },
-        setTechnicalInstallations() {
-
+        updateDamageInspectionStagingData(data, inputName) {
+            switch (inputName) {
+                case 'location':
+                    this.damageInspectionStagingData.locationInput = data;
+                    console.log("updating staging state");
+                    break;
+                default:
+                    console.log("State variable not found");
+            }
         },
         setDamageType(state) {
             state.damageTypeInput = state.selectedDamageTypeOption;
         },
-        setInputValue() {
-            // Needs the value, the inspection type and the name of the state variable
-            // as arguments.
-        }
     },
     getters: {
         getDamageInspectionStagingData(state) {
-            return state.damageInspection;
+            return state.damageInspectionStagingData;
         }
     }
 })

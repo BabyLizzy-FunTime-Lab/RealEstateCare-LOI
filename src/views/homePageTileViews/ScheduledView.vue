@@ -14,18 +14,6 @@ export default {
   data() {
     return {
       inspectionStore: useInspectionStore(),
-      damageInspection: {
-        id: "",
-        inspectorId: "",
-        location: "",
-        new_damage: "",
-        complete_date: new Date().toISOString(),
-        selected_damage_category: "",
-        damage_category: "",
-        emergency: "",
-        description: "",
-        images: []
-      },
       damageInspectionData: Object
     }
   },
@@ -46,9 +34,17 @@ export default {
     setDamageType() {
       this.damageInspectionData.damage_category = this.damageInspectionData.selected_damage_category;
     },
-    setLocation($event) {
-      this.damageInspectionData.locationInput = $event.target.value;
-      console.log("from child: " + $event.target.value);
+    updateDamageInspectionStagingData($event, inputName) {
+      // we need a switch. depending on input name we choose a store action.
+      switch (inputName) {
+        case 'location':
+          this.inspectionStore.updateDamageInspectionStagingData($event.target.value, inputName);
+          console.log("updating location");
+          break;
+        default:
+          console.log("input not valid");
+      }
+      console.log(this.damageInspectionData);
     }
   }
 }
@@ -60,7 +56,7 @@ export default {
       <ion-accordion-group :multiple="true">
         <DamageInspection
             :location="this.damageInspectionData.locationInput"
-            @location-change="setLocation($event)"
+            @update:location="updateDamageInspectionStagingData($event, 'location')"
             :new_damage="this.damageInspectionData.newDamageInput"
             :complete_date="this.damageInspectionData.dateInput"
             :selected_damage_category="this.damageInspectionData.selectedDamageTypeOption"
