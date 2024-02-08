@@ -102,7 +102,12 @@ export const useInspectionStore = defineStore('inspections', {
             switch (inputName) {
                 case 'location':
                     this.damageInspectionStagingData.locationInput = data;
-                    console.log("updating staging state");
+                    break;
+                case 'newDamage':
+                    this.damageInspectionStagingData.newDamageInput = data;
+                    break;
+                case 'completeDate':
+                    this.damageInspectionStagingData.dateInput = data;
                     break;
                 default:
                     console.log("State variable not found");

@@ -36,14 +36,9 @@ export default {
     },
     updateDamageInspectionStagingData($event, inputName) {
       // we need a switch. depending on input name we choose a store action.
-      switch (inputName) {
-        case 'location':
-          this.inspectionStore.updateDamageInspectionStagingData($event.target.value, inputName);
-          console.log("updating location");
-          break;
-        default:
-          console.log("input not valid");
-      }
+      let newData = $event.target.value;
+      this.inspectionStore.updateDamageInspectionStagingData(newData, inputName);
+      console.log("Requesting update of " + inputName + " in staging state.");
       console.log(this.damageInspectionData);
     }
   }
@@ -57,10 +52,12 @@ export default {
         <DamageInspection
             :location="this.damageInspectionData.locationInput"
             @update:location="updateDamageInspectionStagingData($event, 'location')"
-            :new_damage="this.damageInspectionData.newDamageInput"
-            :complete_date="this.damageInspectionData.dateInput"
-            :selected_damage_category="this.damageInspectionData.selectedDamageTypeOption"
-            :damage_category="this.damageInspectionData.damageTypeInput"
+            :new-damage="this.damageInspectionData.newDamageInput"
+            @update:new-damage="updateDamageInspectionStagingData($event, 'newDamage')"
+            :complete-date="this.damageInspectionData.dateInput"
+            @update:complete-date="updateDamageInspectionStagingData($event, 'completeDate')"
+            :selected-damage-category="this.damageInspectionData.selectedDamageTypeOption"
+            :damage-category="this.damageInspectionData.damageTypeInput"
             :emergency="this.damageInspectionData.emergencyInput"
             :description="this.damageInspectionData.commentsInput"
             :images="this.damageInspectionData.images"

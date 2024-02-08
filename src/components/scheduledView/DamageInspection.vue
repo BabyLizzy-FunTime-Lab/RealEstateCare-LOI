@@ -14,36 +14,20 @@ export default {
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
     IonSelectOption, BaseButton
   },
-  data() {
-    return {
-      inspectionInputData: {
-        id: "",
-        inspectorId: "",
-        location: "",
-        new_damage: "",
-        complete_date: new Date().toISOString(),
-        selected_damage_category: "",
-        damage_category: "",
-        emergency: "",
-        description: "",
-        images: []
-      }
-    }
-  },
   props: {
     location: {
       type: String,
     },
-    new_damage: {
+    newDamage: {
       type: String,
     },
-    complete_date: {
+    completeDate: {
       type: String,
     },
-    selected_damage_category: {
+    selectedDamageCategory: {
       type: String,
     },
-    damage_category: {
+    damageCategory: {
       type: String,
     },
     emergency: {
@@ -68,7 +52,7 @@ export default {
       this.$emit(inputUpdate, $event);
     }
   },
-  emits: ['update:location']
+  emits: ['update:location', 'update:newDamage', 'update:completeDate']
 }
 </script>
 
@@ -84,22 +68,24 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-label>New Damage?</ion-label>
-    <ion-radio-group :value="new_damage"
+    <ion-radio-group :value="newDamage"
+                     @ionChange="emitInputChange($event, 'update:newDamage')"
                      name="newDamage">
         <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
         <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
-<!--  <ion-item slot="content">-->
-<!--    <ion-label>Date</ion-label>-->
-<!--    <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>-->
-<!--    <ion-modal :keep-contents-mounted="true">-->
-<!--      <ion-datetime v-bind="complete_date"-->
-<!--                    displayFormat="MMM D, YYYY"-->
-<!--                    pickerFormat="MMM D YYYY"-->
-<!--                    presentation="date" id="date"></ion-datetime>-->
-<!--    </ion-modal>-->
-<!--  </ion-item>-->
+  <ion-item slot="content">
+    <ion-label>Date</ion-label>
+    <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
+    <ion-modal :keep-contents-mounted="true">
+      <ion-datetime :value="completeDate"
+                    @ionChange="emitInputChange($event, 'update:completeDate')"
+                    displayFormat="MMM D, YYYY"
+                    pickerFormat="MMM D YYYY"
+                    presentation="date" id="date"></ion-datetime>
+    </ion-modal>
+  </ion-item>
 <!--  <ion-item slot="content">-->
 <!--    <ion-select v-bind="selected_damage_category"-->
 <!--                label="Damage Type" placeholder="Select" :ioChange="setDamageType">-->
