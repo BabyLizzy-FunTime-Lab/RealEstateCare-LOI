@@ -52,8 +52,10 @@ export default {
       this.$emit(inputUpdate, $event);
     }
   },
-  emits: ['update:location', 'update:newDamage',
-    'update:completeDate', 'update:selectedDamageCategory', 'update:damageCategory'
+  emits: [
+      'update:location', 'update:newDamage', 'update:completeDate',
+      'update:selectedDamageCategory', 'update:damageCategory',
+      'update:emergency'
   ]
 }
 </script>
@@ -107,14 +109,15 @@ export default {
                label="Input damage type"
                label-placement="floating" placeholder="Here" type="text"></ion-input>
   </ion-item>
-<!--  <ion-item slot="content">-->
-<!--    <ion-label>Emergency Action needed?</ion-label>-->
-<!--    <ion-radio-group v-bind="emergency"-->
-<!--                     name="emergency">-->
-<!--      <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>-->
-<!--      <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>-->
-<!--    </ion-radio-group>-->
-<!--  </ion-item>-->
+  <ion-item slot="content">
+    <ion-label>Emergency Action needed?</ion-label>
+    <ion-radio-group :value="emergency"
+                     @ionChange="emitInputChange($event, 'update:emergency')"
+                     name="emergency">
+      <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
+      <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+    </ion-radio-group>
+  </ion-item>
 <!--  <ion-item slot="content">-->
 <!--    <ion-textarea label="Comments"-->
 <!--                  v-bind="description"-->
