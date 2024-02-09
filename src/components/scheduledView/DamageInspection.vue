@@ -52,7 +52,9 @@ export default {
       this.$emit(inputUpdate, $event);
     }
   },
-  emits: ['update:location', 'update:newDamage', 'update:completeDate']
+  emits: ['update:location', 'update:newDamage',
+    'update:completeDate', 'update:selectedDamageCategory', 'update:damageCategory'
+  ]
 }
 </script>
 
@@ -86,21 +88,25 @@ export default {
                     presentation="date" id="date"></ion-datetime>
     </ion-modal>
   </ion-item>
-<!--  <ion-item slot="content">-->
-<!--    <ion-select v-bind="selected_damage_category"-->
-<!--                label="Damage Type" placeholder="Select" :ioChange="setDamageType">-->
-<!--      <ion-select-option value="deliberately">Deliberately</ion-select-option>-->
-<!--      <ion-select-option value="wear">Wear</ion-select-option>-->
-<!--      <ion-select-option value="violence">Violence</ion-select-option>-->
-<!--      <ion-select-option value="normal use">Normal Use</ion-select-option>-->
-<!--      <ion-select-option value="calamity">Calamity</ion-select-option>-->
-<!--      <ion-select-option value="other">Other</ion-select-option>-->
-<!--    </ion-select>-->
-<!--  </ion-item>-->
-<!--  <ion-item slot="content" v-if="selected_damage_category === 'other'">-->
-<!--    <ion-input v-bind="damage_category" label="Input damage type"-->
-<!--               label-placement="floating" placeholder="Here" type="text"></ion-input>-->
-<!--  </ion-item>-->
+  <ion-item slot="content">
+    <ion-select :value="selectedDamageCategory"
+                label="Damage Type"
+                placeholder="Select"
+                @ionChange="emitInputChange($event, 'update:selectedDamageCategory')">
+      <ion-select-option value="deliberately">Deliberately</ion-select-option>
+      <ion-select-option value="wear">Wear</ion-select-option>
+      <ion-select-option value="violence">Violence</ion-select-option>
+      <ion-select-option value="normal use">Normal Use</ion-select-option>
+      <ion-select-option value="calamity">Calamity</ion-select-option>
+      <ion-select-option value="other">Other</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item slot="content" v-if="selectedDamageCategory === 'other'">
+    <ion-input :value="damageCategory"
+               @input="emitInputChange($event, 'update:damageCategory')"
+               label="Input damage type"
+               label-placement="floating" placeholder="Here" type="text"></ion-input>
+  </ion-item>
 <!--  <ion-item slot="content">-->
 <!--    <ion-label>Emergency Action needed?</ion-label>-->
 <!--    <ion-radio-group v-bind="emergency"-->

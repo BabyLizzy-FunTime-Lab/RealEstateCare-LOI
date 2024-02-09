@@ -57,6 +57,8 @@ export default {
             :complete-date="this.damageInspectionData.dateInput"
             @update:complete-date="updateDamageInspectionStagingData($event, 'completeDate')"
             :selected-damage-category="this.damageInspectionData.selectedDamageTypeOption"
+            @update:selected-damage-category="updateDamageInspectionStagingData($event, 'selectedDamageCategory')"
+
             :damage-category="this.damageInspectionData.damageTypeInput"
             :emergency="this.damageInspectionData.emergencyInput"
             :description="this.damageInspectionData.commentsInput"

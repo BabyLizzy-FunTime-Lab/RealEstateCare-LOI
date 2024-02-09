@@ -109,6 +109,9 @@ export const useInspectionStore = defineStore('inspections', {
                 case 'completeDate':
                     this.damageInspectionStagingData.dateInput = data;
                     break;
+                case 'selectedDamageCategory':
+                    this.damageInspectionStagingData.selectedDamageTypeOption = data;
+                    break;
                 default:
                     console.log("State variable not found");
             }
