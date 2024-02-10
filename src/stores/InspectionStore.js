@@ -111,13 +111,20 @@ export const useInspectionStore = defineStore('inspections', {
                     break;
                 case 'selectedDamageCategory':
                     this.getDamageInspectionStagingData.selectedDamageTypeOption = data;
-                    this.getDamageInspectionStagingData.damageTypeInput = data;
+                    if (data === 'other') {
+                        this.getDamageInspectionStagingData.damageTypeInput = '';
+                    } else {
+                        this.getDamageInspectionStagingData.damageTypeInput = data;
+                    }
                     break;
                 case 'damageCategory':
                     this.getDamageInspectionStagingData.damageTypeInput = data;
                     break;
                 case 'emergency':
                     this.getDamageInspectionStagingData.emergencyInput = data;
+                    break;
+                case 'description':
+                    this.getDamageInspectionStagingData.commentsInput = data;
                     break;
                 default:
                     console.log("State variable not found");

@@ -63,6 +63,7 @@ export default {
             :emergency="this.damageInspectionData.emergencyInput"
             @update:emergency="updateDamageInspectionStagingData($event, 'emergency')"
             :description="this.damageInspectionData.commentsInput"
+            @update:description="updateDamageInspectionStagingData($event, 'description')"
             :images="this.damageInspectionData.images"
             :save-data="saveData"
             :set-damage-type="setDamageType"

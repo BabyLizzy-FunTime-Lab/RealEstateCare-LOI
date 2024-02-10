@@ -55,7 +55,7 @@ export default {
   emits: [
       'update:location', 'update:newDamage', 'update:completeDate',
       'update:selectedDamageCategory', 'update:damageCategory',
-      'update:emergency'
+      'update:emergency', 'update:description'
   ]
 }
 </script>
@@ -118,17 +118,18 @@ export default {
       <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
-<!--  <ion-item slot="content">-->
-<!--    <ion-textarea label="Comments"-->
-<!--                  v-bind="description"-->
-<!--                  label-placement="floating"-->
-<!--                  :auto-grow="true"-->
-<!--                  placeholder="Enter your comments"></ion-textarea>-->
-<!--  </ion-item>-->
-<!--  <ion-item slot="content">-->
-<!--    <ion-label>Photos</ion-label>-->
-<!--    <ion-button color="primary">Take Photo</ion-button>-->
-<!--  </ion-item>-->
+  <ion-item slot="content">
+    <ion-textarea label="Comments"
+                  :value="description"
+                  @ionChange="emitInputChange($event, 'update:description')"
+                  label-placement="floating"
+                  :auto-grow="true"
+                  placeholder="Enter your comments"></ion-textarea>
+  </ion-item>
+  <ion-item slot="content">
+    <ion-label>Photos</ion-label>
+    <ion-button color="primary">Take Photo</ion-button>
+  </ion-item>
   <BaseButton slot="content" name="Save" @click="saveData"/>
 </base-accordion-layout>
 </template>
