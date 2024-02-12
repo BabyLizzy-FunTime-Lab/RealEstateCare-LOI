@@ -40,11 +40,8 @@ export default {
       default: [],
       required: false
     },
-    saveData: {
+    saveDataRequest: {
       type: Function,
-    },
-    setDamageType: {
-      type: Function
     }
   },
   methods: {
@@ -130,7 +127,7 @@ export default {
     <ion-label>Photos</ion-label>
     <ion-button color="primary">Take Photo</ion-button>
   </ion-item>
-  <BaseButton slot="content" name="Save" @click="saveData"/>
+  <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>
 </template>
 

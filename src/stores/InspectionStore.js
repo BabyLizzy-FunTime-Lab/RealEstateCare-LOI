@@ -52,9 +52,12 @@ export const useInspectionStore = defineStore('inspections', {
         }
     },
     actions: {
+        fetchUserId() {
+            return loginStore.getUserInfo.id;
+        },
         fetchInspections() {
                 this.loadingStatus = true;
-                let user_id = loginStore.getUserInfo.id;
+                let user_id = this.fetchUserId();
                 // call the independent fetch functions.
                 this.fetchDamageInspections(user_id);
                 this.fetchBacklogMaintenance(user_id);
@@ -130,9 +133,18 @@ export const useInspectionStore = defineStore('inspections', {
                     console.log("State variable not found");
             }
         },
-        setDamageType(state) {
-            state.damageTypeInput = state.selectedDamageTypeOption;
-        },
+       pushDamageInspectionStagingData() {
+            // Images are saved with another function that returns the nessasery
+            // medialinks on success. These links need to be added to the push data
+            // before they go to the db.
+            console.log("Pushing Damage Inspection data to database");
+            // Adding user id to the data.
+            this.getDamageInspectionStagingData.inspectorId = this.fetchUserId();
+            console.log(this.getDamageInspectionStagingData);
+            // Triggers alert, if no connection could be made to the db.
+            // In that case the data needs to be saved localy.
+           // seperate store for local saves.
+       }
     },
     getters: {
         getDamageInspectionStagingData(state) {

@@ -21,18 +21,9 @@ export default {
     this.damageInspectionData = this.inspectionStore.getDamageInspectionStagingData
   },
   methods: {
-    saveData() {
-      let data = this.damageInspectionData;
-      delete data.selected_damage_category;
-      // new data gets added a new id.
-      delete data.id;
-      console.log(data);
-      // the inspectorId is added by the saveDamageInspections function.
-      // this.inspectionStore.saveDamageInspections();
-      console.log("Saving Damage Inspection data...");
-    },
-    setDamageType() {
-      this.damageInspectionData.damage_category = this.damageInspectionData.selected_damage_category;
+    saveDataRequest() {
+      console.log("Requesting Damage Inspection data push...");
+      this.inspectionStore.pushDamageInspectionStagingData();
     },
     updateDamageInspectionStagingData($event, inputName) {
       // we need a switch. depending on input name we choose a store action.
@@ -65,8 +56,7 @@ export default {
             :description="this.damageInspectionData.commentsInput"
             @update:description="updateDamageInspectionStagingData($event, 'description')"
             :images="this.damageInspectionData.images"
-            :save-data="saveData"
-            :set-damage-type="setDamageType"
+            :save-data-request="saveDataRequest"
         />
         <BacklogMaintenance/>
         <TechnicalInstallationInspection/>
