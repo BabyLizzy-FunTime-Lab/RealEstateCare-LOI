@@ -1,7 +1,7 @@
 <script>
 import {
   IonItem, IonLabel, IonInput, IonTextarea, IonDatetime, IonDatetimeButton, IonModal,
-  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
+  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton, IonImg, IonThumbnail
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
@@ -12,7 +12,7 @@ export default {
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton
+    IonSelectOption, BaseButton, IonImg, IonThumbnail
   },
   props: {
     location: {
@@ -123,14 +123,29 @@ export default {
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
-  <ion-item slot="content">
-    <ion-label>Photos</ion-label>
+  <ion-item slot="content" lines="none">
+    <ion-label >Photos</ion-label>
     <ion-button color="primary">Take Photo</ion-button>
+  </ion-item>
+  <ion-item  slot="content" v-if="images.length > 0">
+    <div id="thumbnail--container">
+      <ion-thumbnail v-for="(image, index) in images" :key="index">
+        <ion-img :src="image"></ion-img>
+      </ion-thumbnail>
+    </div>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>
 </template>
 
 <style scoped lang="scss">
-
+#thumbnail--container {
+  width: 100%;
+  margin-bottom: .5em;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: .5em .5em;
+}
 </style>

@@ -23,7 +23,17 @@ export const useInspectionStore = defineStore('inspections', {
                 damageTypeInput: "",
                 emergencyInput: "",
                 commentsInput: "",
-                images: []
+                images: [
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
+                ]
             },
             backlogMaintenance: {
                 inspectorId: "",
