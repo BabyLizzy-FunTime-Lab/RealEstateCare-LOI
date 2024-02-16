@@ -14,6 +14,11 @@ export default {
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
     IonSelectOption, BaseButton, IonImg, IonThumbnail
   },
+  data() {
+    return {
+      isModalOpen: false
+    }
+  },
   props: {
     location: {
       type: String,
@@ -47,6 +52,9 @@ export default {
   methods: {
     emitInputChange($event, inputUpdate) {
       this.$emit(inputUpdate, $event);
+    },
+    openModal() {
+     this.isModalOpen = true
     }
   },
   emits: [
@@ -129,10 +137,24 @@ export default {
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">
-      <ion-thumbnail v-for="(image, index) in images" :key="index">
+      <ion-thumbnail @click="openModal" v-for="(image, index) in images" :key="index">
         <ion-img :src="image"></ion-img>
       </ion-thumbnail>
     </div>
+    <ion-modal :is-open="isModalOpen">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button @click="">Delete</ion-button>
+          </ion-buttons>
+          <ion-title>Welcome</ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-img src="https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg"></ion-img>
+    </ion-modal>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>
