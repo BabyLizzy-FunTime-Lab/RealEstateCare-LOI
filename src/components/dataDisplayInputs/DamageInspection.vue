@@ -5,6 +5,7 @@ import {
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
+import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
 
 
 export default {
@@ -12,12 +13,7 @@ export default {
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton, IonImg, IonThumbnail
-  },
-  data() {
-    return {
-      isModalOpen: false
-    }
+    IonSelectOption, BaseButton, IonImg, IonThumbnail, ImageThumbnailViewer
   },
   props: {
     location: {
@@ -47,15 +43,15 @@ export default {
     },
     saveDataRequest: {
       type: Function,
+    },
+    delete: {
+      type: Function
     }
   },
   methods: {
     emitInputChange($event, inputUpdate) {
       this.$emit(inputUpdate, $event);
     },
-    openModal() {
-     this.isModalOpen = true
-    }
   },
   emits: [
       'update:location', 'update:newDamage', 'update:completeDate',
@@ -137,24 +133,8 @@ export default {
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">
-      <ion-thumbnail @click="openModal" v-for="(image, index) in images" :key="index">
-        <ion-img :src="image"></ion-img>
-      </ion-thumbnail>
+      <image-thumbnail-viewer v-for="(image, index) in images" :key="index" :image="image" :delete="delete"/>
     </div>
-    <ion-modal :is-open="isModalOpen">
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button @click="">Delete</ion-button>
-          </ion-buttons>
-          <ion-title>Welcome</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-img src="https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg"></ion-img>
-    </ion-modal>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>

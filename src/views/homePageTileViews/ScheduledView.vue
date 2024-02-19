@@ -1,10 +1,10 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import baseListLayout from "@/components/base/BaseListLayout.vue";
-import DamageInspection from "@/components/scheduledView/DamageInspection.vue";
-import BacklogMaintenance from "@/components/scheduledView/BacklogMaintenance.vue";
-import TechnicalInstallationInspection from "@/components/scheduledView/TechnicalInstallationInspection.vue";
-import Modifications from "@/components/scheduledView/Modifications.vue";
+import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
+import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
+import TechnicalInstallationInspection from "@/components/dataDisplayInputs/TechnicalInstallationInspection.vue";
+import Modifications from "@/components/dataDisplayInputs/Modifications.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
@@ -31,6 +31,9 @@ export default {
       this.inspectionStore.updateDamageInspectionStagingData(newData, inputName);
       console.log("Requesting update of " + inputName + " in staging state.");
       console.log(this.damageInspectionData);
+    },
+    delete(image) {
+      console.log("deleting: " + image);
     }
   }
 }
