@@ -36,14 +36,14 @@ export default {
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content id="image--wrapper">
       <ion-img :src="image"/>
     </ion-content>
   </ion-modal>
 </template>
 
 <style scoped lang="scss">
-ion-content {
+#image--wrapper {
   ion-img {
     padding-top: 1em;
     height: 80vh;
