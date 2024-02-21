@@ -32,8 +32,8 @@ export default {
       console.log("Requesting update of " + inputName + " in staging state.");
       console.log(this.damageInspectionData);
     },
-    delete(image) {
-      console.log("deleting: " + image);
+    handleDeleteStagingImageEvent(img) {
+      console.log("Deleting: " + img);
     }
   }
 }
@@ -59,6 +59,7 @@ export default {
             :description="this.damageInspectionData.commentsInput"
             @update:description="updateDamageInspectionStagingData($event, 'description')"
             :images="this.damageInspectionData.images"
+            @delete:image="handleDeleteStagingImageEvent"
             :save-data-request="saveDataRequest"
         />
         <BacklogMaintenance/>

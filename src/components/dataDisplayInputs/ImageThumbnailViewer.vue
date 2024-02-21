@@ -1,9 +1,9 @@
 <script>
-import {IonButton, IonImg, IonModal, IonThumbnail} from "@ionic/vue";
+import {IonHeader, IonToolbar, IonButton, IonButtons, IonContent, IonImg, IonModal, IonThumbnail} from "@ionic/vue";
 
 export default {
   name: "ImageThumbnailViewer",
-  components: {IonModal, IonThumbnail, IonButton, IonImg},
+  components: {IonHeader, IonToolbar, IonModal, IonContent, IonThumbnail, IonButton, IonButtons, IonImg},
   props: {
     image: String,
     delete: Function,
@@ -11,6 +11,10 @@ export default {
   methods: {
     openModal(setTo) {
       this.isModalOpen = setTo
+    },
+    emitToParent(eventName, img) {
+      this.$emit(eventName, img);
+      this.openModal(false);
     }
   },
   data() {
@@ -18,6 +22,7 @@ export default {
       isModalOpen: false
     }
   },
+  emits: ['delete-event']
 }
 </script>
 
@@ -29,7 +34,7 @@ export default {
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button :@click="delete" >Delete</ion-button>
+          <ion-button @click="emitToParent('delete-event', image)" >Delete</ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
           <ion-button @click="openModal(false)">Close</ion-button>

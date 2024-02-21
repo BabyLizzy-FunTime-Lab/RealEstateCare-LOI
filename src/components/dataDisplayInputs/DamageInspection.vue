@@ -44,19 +44,16 @@ export default {
     saveDataRequest: {
       type: Function,
     },
-    delete: {
-      type: Function
-    }
   },
   methods: {
-    emitInputChange($event, inputUpdate) {
-      this.$emit(inputUpdate, $event);
+    emitInputChange(data, eventName) {
+      this.$emit(eventName, data);
     },
   },
   emits: [
       'update:location', 'update:newDamage', 'update:completeDate',
       'update:selectedDamageCategory', 'update:damageCategory',
-      'update:emergency', 'update:description'
+      'update:emergency', 'update:description', 'delete:image'
   ]
 }
 </script>
@@ -69,7 +66,7 @@ export default {
                @input="emitInputChange($event, 'update:location')"
                placeholder="Input address"
                label-placement="floating"
-               type="text" />
+               type="text"/>
   </ion-item>
   <ion-item slot="content">
     <ion-label>New Damage?</ion-label>
@@ -133,7 +130,8 @@ export default {
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">
-      <image-thumbnail-viewer v-for="(image, index) in images" :key="index" :image="image" :delete="delete"/>
+      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"
+                              :image="image" @delete-event="emitInputChange(image, 'delete:image')"/>
     </div>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
