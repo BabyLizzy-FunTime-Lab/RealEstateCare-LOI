@@ -32,7 +32,7 @@ export default {
   </ion-thumbnail>
   <ion-modal :is-open="isModalOpen">
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-buttons slot="start">
           <ion-button @click="emitToParent('delete-event', image)" >Delete</ion-button>
         </ion-buttons>

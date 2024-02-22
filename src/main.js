@@ -1,3 +1,7 @@
+// Above the createApp() line
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+defineCustomElements(window);
+
 import { createApp } from 'vue'
 import { createPinia } from "pinia";
 import App from './App.vue'

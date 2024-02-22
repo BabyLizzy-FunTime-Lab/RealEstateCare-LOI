@@ -1,19 +1,27 @@
 <script>
 import {
   IonItem, IonLabel, IonInput, IonTextarea, IonDatetime, IonDatetimeButton, IonModal,
-  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton, IonImg, IonThumbnail
+  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
+import { usePhotoGallery } from '@/composables/usePhotoGallery.js';
 
+const { takePhoto, photos } = usePhotoGallery();
 
 export default {
   name: "DamageInspection",
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton, IonImg, IonThumbnail, ImageThumbnailViewer
+    IonSelectOption, BaseButton, ImageThumbnailViewer
+  },
+  data() {
+    return {
+      photos,
+      takePhoto
+    }
   },
   props: {
     location: {
@@ -49,6 +57,9 @@ export default {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
+    testPhoto() {
+      console.log(this.photos);
+    }
   },
   emits: [
       'update:location', 'update:newDamage', 'update:completeDate',
@@ -125,8 +136,8 @@ export default {
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
   <ion-item slot="content" lines="none">
-    <ion-label >Photos</ion-label>
-    <ion-button color="primary">Take Photo</ion-button>
+    <ion-label @click="testPhoto">Photos</ion-label>
+    <ion-button @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">
