@@ -7,22 +7,24 @@ import { Preferences } from '@capacitor/preferences';
 
 export const usePhotoGallery = () => {
     const photos = ref([]);
-    let photo = Object;
+    const newPhoto= ref();
     const takePhoto = async () => {
-        photo = await Camera.getPhoto({
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Camera,
-        quality: 100,
+        const photo = await Camera.getPhoto({
+            resultType: CameraResultType.Uri,
+            source: CameraSource.Camera,
+            quality: 100,
         });
-    };
-    const fileName = Date.now() + '.jpeg';
-    const savedFileImage = {
-        filepath: fileName,
-        webviewPath: photo.webPath,
-    };
 
-    photos.value = [savedFileImage, ...photos.value];
+        const fileName = Date.now() + '.jpeg';
+        const savedFileImage = {
+            filepath: fileName,
+            webviewPath: photo.webPath,
+        };
+        photos.value = [savedFileImage, ...photos.value];
+        newPhoto.value = savedFileImage;
+    };
     return {
+        newPhoto,
         photos,
         takePhoto,
     };

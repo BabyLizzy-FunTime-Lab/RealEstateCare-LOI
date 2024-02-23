@@ -34,6 +34,10 @@ export default {
     },
     handleDeleteStagingImageEvent(img) {
       console.log("Deleting: " + img);
+    },
+    handleAddingPhoto(newImg) {
+      console.log("new img object: ");
+      console.log(newImg);
     }
   }
 }
@@ -60,6 +64,7 @@ export default {
             @update:description="updateDamageInspectionStagingData($event, 'description')"
             :images="this.damageInspectionData.images"
             @delete:image="handleDeleteStagingImageEvent"
+            @update:image-list="handleAddingPhoto"
             :save-data-request="saveDataRequest"
         />
         <BacklogMaintenance/>

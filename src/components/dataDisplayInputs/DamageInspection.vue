@@ -8,7 +8,7 @@ import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
 import { usePhotoGallery } from '@/composables/usePhotoGallery.js';
 
-const { takePhoto, photos } = usePhotoGallery();
+const { takePhoto, photos, newPhoto } = usePhotoGallery();
 
 export default {
   name: "DamageInspection",
@@ -19,6 +19,7 @@ export default {
   },
   data() {
     return {
+      newPhoto,
       photos,
       takePhoto
     }
@@ -58,13 +59,16 @@ export default {
       this.$emit(eventName, data);
     },
     testPhoto() {
-      console.log(this.photos);
+      console.log(newPhoto.value);
+    },
+    emitNewPhoto() {
+      this.$emit('update:imageList', newPhoto)
     }
   },
   emits: [
       'update:location', 'update:newDamage', 'update:completeDate',
       'update:selectedDamageCategory', 'update:damageCategory',
-      'update:emergency', 'update:description', 'delete:image'
+      'update:emergency', 'update:description', 'update:imageList', 'delete:image'
   ]
 }
 </script>
