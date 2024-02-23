@@ -58,11 +58,10 @@ export default {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
-    testPhoto() {
-      console.log(newPhoto.value);
-    },
-    emitNewPhoto() {
-      this.$emit('update:imageList', newPhoto)
+  },
+  watch: {
+    newPhoto() {
+      this.$emit('update:imageList', newPhoto.value);
     }
   },
   emits: [
@@ -140,7 +139,7 @@ export default {
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
   <ion-item slot="content" lines="none">
-    <ion-label @click="testPhoto">Photos</ion-label>
+    <ion-label>Photos</ion-label>
     <ion-button @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">

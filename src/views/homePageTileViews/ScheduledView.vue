@@ -27,7 +27,12 @@ export default {
     },
     updateDamageInspectionStagingData($event, inputName) {
       // we need a switch. depending on input name we choose a store action.
-      let newData = $event.target.value;
+      let newData;
+      if(typeof $event === 'string') {
+        newData = $event;
+      } else {
+        newData = $event.target.value;
+      }
       this.inspectionStore.updateDamageInspectionStagingData(newData, inputName);
       console.log("Requesting update of " + inputName + " in staging state.");
       console.log(this.damageInspectionData);
@@ -37,7 +42,8 @@ export default {
     },
     handleAddingPhoto(newImg) {
       console.log("new img object: ");
-      console.log(newImg);
+      console.log(newImg.webviewPath);
+      this.updateDamageInspectionStagingData(newImg.webviewPath,'image', );
     }
   }
 }

@@ -139,6 +139,11 @@ export const useInspectionStore = defineStore('inspections', {
                 case 'description':
                     this.getDamageInspectionStagingData.commentsInput = data;
                     break;
+                case 'image':
+                    this.getDamageInspectionStagingData.images =
+                        [data, ...this.getDamageInspectionStagingData.images];
+                    console.log(this.getDamageInspectionStagingData.images);
+                    break;
                 default:
                     console.log("State variable not found");
             }
