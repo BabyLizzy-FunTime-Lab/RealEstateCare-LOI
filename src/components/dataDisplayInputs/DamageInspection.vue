@@ -61,13 +61,13 @@ export default {
   },
   watch: {
     newPhoto() {
-      this.$emit('update:imageList', newPhoto.value);
+      this.$emit('update:images', newPhoto.value);
     }
   },
   emits: [
       'update:location', 'update:newDamage', 'update:completeDate',
       'update:selectedDamageCategory', 'update:damageCategory',
-      'update:emergency', 'update:description', 'update:imageList', 'delete:image'
+      'update:emergency', 'update:description', 'update:images', 'delete:image'
   ]
 }
 </script>
@@ -140,7 +140,7 @@ export default {
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">

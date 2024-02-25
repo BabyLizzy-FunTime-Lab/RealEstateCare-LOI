@@ -1,5 +1,6 @@
 <script>
 import {IonHeader, IonToolbar, IonButton, IonButtons, IonContent, IonImg, IonModal, IonThumbnail} from "@ionic/vue";
+import { modalController } from "@ionic/vue";
 
 export default {
   name: "ImageThumbnailViewer",
@@ -9,17 +10,35 @@ export default {
     delete: Function,
   },
   methods: {
-    openModal(setTo) {
-      this.isModalOpen = setTo
+    openModal() {
+      this.isModalOpen = true
     },
-    emitToParent(eventName, img) {
-      this.$emit(eventName, img);
-      this.openModal(false);
+    async close() {
+      await modalController.dismiss();
+    },
+    closeModal() {
+      this.isModalOpen = false
+    },
+    emitDeletePhoto(img) {
+      // this.$emit(eventName, img);
+      this.emitDeleteDismiss(img);
+      console.log(img);
+      this.close();
+      this.isModalOpen = false;
+    },
+    deletePhotoOnDismiss(ev) {
+      if (ev.detail.role === 'deletePhoto') {
+        this.$emit('delete-event', ev.detail.data);
+      }
+    },
+    async emitDeleteDismiss(img) {
+      this.$emit('delete-event', img);
+      this.isModalOpen = false;
     }
   },
   data() {
     return {
-      isModalOpen: false
+      isModalOpen: false,
     }
   },
   emits: ['delete-event']
@@ -27,17 +46,17 @@ export default {
 </script>
 
 <template>
-  <ion-thumbnail @click="openModal(true)">
+  <ion-thumbnail @click="openModal">
     <ion-img :src="image"></ion-img>
   </ion-thumbnail>
-  <ion-modal :is-open="isModalOpen">
+  <ion-modal :is-open="isModalOpen" can-dismiss="true">
     <ion-header>
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
-          <ion-button @click="emitToParent('delete-event', image)" >Delete</ion-button>
+          <ion-button @click="emitDeletePhoto(image)" >Delete</ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
-          <ion-button @click="openModal(false)">Close</ion-button>
+          <ion-button @click="closeModal">Close</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>

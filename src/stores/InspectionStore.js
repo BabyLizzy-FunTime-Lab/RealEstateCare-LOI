@@ -23,17 +23,7 @@ export const useInspectionStore = defineStore('inspections', {
                 damageTypeInput: "",
                 emergencyInput: "",
                 commentsInput: "",
-                images: [
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-                    "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
-                ]
+                images: []
             },
             backlogMaintenance: {
                 inspectorId: "",
@@ -112,6 +102,7 @@ export const useInspectionStore = defineStore('inspections', {
                 })
         },
         updateDamageInspectionStagingData(data, inputName) {
+            console.log("Processing request: " + inputName);
             switch (inputName) {
                 case 'location':
                     this.getDamageInspectionStagingData.locationInput = data;
@@ -139,10 +130,15 @@ export const useInspectionStore = defineStore('inspections', {
                 case 'description':
                     this.getDamageInspectionStagingData.commentsInput = data;
                     break;
-                case 'image':
+                case 'takePhoto':
                     this.getDamageInspectionStagingData.images =
                         [data, ...this.getDamageInspectionStagingData.images];
-                    console.log(this.getDamageInspectionStagingData.images);
+                    break;
+                case 'deletePhoto':
+                    let findPhoto = this.getDamageInspectionStagingData.images.indexOf(data);
+                    if(findPhoto !== -1) {
+                        this.getDamageInspectionStagingData.images.splice(findPhoto, 1);
+                    }
                     break;
                 default:
                     console.log("State variable not found");
@@ -167,3 +163,15 @@ export const useInspectionStore = defineStore('inspections', {
         }
     }
 })
+
+    // [
+    // "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
+    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
+    // ]

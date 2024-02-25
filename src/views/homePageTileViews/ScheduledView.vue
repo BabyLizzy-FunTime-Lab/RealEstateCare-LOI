@@ -26,24 +26,22 @@ export default {
       this.inspectionStore.pushDamageInspectionStagingData();
     },
     updateDamageInspectionStagingData($event, inputName) {
-      // we need a switch. depending on input name we choose a store action.
-      let newData;
+      let data;
       if(typeof $event === 'string') {
-        newData = $event;
+        data = $event;
       } else {
-        newData = $event.target.value;
+        data = $event.target.value;
       }
-      this.inspectionStore.updateDamageInspectionStagingData(newData, inputName);
       console.log("Requesting update of " + inputName + " in staging state.");
+      this.inspectionStore.updateDamageInspectionStagingData(data, inputName);
+      console.log("Requesting finished");
       console.log(this.damageInspectionData);
     },
-    handleDeleteStagingImageEvent(img) {
-      console.log("Deleting: " + img);
+    handleDeletePhoto(imgURL) {
+      this.updateDamageInspectionStagingData(imgURL,'deletePhoto', );
     },
-    handleAddingPhoto(newImg) {
-      console.log("new img object: ");
-      console.log(newImg.webviewPath);
-      this.updateDamageInspectionStagingData(newImg.webviewPath,'image', );
+    handleTakingPhoto(newImg) {
+      this.updateDamageInspectionStagingData(newImg.webviewPath,'takePhoto', );
     }
   }
 }
@@ -69,8 +67,8 @@ export default {
             :description="this.damageInspectionData.commentsInput"
             @update:description="updateDamageInspectionStagingData($event, 'description')"
             :images="this.damageInspectionData.images"
-            @delete:image="handleDeleteStagingImageEvent"
-            @update:image-list="handleAddingPhoto"
+            @update:images="handleTakingPhoto"
+            @delete:image="handleDeletePhoto"
             :save-data-request="saveDataRequest"
         />
         <BacklogMaintenance/>
