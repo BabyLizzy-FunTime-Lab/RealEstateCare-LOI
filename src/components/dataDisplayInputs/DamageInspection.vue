@@ -6,6 +6,7 @@ import {
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
+import { modalController } from "@ionic/vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
@@ -58,6 +59,9 @@ export default {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
+    async dismissModal() {
+      await modalController.dismiss();
+    },
   },
   watch: {
     newPhoto() {
@@ -82,15 +86,7 @@ export default {
                label-placement="floating"
                type="text"/>
   </ion-item>
-  <ion-item slot="content">
-    <ion-label>New Damage?</ion-label>
-    <ion-radio-group :value="newDamage"
-                     @ionChange="emitInputChange($event, 'update:newDamage')"
-                     name="newDamage">
-        <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
-        <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
-    </ion-radio-group>
-  </ion-item>
+
   <ion-item slot="content">
     <ion-label>Date</ion-label>
     <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
@@ -100,6 +96,7 @@ export default {
                     displayFormat="MMM D, YYYY"
                     pickerFormat="MMM D YYYY"
                     presentation="date" id="date"></ion-datetime>
+      <ion-button @click="dismissModal" >OK</ion-button>
     </ion-modal>
   </ion-item>
   <ion-item slot="content">
@@ -120,6 +117,15 @@ export default {
                @input="emitInputChange($event, 'update:damageCategory')"
                label="Input damage type"
                label-placement="floating" placeholder="Here" type="text"></ion-input>
+  </ion-item>
+  <ion-item slot="content">
+    <ion-label>New Damage?</ion-label>
+    <ion-radio-group :value="newDamage"
+                     @ionChange="emitInputChange($event, 'update:newDamage')"
+                     name="newDamage">
+      <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
+      <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+    </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
     <ion-label>Emergency Action needed?</ion-label>
