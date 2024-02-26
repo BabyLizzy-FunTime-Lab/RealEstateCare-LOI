@@ -6,9 +6,9 @@ import {
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
-import { usePhotoGallery } from '@/composables/usePhotoGallery.js';
+import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
-const { takePhoto, photos, newPhoto } = usePhotoGallery();
+const { takePhoto, photos, newPhoto } = usePhotoCamera();
 
 export default {
   name: "DamageInspection",

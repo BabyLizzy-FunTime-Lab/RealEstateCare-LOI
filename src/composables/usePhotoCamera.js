@@ -5,7 +5,7 @@ import { Camera, CameraResultType, CameraSource, } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 
-export const usePhotoGallery = () => {
+export const usePhotoCamera = () => {
     const photos = ref([]);
     const newPhoto= ref();
     const takePhoto = async () => {
@@ -30,7 +30,3 @@ export const usePhotoGallery = () => {
     };
 };
 
-// export let UserPhoto = {
-//     filepath: String,
-//     webviewPath: String
-// }

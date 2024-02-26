@@ -13,27 +13,15 @@ export default {
     openModal() {
       this.isModalOpen = true
     },
-    async close() {
+    async dismissModal() {
       await modalController.dismiss();
     },
     closeModal() {
       this.isModalOpen = false
     },
     emitDeletePhoto(img) {
-      // this.$emit(eventName, img);
-      this.emitDeleteDismiss(img);
-      console.log(img);
-      this.close();
-      this.isModalOpen = false;
-    },
-    deletePhotoOnDismiss(ev) {
-      if (ev.detail.role === 'deletePhoto') {
-        this.$emit('delete-event', ev.detail.data);
-      }
-    },
-    async emitDeleteDismiss(img) {
       this.$emit('delete-event', img);
-      this.isModalOpen = false;
+      this.dismissModal();
     }
   },
   data() {
