@@ -46,7 +46,6 @@ export default {
         <ion-buttons slot="end">
           <ion-button @click="closeModal">Close</ion-button>
         </ion-buttons>
-        <a :href="image" download>Dowmload</a>
       </ion-toolbar>
     </ion-header>
     <ion-content id="image--wrapper">
