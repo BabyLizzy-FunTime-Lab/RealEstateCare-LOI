@@ -159,6 +159,7 @@ export const useInspectionStore = defineStore('inspections', {
     },
     getters: {
         getDamageInspectionStagingData(state) {
+            // convert images object array into string array with only urls.
             return state.damageInspectionStagingData;
         }
     }
