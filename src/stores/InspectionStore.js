@@ -104,6 +104,8 @@ export const useInspectionStore = defineStore('inspections', {
         updateDamageInspectionStagingData(data, inputName) {
             console.log("Processing request: " + inputName);
             switch (inputName) {
+                // All cases will now deal with incomming objects. Make the changes.
+                    // data = $event.target.value;
                 case 'location':
                     this.getDamageInspectionStagingData.locationInput = data;
                     break;
@@ -135,6 +137,7 @@ export const useInspectionStore = defineStore('inspections', {
                         [data, ...this.getDamageInspectionStagingData.images];
                     break;
                 case 'deletePhoto':
+                    // With the changes we need to first find the object with the url and then delete it.
                     let findPhoto = this.getDamageInspectionStagingData.images.indexOf(data);
                     if(findPhoto !== -1) {
                         this.getDamageInspectionStagingData.images.splice(findPhoto, 1);
@@ -159,9 +162,20 @@ export const useInspectionStore = defineStore('inspections', {
     },
     getters: {
         getDamageInspectionStagingData(state) {
-            // convert images object array into string array with only urls.
+            console.log("Raw staging data: ");
+            console.log(state.damageInspectionStagingData);
             return state.damageInspectionStagingData;
-        }
+        },
+        // getDamageInspectionViewData(state) {
+        //     // returnData is now a reference, it should be a copy.
+        //     let returnData = { ...state.damageInspectionStagingData};
+        //     returnData.images.forEach((data, index) => {
+        //         returnData.images.splice(index, 1, data.webviewPath);
+        //     })
+        //     console.log("Filtered view data: ")
+        //     console.log(returnData);
+        //     return returnData;
+        // }
     }
 })
 
