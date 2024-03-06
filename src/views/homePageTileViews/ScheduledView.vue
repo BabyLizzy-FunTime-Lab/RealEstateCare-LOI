@@ -17,44 +17,23 @@ export default {
       damageInspectionData: Object
     }
   },
-  // watch: {
-  //   damageInspectionData() {
-  //     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData
-  //   }
-  // },
   mounted() {
     this.damageInspectionData = this.inspectionStore.getDamageInspectionStagingData
   },
-  // computed: {
-  //   damageInspectionData() {
-  //     console.log("computed")
-  //     return this.inspectionStore.getDamageInspectionStagingData;
-  //   }
-  // },
   methods: {
     saveDataRequest() {
       console.log("Requesting Damage Inspection data push...");
       this.inspectionStore.pushDamageInspectionStagingData();
     },
     updateDamageInspectionStagingData($event, inputName) {
-      // let data;
-      // if(typeof $event === 'string') {
-      //   data = $event;
-      // } else {
-      //   data = $event.target.value;
-      // }
-      // We need to make changes to the switch in the state. Now they must all deal
-      // with in coming objects.
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateDamageInspectionStagingData($event, inputName);
       console.log("Requesting finished");
-      console.log(this.damageInspectionData);
     },
     handleDeletePhoto(imgURL) {
       this.updateDamageInspectionStagingData(imgURL,'deletePhoto', );
     },
     handleTakingPhoto(newImg) {
-      // this.updateDamageInspectionStagingData(newImg.webviewPath,'takePhoto', );
       this.updateDamageInspectionStagingData(newImg,'takePhoto', );
     }
   }
@@ -90,8 +69,6 @@ export default {
         <Modifications/>
       </ion-accordion-group>
     </base-list-layout>
-
-    <p>Each form should have a unique id, the client location, send date and the inspector id.</p>
   </base-layout>
 </template>
 

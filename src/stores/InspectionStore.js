@@ -1,6 +1,9 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import axios from "axios";
+import { usePhotoCamera} from "@/composables/usePhotoCamera.js";
+
+const { photos } = usePhotoCamera();
 
 // Default variables.
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
@@ -104,9 +107,11 @@ export const useInspectionStore = defineStore('inspections', {
         },
         stageNewPhoto(newPhoto) {
             this.generalLocalPhotoStaging = [newPhoto, ...this.generalLocalPhotoStaging];
-            console.log(this.generalLocalPhotoStaging);
         },
-
+        unstageNewPhoto(photoURI) {
+            this.generalLocalPhotoStaging =
+                this.generalLocalPhotoStaging.filter(photo => photo.webviewPath !== photoURI);
+        },
         updateDamageInspectionStagingData(data, inputName) {
             console.log("Processing request: " + inputName);
             switch (inputName) {
@@ -142,11 +147,11 @@ export const useInspectionStore = defineStore('inspections', {
                     this.stageNewPhoto(data);
                     break;
                 case 'deletePhoto':
-                    // With the changes we need to first find the object with the url and then delete it.
                     let findPhoto = this.getDamageInspectionStagingData.images.indexOf(data);
                     if(findPhoto !== -1) {
                         this.getDamageInspectionStagingData.images.splice(findPhoto, 1);
                     }
+                    this.unstageNewPhoto(data);
                     break;
                 default:
                     console.log("State variable not found");
@@ -155,7 +160,8 @@ export const useInspectionStore = defineStore('inspections', {
        pushDamageInspectionStagingData() {
             // Images are saved with another function that returns the nessasery
             // medialinks on success. These links need to be added to the push data
-            // before they go to the db.
+            // before they go to the db. Images are only saved locally if no contact could be made
+           // with the DB. So we will need a try and catch.
             console.log("Pushing Damage Inspection data to database");
             // Adding user id to the data.
             this.getDamageInspectionStagingData.inspectorId = this.fetchUserId();
@@ -167,8 +173,6 @@ export const useInspectionStore = defineStore('inspections', {
     },
     getters: {
         getDamageInspectionStagingData(state) {
-            console.log("Raw staging data: ");
-            console.log(state.damageInspectionStagingData);
             return state.damageInspectionStagingData;
         },
         getGeneralLocalPhotoStaging(state) {
@@ -176,15 +180,3 @@ export const useInspectionStore = defineStore('inspections', {
         }
     }
 })
-
-    // [
-    // "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1692352694/work-demos/island-house.jpg",
-    //     "https://res.cloudinary.com/babylizzyevee/image/upload/v1700140252/CV-images/real-estate-care.jpg",
-    // ]
