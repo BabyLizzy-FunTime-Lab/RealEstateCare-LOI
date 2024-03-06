@@ -110,8 +110,6 @@ export const useInspectionStore = defineStore('inspections', {
         updateDamageInspectionStagingData(data, inputName) {
             console.log("Processing request: " + inputName);
             switch (inputName) {
-                // All cases will now deal with incomming objects. Make the changes.
-                    // data = $event.target.value;
                 case 'location':
                     this.getDamageInspectionStagingData.locationInput = data.target.value;
                     break;
