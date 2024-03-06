@@ -14,6 +14,7 @@ export const useInspectionStore = defineStore('inspections', {
             backlog_maintenance_result: [],
             technical_installation_inspections_result: [],
             inventory_of_changes_result: [],
+            generalLocalPhotoStaging: [],
             damageInspectionStagingData: {
                 inspectorId: "",
                 locationInput: "",
@@ -101,40 +102,46 @@ export const useInspectionStore = defineStore('inspections', {
                     this.loadingStatus = false
                 })
         },
+        stageNewPhoto(newPhoto) {
+            this.generalLocalPhotoStaging = [newPhoto, ...this.generalLocalPhotoStaging];
+            console.log(this.generalLocalPhotoStaging);
+        },
+
         updateDamageInspectionStagingData(data, inputName) {
             console.log("Processing request: " + inputName);
             switch (inputName) {
                 // All cases will now deal with incomming objects. Make the changes.
                     // data = $event.target.value;
                 case 'location':
-                    this.getDamageInspectionStagingData.locationInput = data;
+                    this.getDamageInspectionStagingData.locationInput = data.target.value;
                     break;
                 case 'newDamage':
-                    this.getDamageInspectionStagingData.newDamageInput = data;
+                    this.getDamageInspectionStagingData.newDamageInput = data.target.value;
                     break;
                 case 'completeDate':
-                    this.getDamageInspectionStagingData.dateInput = data;
+                    this.getDamageInspectionStagingData.dateInput = data.target.value;
                     break;
                 case 'selectedDamageCategory':
-                    this.getDamageInspectionStagingData.selectedDamageTypeOption = data;
-                    if (data === 'other') {
+                    this.getDamageInspectionStagingData.selectedDamageTypeOption = data.target.value;
+                    if (data.target.value === 'other') {
                         this.getDamageInspectionStagingData.damageTypeInput = '';
                     } else {
-                        this.getDamageInspectionStagingData.damageTypeInput = data;
+                        this.getDamageInspectionStagingData.damageTypeInput = data.target.value;
                     }
                     break;
                 case 'damageCategory':
-                    this.getDamageInspectionStagingData.damageTypeInput = data;
+                    this.getDamageInspectionStagingData.damageTypeInput =data.target.value;
                     break;
                 case 'emergency':
-                    this.getDamageInspectionStagingData.emergencyInput = data;
+                    this.getDamageInspectionStagingData.emergencyInput = data.target.value;
                     break;
                 case 'description':
-                    this.getDamageInspectionStagingData.commentsInput = data;
+                    this.getDamageInspectionStagingData.commentsInput = data.target.value;
                     break;
                 case 'takePhoto':
                     this.getDamageInspectionStagingData.images =
-                        [data, ...this.getDamageInspectionStagingData.images];
+                        [data.webviewPath, ...this.getDamageInspectionStagingData.images];
+                    this.stageNewPhoto(data);
                     break;
                 case 'deletePhoto':
                     // With the changes we need to first find the object with the url and then delete it.
@@ -166,16 +173,9 @@ export const useInspectionStore = defineStore('inspections', {
             console.log(state.damageInspectionStagingData);
             return state.damageInspectionStagingData;
         },
-        // getDamageInspectionViewData(state) {
-        //     // returnData is now a reference, it should be a copy.
-        //     let returnData = { ...state.damageInspectionStagingData};
-        //     returnData.images.forEach((data, index) => {
-        //         returnData.images.splice(index, 1, data.webviewPath);
-        //     })
-        //     console.log("Filtered view data: ")
-        //     console.log(returnData);
-        //     return returnData;
-        // }
+        getGeneralLocalPhotoStaging(state) {
+            return state.generalLocalPhotoStaging;
+        }
     }
 })
 
