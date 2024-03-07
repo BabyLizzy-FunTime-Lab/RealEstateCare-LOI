@@ -18,7 +18,7 @@ export const useInspectionStore = defineStore('inspections', {
             technical_installation_inspections_result: [],
             inventory_of_changes_result: [],
             generalLocalPhotoStaging: [],
-            damageInspectionStagingData: {
+            damageInspectionViewData: {
                 inspectorId: "",
                 locationInput: "",
                 newDamageInput: "",
@@ -112,44 +112,44 @@ export const useInspectionStore = defineStore('inspections', {
             this.generalLocalPhotoStaging =
                 this.generalLocalPhotoStaging.filter(photo => photo.webviewPath !== photoURI);
         },
-        updateDamageInspectionStagingData(data, inputName) {
+        updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
             switch (inputName) {
                 case 'location':
-                    this.getDamageInspectionStagingData.locationInput = data.target.value;
+                    this.getDamageInspectionViewData.locationInput = data.target.value;
                     break;
                 case 'newDamage':
-                    this.getDamageInspectionStagingData.newDamageInput = data.target.value;
+                    this.getDamageInspectionViewData.newDamageInput = data.target.value;
                     break;
                 case 'completeDate':
-                    this.getDamageInspectionStagingData.dateInput = data.target.value;
+                    this.getDamageInspectionViewData.dateInput = data.target.value;
                     break;
                 case 'selectedDamageCategory':
-                    this.getDamageInspectionStagingData.selectedDamageTypeOption = data.target.value;
+                    this.getDamageInspectionViewData.selectedDamageTypeOption = data.target.value;
                     if (data.target.value === 'other') {
-                        this.getDamageInspectionStagingData.damageTypeInput = '';
+                        this.getDamageInspectionViewData.damageTypeInput = '';
                     } else {
-                        this.getDamageInspectionStagingData.damageTypeInput = data.target.value;
+                        this.getDamageInspectionViewData.damageTypeInput = data.target.value;
                     }
                     break;
                 case 'damageCategory':
-                    this.getDamageInspectionStagingData.damageTypeInput =data.target.value;
+                    this.getDamageInspectionViewData.damageTypeInput =data.target.value;
                     break;
                 case 'emergency':
-                    this.getDamageInspectionStagingData.emergencyInput = data.target.value;
+                    this.getDamageInspectionViewData.emergencyInput = data.target.value;
                     break;
                 case 'description':
-                    this.getDamageInspectionStagingData.commentsInput = data.target.value;
+                    this.getDamageInspectionViewData.commentsInput = data.target.value;
                     break;
                 case 'takePhoto':
-                    this.getDamageInspectionStagingData.images =
-                        [data.webviewPath, ...this.getDamageInspectionStagingData.images];
+                    this.getDamageInspectionViewData.images =
+                        [data.webviewPath, ...this.getDamageInspectionViewData.images];
                     this.stageNewPhoto(data);
                     break;
                 case 'deletePhoto':
-                    let findPhoto = this.getDamageInspectionStagingData.images.indexOf(data);
+                    let findPhoto = this.getDamageInspectionViewData.images.indexOf(data);
                     if(findPhoto !== -1) {
-                        this.getDamageInspectionStagingData.images.splice(findPhoto, 1);
+                        this.getDamageInspectionViewData.images.splice(findPhoto, 1);
                     }
                     this.unstageNewPhoto(data);
                     break;
@@ -157,23 +157,23 @@ export const useInspectionStore = defineStore('inspections', {
                     console.log("State variable not found");
             }
         },
-       pushDamageInspectionStagingData() {
+       pushdamageInspectionViewData() {
             // Images are saved with another function that returns the nessasery
             // medialinks on success. These links need to be added to the push data
             // before they go to the db. Images are only saved locally if no contact could be made
            // with the DB. So we will need a try and catch.
             console.log("Pushing Damage Inspection data to database");
             // Adding user id to the data.
-            this.getDamageInspectionStagingData.inspectorId = this.fetchUserId();
-            console.log(this.getDamageInspectionStagingData);
+            this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
+            console.log(this.getDamageInspectionViewData);
             // Triggers alert, if no connection could be made to the db.
             // In that case the data needs to be saved localy.
            // seperate store for local saves.
        }
     },
     getters: {
-        getDamageInspectionStagingData(state) {
-            return state.damageInspectionStagingData;
+        getDamageInspectionViewData(state) {
+            return state.damageInspectionViewData;
         },
         getGeneralLocalPhotoStaging(state) {
             return state.generalLocalPhotoStaging;

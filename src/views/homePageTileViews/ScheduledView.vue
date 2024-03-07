@@ -18,23 +18,23 @@ export default {
     }
   },
   mounted() {
-    this.damageInspectionData = this.inspectionStore.getDamageInspectionStagingData
+    this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData
   },
   methods: {
     saveDataRequest() {
       console.log("Requesting Damage Inspection data push...");
-      this.inspectionStore.pushDamageInspectionStagingData();
+      this.inspectionStore.pushdamageInspectionViewData();
     },
-    updateDamageInspectionStagingData($event, inputName) {
+    updateDamageInspectionViewData($event, inputName) {
       console.log("Requesting update of " + inputName + " in staging state.");
-      this.inspectionStore.updateDamageInspectionStagingData($event, inputName);
+      this.inspectionStore.updateDamageInspectionViewData($event, inputName);
       console.log("Requesting finished");
     },
     handleDeletePhoto(imgURL) {
-      this.updateDamageInspectionStagingData(imgURL,'deletePhoto', );
+      this.updateDamageInspectionViewData(imgURL,'deletePhoto', );
     },
     handleTakingPhoto(newImg) {
-      this.updateDamageInspectionStagingData(newImg,'takePhoto', );
+      this.updateDamageInspectionViewData(newImg,'takePhoto', );
     }
   }
 }
@@ -46,19 +46,19 @@ export default {
       <ion-accordion-group :multiple="true">
         <DamageInspection
             :location="this.damageInspectionData.locationInput"
-            @update:location="updateDamageInspectionStagingData($event, 'location')"
+            @update:location="updateDamageInspectionViewData($event, 'location')"
             :new-damage="this.damageInspectionData.newDamageInput"
-            @update:new-damage="updateDamageInspectionStagingData($event, 'newDamage')"
+            @update:new-damage="updateDamageInspectionViewData($event, 'newDamage')"
             :complete-date="this.damageInspectionData.dateInput"
-            @update:complete-date="updateDamageInspectionStagingData($event, 'completeDate')"
+            @update:complete-date="updateDamageInspectionViewData($event, 'completeDate')"
             :selected-damage-category="this.damageInspectionData.selectedDamageTypeOption"
-            @update:selected-damage-category="updateDamageInspectionStagingData($event, 'selectedDamageCategory')"
+            @update:selected-damage-category="updateDamageInspectionViewData($event, 'selectedDamageCategory')"
             :damage-category="this.damageInspectionData.damageTypeInput"
-            @update:damage-category="updateDamageInspectionStagingData($event, 'damageCategory')"
+            @update:damage-category="updateDamageInspectionViewData($event, 'damageCategory')"
             :emergency="this.damageInspectionData.emergencyInput"
-            @update:emergency="updateDamageInspectionStagingData($event, 'emergency')"
+            @update:emergency="updateDamageInspectionViewData($event, 'emergency')"
             :description="this.damageInspectionData.commentsInput"
-            @update:description="updateDamageInspectionStagingData($event, 'description')"
+            @update:description="updateDamageInspectionViewData($event, 'description')"
             :images="this.damageInspectionData.images"
             @update:images="handleTakingPhoto"
             @delete:image="handleDeletePhoto"
