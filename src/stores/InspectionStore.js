@@ -29,7 +29,7 @@ export const useInspectionStore = defineStore('inspections', {
                 commentsInput: "",
                 images: []
             },
-            backlogMaintenance: {
+            backlogMaintenanceViewData: {
                 inspectorId: "",
                 locationInput: "",
                 maintenanceTypeInput: "",
