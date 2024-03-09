@@ -30,7 +30,7 @@ export default {
 <BaseAccordionLayout header-name="Backlog Maintenance" accordion-value="second">
   <ion-item slot="content">
     <ion-input label="Location"
-               v-model="inspectionStore.backlogMaintenance.locationInput"
+               v-model="inspectionStore.backlogMaintenanceViewData.locationInput"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>

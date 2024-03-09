@@ -86,7 +86,6 @@ export default {
                label-placement="floating"
                type="text"/>
   </ion-item>
-
   <ion-item slot="content">
     <ion-label>Date</ion-label>
     <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
