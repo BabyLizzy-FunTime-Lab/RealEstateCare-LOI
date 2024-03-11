@@ -31,9 +31,11 @@ export const useInspectionStore = defineStore('inspections', {
             },
             backlogMaintenanceViewData: {
                 inspectorId: "",
-                locationInput: "",
-                maintenanceTypeInput: "",
-                costIndication: ""
+                locationInput: "1",
+                emergencyInput: "yes",
+                maintenanceTypeInput: "paint",
+                costIndication: "0-500",
+                images: []
             },
             technicalInstallation: {
                 inspectorId: "",
@@ -177,6 +179,9 @@ export const useInspectionStore = defineStore('inspections', {
         },
         getGeneralLocalPhotoStaging(state) {
             return state.generalLocalPhotoStaging;
+        },
+        getBacklogMaintenanceViewData(state) {
+            return state.backlogMaintenanceViewData;
         }
     }
 })

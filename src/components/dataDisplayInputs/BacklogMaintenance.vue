@@ -22,6 +22,15 @@ export default {
       photos,
       takePhoto
     }
+  },
+  props: {
+    location: String,
+    emergency: String,
+    type: String,
+    costIndication: String,
+    images: {
+      default: []
+    },
   }
 }
 </script>
@@ -30,14 +39,14 @@ export default {
 <BaseAccordionLayout header-name="Backlog Maintenance" accordion-value="second">
   <ion-item slot="content">
     <ion-input label="Location"
-               v-model="inspectionStore.backlogMaintenanceViewData.locationInput"
+               :value="location"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
   </ion-item>
   <ion-item slot="content">
     <ion-label>Emergency Action needed?</ion-label>
-    <ion-radio-group value=""
+    <ion-radio-group :value="emergency"
                      @ionChange="console.log('emergency')"
                      name="emergency">
       <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
@@ -45,7 +54,7 @@ export default {
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
-    <ion-select value=""
+    <ion-select :value="type"
                 label="Maintenance Type"
                 placeholder="Select">
       <ion-select-option value="paint">Paint</ion-select-option>
@@ -56,7 +65,7 @@ export default {
     </ion-select>
   </ion-item>
   <ion-item slot="content">
-    <ion-select value=""
+    <ion-select :value="costIndication"
                 label="Cost Prediction"
                 placeholder="Select">
       <ion-select-option value="0-500">0-500</ion-select-option>
@@ -68,12 +77,12 @@ export default {
     <ion-label>Photos</ion-label>
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
-<!--  <ion-item  slot="content" v-if="images.length > 0">-->
-<!--    <div id="thumbnail&#45;&#45;container">-->
-<!--      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"-->
-<!--                              :image="image" @delete-event="emitInputChange(image, 'delete:image')"/>-->
-<!--    </div>-->
-<!--  </ion-item>-->
+  <ion-item  slot="content" v-if="images.length > 0">
+    <div id="thumbnail--container">
+      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"
+                              :image="image" @delete-event="console.log('delete:image')"/>
+    </div>
+  </ion-item>
   <BaseButton slot="content" name="Save" @click="console.log('saving backlog')"/>
 </BaseAccordionLayout>
 </template>

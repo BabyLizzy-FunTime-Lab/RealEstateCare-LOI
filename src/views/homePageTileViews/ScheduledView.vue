@@ -14,11 +14,13 @@ export default {
   data() {
     return {
       inspectionStore: useInspectionStore(),
-      damageInspectionData: Object
+      damageInspectionData: Object,
+      backlogMaintenanceData: Object
     }
   },
   mounted() {
-    this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData
+    this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
+    this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
   },
   methods: {
     saveDataRequest() {
@@ -64,7 +66,13 @@ export default {
             @delete:image="handleDeletePhoto"
             :save-data-request="saveDataRequest"
         />
-        <BacklogMaintenance/>
+        <BacklogMaintenance
+          :location="this.backlogMaintenanceData.locationInput"
+          :emergency="this.backlogMaintenanceData.emergencyInput"
+          :type="this.backlogMaintenanceData.maintenanceTypeInput"
+          :cost-indication="this.backlogMaintenanceData.costIndication"
+          :images="this.backlogMaintenanceData.images"
+        />
         <TechnicalInstallationInspection/>
         <Modifications/>
       </ion-accordion-group>
