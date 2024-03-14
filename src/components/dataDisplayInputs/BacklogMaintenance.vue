@@ -1,7 +1,17 @@
 <script>
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
-import {IonItem, IonInput, IonSelect, IonSelectOption, IonRadioGroup, IonLabel, IonRadio, IonButton} from "@ionic/vue";
+import {
+  IonItem,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonRadioGroup,
+  IonLabel,
+  IonRadio,
+  IonButton,
+  modalController
+} from "@ionic/vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
@@ -11,10 +21,8 @@ const { takePhoto, photos, newPhoto } = usePhotoCamera();
 export default {
   name: "BacklogMaintenance",
   components: {
-    ImageThumbnailViewer,
-    IonButton,
-    BaseButton,
-    IonRadio, IonLabel, IonRadioGroup, BaseAccordionLayout, IonItem, IonInput, IonSelect, IonSelectOption},
+    ImageThumbnailViewer, IonButton, BaseButton, IonRadio, IonLabel, IonRadioGroup,
+    BaseAccordionLayout, IonItem, IonInput, IonSelect, IonSelectOption},
   data() {
     return {
       inspectionStore: useInspectionStore(),
@@ -31,7 +39,24 @@ export default {
     images: {
       default: []
     },
-  }
+    saveDataRequest: Function
+  },
+  methods: {
+    emitInputChange(data, eventName) {
+      this.$emit(eventName, data);
+    },
+    async dismissModal() {
+      await modalController.dismiss();
+    },
+  },
+  watch: {
+    newPhoto() {
+      this.$emit('update:images', newPhoto.value);
+    }
+  },
+  emits: [
+      'update:images'
+  ]
 }
 </script>
 
@@ -80,7 +105,7 @@ export default {
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">
       <image-thumbnail-viewer v-for="(image, index) in images" :key="index"
-                              :image="image" @delete-event="console.log('delete:image')"/>
+                              :image="image" @delete-event="emitInputChange(image, 'delete:image')"/>
     </div>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="console.log('saving backlog')"/>

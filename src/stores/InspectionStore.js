@@ -31,10 +31,10 @@ export const useInspectionStore = defineStore('inspections', {
             },
             backlogMaintenanceViewData: {
                 inspectorId: "",
-                locationInput: "1",
-                emergencyInput: "yes",
-                maintenanceTypeInput: "paint",
-                costIndication: "0-500",
+                locationInput: "",
+                emergencyInput: "",
+                maintenanceTypeInput: "",
+                costIndication: "",
                 images: []
             },
             technicalInstallation: {
@@ -156,8 +156,20 @@ export const useInspectionStore = defineStore('inspections', {
                     this.unstageNewPhoto(data);
                     break;
                 default:
-                    console.log("State variable not found");
+                    console.log("Invalid DamageInspection input");
             }
+        },
+        updateBacklogMaintenanceViewData(data, inputName) {
+          console.log('Processing request: ' + inputName);
+          switch (inputName) {
+              case 'takePhoto':
+                  this.getBacklogMaintenanceViewData.images =
+                      [data.webviewPath, ...this.getBacklogMaintenanceViewData.images];
+                  this.stageNewPhoto(data);
+                  break;
+              default:
+                  console.log("Invalid Backlog input")
+          }
         },
        pushdamageInspectionViewData() {
             // Images are saved with another function that returns the nessasery

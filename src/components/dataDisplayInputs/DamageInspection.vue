@@ -26,27 +26,13 @@ export default {
     }
   },
   props: {
-    location: {
-      type: String,
-    },
-    newDamage: {
-      type: String,
-    },
-    completeDate: {
-      type: String,
-    },
-    selectedDamageCategory: {
-      type: String,
-    },
-    damageCategory: {
-      type: String,
-    },
-    emergency: {
-      type: String,
-    },
-    description: {
-      type: String,
-    },
+    location: String,
+    newDamage: String,
+    completeDate: String,
+    selectedDamageCategory: String,
+    damageCategory: String,
+    emergency: String,
+    description: String,
     images: {
       default: [],
       required: false

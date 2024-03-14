@@ -32,11 +32,8 @@ export default {
       this.inspectionStore.updateDamageInspectionViewData($event, inputName);
       console.log("Requesting finished");
     },
-    handleDeletePhoto(imgURL) {
-      this.updateDamageInspectionViewData(imgURL,'deletePhoto', );
-    },
-    handleTakingPhoto(newImg) {
-      this.updateDamageInspectionViewData(newImg,'takePhoto', );
+    updateBacklogMaintenanceViewData($event, inputName) {
+      this.inspectionStore.updateBacklogMaintenanceViewData($event, inputName);
     }
   }
 }
@@ -62,8 +59,8 @@ export default {
             :description="this.damageInspectionData.commentsInput"
             @update:description="updateDamageInspectionViewData($event, 'description')"
             :images="this.damageInspectionData.images"
-            @update:images="handleTakingPhoto"
-            @delete:image="handleDeletePhoto"
+            @update:images="this.updateDamageInspectionViewData($event,'takePhoto')"
+            @delete:image="this.updateDamageInspectionViewData($event,'deletePhoto')"
             :save-data-request="saveDataRequest"
         />
         <BacklogMaintenance
@@ -72,6 +69,7 @@ export default {
           :type="this.backlogMaintenanceData.maintenanceTypeInput"
           :cost-indication="this.backlogMaintenanceData.costIndication"
           :images="this.backlogMaintenanceData.images"
+          @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
         />
         <TechnicalInstallationInspection/>
         <Modifications/>
