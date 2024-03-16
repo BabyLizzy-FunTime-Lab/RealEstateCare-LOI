@@ -114,6 +114,17 @@ export const useInspectionStore = defineStore('inspections', {
             this.generalLocalPhotoStaging =
                 this.generalLocalPhotoStaging.filter(photo => photo.webviewPath !== photoURI);
         },
+        addPhotoToView(newPhoto, viewData) {
+            viewData.images =
+                [newPhoto.webviewPath, ...viewData.images];
+        },
+        deletePhotoFromView(photoURI, viewData) {
+            // let findPhoto = this.getDamageInspectionViewData.images.indexOf(data);
+            let findPhoto = viewData.images.indexOf(photoURI);
+            if(findPhoto !== -1) {
+                viewData.images.splice(findPhoto, 1);
+            }
+        },
         updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
             switch (inputName) {
@@ -144,15 +155,11 @@ export const useInspectionStore = defineStore('inspections', {
                     this.getDamageInspectionViewData.commentsInput = data.target.value;
                     break;
                 case 'takePhoto':
-                    this.getDamageInspectionViewData.images =
-                        [data.webviewPath, ...this.getDamageInspectionViewData.images];
+                    this.addPhotoToView(data, this.getDamageInspectionViewData);
                     this.stageNewPhoto(data);
                     break;
                 case 'deletePhoto':
-                    let findPhoto = this.getDamageInspectionViewData.images.indexOf(data);
-                    if(findPhoto !== -1) {
-                        this.getDamageInspectionViewData.images.splice(findPhoto, 1);
-                    }
+                    this.deletePhotoFromView(data, this.getDamageInspectionViewData);
                     this.unstageNewPhoto(data);
                     break;
                 default:
@@ -163,9 +170,12 @@ export const useInspectionStore = defineStore('inspections', {
           console.log('Processing request: ' + inputName);
           switch (inputName) {
               case 'takePhoto':
-                  this.getBacklogMaintenanceViewData.images =
-                      [data.webviewPath, ...this.getBacklogMaintenanceViewData.images];
+                  this.addPhotoToView(data, this.getBacklogMaintenanceViewData);
                   this.stageNewPhoto(data);
+                  break;
+              case 'deletePhoto':
+                  this.deletePhotoFromView(data, this.getBacklogMaintenanceViewData);
+                  this.unstageNewPhoto(data);
                   break;
               default:
                   console.log("Invalid Backlog input")

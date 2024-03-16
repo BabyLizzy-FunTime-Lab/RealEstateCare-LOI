@@ -55,7 +55,7 @@ export default {
     }
   },
   emits: [
-      'update:images'
+      'update:images', 'delete:image'
   ]
 }
 </script>
@@ -104,8 +104,8 @@ export default {
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <div id="thumbnail--container">
-      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"
-                              :image="image" @delete-event="emitInputChange(image, 'delete:image')"/>
+      <image-thumbnail-viewer :images="images"
+                              @delete-event="emitInputChange($event, 'delete:image')"/>
     </div>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="console.log('saving backlog')"/>

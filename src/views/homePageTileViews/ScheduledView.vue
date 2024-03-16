@@ -70,6 +70,7 @@ export default {
           :cost-indication="this.backlogMaintenanceData.costIndication"
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
+          @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
         />
         <TechnicalInstallationInspection/>
         <Modifications/>
