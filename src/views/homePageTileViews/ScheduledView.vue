@@ -92,6 +92,7 @@ export default {
           @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
           :images="this.technicalInstallationData.images"
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
+          @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
         />
         <Modifications/>
       </ion-accordion-group>
