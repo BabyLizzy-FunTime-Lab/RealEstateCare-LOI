@@ -3,12 +3,14 @@ import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonTextarea} from "@ionic/vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 import BaseButton from "@/components/base/BaseButton.vue";
+import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
 
 export default {
   name: "Modifications",
   components: {
+    ImageThumbnailViewer,
     IonButton,
     IonTextarea, IonSelectOption, IonSelect, BaseButton, IonInput, BaseAccordionLayout, IonItem, IonLabel},
   data() {
@@ -73,12 +75,10 @@ export default {
     <ion-label>Photos</ion-label>
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
-  <!--  <ion-item  slot="content" v-if="images.length > 0">-->
-  <!--    <div id="thumbnail&#45;&#45;container">-->
-  <!--      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"-->
-  <!--                              :image="image" @delete-event="emitInputChange(image, 'delete:image')"/>-->
-  <!--    </div>-->
-  <!--  </ion-item>-->
+<!--    <ion-item  slot="content" v-if="images.length > 0">-->
+<!--      <image-thumbnail-viewer-->
+<!--          :images="images" @delete-event="emitInputChange($event, 'delete:image')"/>-->
+<!--    </ion-item>-->
   <BaseButton slot="content" name="Save" @click="console.log('saving mods')"/>
 </BaseAccordionLayout>
 </template>

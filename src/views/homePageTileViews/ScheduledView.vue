@@ -15,12 +15,16 @@ export default {
     return {
       inspectionStore: useInspectionStore(),
       damageInspectionData: Object,
-      backlogMaintenanceData: Object
+      backlogMaintenanceData: Object,
+      technicalInstallationData: Object,
+      modificationsData: Object
     }
   },
   mounted() {
     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
     this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
+    this.technicalInstallationData = this.inspectionStore.getTechnicalInstallationViewData;
+    this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {
     saveDataRequest() {
@@ -35,6 +39,11 @@ export default {
     updateBacklogMaintenanceViewData($event, inputName) {
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateBacklogMaintenanceViewData($event, inputName);
+      console.log("Requesting finished");
+    },
+    updateTechnicalInstallationViewData($event, inputName) {
+      console.log("Requesting update of " + inputName + " in staging state.");
+      this.inspectionStore.updateTechnicalInstallationViewData($event, inputName);
       console.log("Requesting finished");
     }
   }
@@ -79,7 +88,10 @@ export default {
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
         />
         <TechnicalInstallationInspection
-
+          :location="this.technicalInstallationData.locationInput"
+          @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
+          :images="this.technicalInstallationData.images"
+          @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
         />
         <Modifications/>
       </ion-accordion-group>

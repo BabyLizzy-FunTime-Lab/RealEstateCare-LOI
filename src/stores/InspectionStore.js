@@ -44,7 +44,8 @@ export const useInspectionStore = defineStore('inspections', {
                 reportedFaultInput: "",
                 testProcedureInput: "",
                 approvedInput: "",
-                commentsInput: ""
+                commentsInput: "",
+                images: []
             },
             modificationsViewData: {
                 inspectorId: "",
@@ -53,7 +54,8 @@ export const useInspectionStore = defineStore('inspections', {
                 modifiedByInput: "",
                 descriptionInput: "",
                 necessaryActionInput: "",
-                commentsInput: ""
+                commentsInput: "",
+                images:[]
             }
         }
     },
@@ -175,8 +177,8 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         updateBacklogMaintenanceViewData(data, inputName) {
-          console.log('Processing request: ' + inputName);
-          switch (inputName) {
+            console.log('Processing request: ' + inputName);
+            switch (inputName) {
               case 'location':
                   this.updateInputView(data, this.getBacklogMaintenanceViewData, 'locationInput');
                   break;
@@ -201,6 +203,24 @@ export const useInspectionStore = defineStore('inspections', {
                   console.log("Invalid Backlog input")
           }
         },
+        updateTechnicalInstallationViewData(data, inputName) {
+            console.log('Processing request: ' + inputName);
+            switch(inputName) {
+                case 'location':
+                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'locationInput');
+                    break;
+                case 'takePhoto':
+                    this.addPhotoToView(data, this.getTechnicalInstallationViewData);
+                    this.stageNewPhoto(data);
+                    break;
+                case 'deletePhoto':
+                    this.deletePhotoFromView(data, this.getTechnicalInstallationViewData);
+                    this.unstageNewPhoto(data);
+                    break;
+                default:
+                    console.log("Invalid Backlog input")
+            }
+        },
        pushdamageInspectionViewData() {
             // Images are saved with another function that returns the nessasery
             // medialinks on success. These links need to be added to the push data
@@ -224,6 +244,12 @@ export const useInspectionStore = defineStore('inspections', {
         },
         getBacklogMaintenanceViewData(state) {
             return state.backlogMaintenanceViewData;
+        },
+        getTechnicalInstallationViewData(state) {
+            return state.technicalInstallationViewData;
+        },
+        getModificationsViewData(state) {
+            return state.modificationsViewData;
         }
     }
 })

@@ -1,15 +1,8 @@
 <script>
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {
-  IonButton,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonRadio,
-  IonRadioGroup,
-  IonSelect,
-  IonSelectOption,
-  IonTextarea
+  IonButton, IonInput, IonItem, IonLabel, IonRadio, IonRadioGroup,
+  IonSelect, IonSelectOption, IonTextarea, modalController
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
@@ -31,6 +24,35 @@ export default {
       takePhoto
     }
   },
+  props: {
+    location: String,
+    installationType: String,
+    clientStatement: String,
+    approved: String,
+    testProcedure: String,
+    comments: String,
+    images: {
+      default: [],
+      required: false
+    }
+  },
+  methods: {
+    emitInputChange(data, eventName) {
+      this.$emit(eventName, data);
+    },
+    async dismissModal() {
+      await modalController.dismiss();
+    },
+  },
+  watch: {
+    newPhoto() {
+      this.$emit('update:images', newPhoto.value);
+    }
+  },
+  emits: [
+    'update:images', 'delete:image', 'update:location', 'update:installationType',
+    'update:clientStatement', 'update:approved', 'update:comments'
+  ]
 }
 </script>
 
@@ -38,15 +60,17 @@ export default {
 <BaseAccordionLayout header-name="Technical Installation Inspection" accordion-value="third">
   <ion-item slot="content">
     <ion-input label="Location"
+               :value="location"
+               @input="emitInputChange($event, 'update:location')"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
   </ion-item>
   <ion-item slot="content">
-    <ion-select value=""
-                label="Installation type"
-                placeholder="Select"
-                @ionChange="console.log('tech damage')">
+    <ion-select label="Installation type"
+                :value="installationType"
+                @ionChange="emitInputChange($event, 'update:installationType')"
+                placeholder="Select">
       <ion-select-option value="cooling">Cooling</ion-select-option>
       <ion-select-option value="heating">Heating</ion-select-option>
       <ion-select-option value="ventilation">Ventilation</ion-select-option>
@@ -56,16 +80,16 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Client statement"
-                  value=""
-                  @ionChange="console.log('update:clientStatement')"
+                  :value="clientStatement"
+                  @ionChange="emitInputChange($event,'update:clientStatement')"
                   label-placement="floating"
                   :auto-grow="true"
-                  placeholder="Enter statement"></ion-textarea>
+                  placeholder="Enter statement"/>
   </ion-item>
   <ion-item slot="content">
     <ion-label>Approved</ion-label>
-    <ion-radio-group value=""
-                     @ionChange="console.log('update:approved')"
+    <ion-radio-group :value="approved"
+                     @ionChange="emitInputChange($event,'update:approved')"
                      name="newDamage">
       <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
       <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
@@ -73,12 +97,12 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-label>Test procedure</ion-label>
-    <BaseButton name="View" @click="console.log('get procedure')"/>
+    <BaseButton name="View" @click="console.log('Display procedures as a modal.')"/>
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Comments"
-                  value=""
-                  @ionChange="console.log('update:description')"
+                  :value="comments"
+                  @ionChange="emitInputChange($event,'update:comments')"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
@@ -87,12 +111,10 @@ export default {
     <ion-label>Photos</ion-label>
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
-<!--  <ion-item  slot="content" v-if="images.length > 0">-->
-<!--    <div id="thumbnail&#45;&#45;container">-->
-<!--      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"-->
-<!--                              :image="image" @delete-event="emitInputChange(image, 'delete:image')"/>-->
-<!--    </div>-->
-<!--  </ion-item>-->
+  <ion-item  slot="content" v-if="images.length > 0">
+      <image-thumbnail-viewer
+          :images="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+  </ion-item>
   <BaseButton slot="content" name="Save" @click="console.log('saving technical')"/>
 </BaseAccordionLayout>
 </template>

@@ -134,8 +134,8 @@ export default {
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-      <image-thumbnail-viewer :images="images"
-                              @delete-event="emitInputChange($event, 'delete:image')"/>
+      <image-thumbnail-viewer
+          :images="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>
