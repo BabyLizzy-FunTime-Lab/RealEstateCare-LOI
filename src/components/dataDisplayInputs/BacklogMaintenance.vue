@@ -2,15 +2,8 @@
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {
-  IonItem,
-  IonInput,
-  IonSelect,
-  IonSelectOption,
-  IonRadioGroup,
-  IonLabel,
-  IonRadio,
-  IonButton,
-  modalController
+  IonItem, IonInput, IonSelect, IonSelectOption, IonRadioGroup,
+  IonLabel, IonRadio, IonButton, modalController
 } from "@ionic/vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 import BaseButton from "@/components/base/BaseButton.vue";
@@ -55,7 +48,8 @@ export default {
     }
   },
   emits: [
-      'update:images', 'delete:image'
+      'update:images', 'delete:image', 'update:location', 'update:emergency',
+      'update:maintenanceType', 'update:costIndication',
   ]
 }
 </script>
@@ -65,6 +59,7 @@ export default {
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"
+               @input="emitInputChange($event, 'update:location')"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
@@ -72,7 +67,7 @@ export default {
   <ion-item slot="content">
     <ion-label>Emergency Action needed?</ion-label>
     <ion-radio-group :value="emergency"
-                     @ionChange="console.log('emergency')"
+                     @ionChange="emitInputChange($event, 'update:emergency')"
                      name="emergency">
       <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
       <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
@@ -80,6 +75,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="type"
+                @ionChange="emitInputChange($event, 'update:maintenanceType')"
                 label="Maintenance Type"
                 placeholder="Select">
       <ion-select-option value="paint">Paint</ion-select-option>
@@ -91,6 +87,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="costIndication"
+                @ionChange="emitInputChange($event, 'update:costIndication')"
                 label="Cost Prediction"
                 placeholder="Select">
       <ion-select-option value="0-500">0-500</ion-select-option>

@@ -34,10 +34,10 @@ export const useInspectionStore = defineStore('inspections', {
                 locationInput: "",
                 emergencyInput: "",
                 maintenanceTypeInput: "",
-                costIndication: "",
+                costIndicationInput: "",
                 images: []
             },
-            technicalInstallation: {
+            technicalInstallationViewData: {
                 inspectorId: "",
                 locationInput: "",
                 installationTypeInput: "",
@@ -46,7 +46,7 @@ export const useInspectionStore = defineStore('inspections', {
                 approvedInput: "",
                 commentsInput: ""
             },
-            modifications: {
+            modificationsViewData: {
                 inspectorId: "",
                 historyRecordLink: "",
                 locationInput: "",
@@ -118,8 +118,16 @@ export const useInspectionStore = defineStore('inspections', {
             viewData.images =
                 [newPhoto.webviewPath, ...viewData.images];
         },
+        updateInputView(newData, viewData, propertyName) {
+            // This is a good spot to implement input validation.
+            // If it recieved an event object, it will seek the target.value
+            if(typeof newData === 'object' && newData !== null ) {
+                viewData[propertyName] = newData.target.value
+            } else {
+                viewData[propertyName] = newData
+            }
+        },
         deletePhotoFromView(photoURI, viewData) {
-            // let findPhoto = this.getDamageInspectionViewData.images.indexOf(data);
             let findPhoto = viewData.images.indexOf(photoURI);
             if(findPhoto !== -1) {
                 viewData.images.splice(findPhoto, 1);
@@ -129,30 +137,30 @@ export const useInspectionStore = defineStore('inspections', {
             console.log("Processing request: " + inputName);
             switch (inputName) {
                 case 'location':
-                    this.getDamageInspectionViewData.locationInput = data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'locationInput');
                     break;
                 case 'newDamage':
-                    this.getDamageInspectionViewData.newDamageInput = data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'newDamageInput');
                     break;
                 case 'completeDate':
-                    this.getDamageInspectionViewData.dateInput = data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'dateInput');
                     break;
                 case 'selectedDamageCategory':
-                    this.getDamageInspectionViewData.selectedDamageTypeOption = data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'selectedDamageTypeOption');
                     if (data.target.value === 'other') {
-                        this.getDamageInspectionViewData.damageTypeInput = '';
+                        this.updateInputView('', this.getDamageInspectionViewData, 'damageTypeInput');
                     } else {
-                        this.getDamageInspectionViewData.damageTypeInput = data.target.value;
+                        this.updateInputView(data, this.getDamageInspectionViewData, 'damageTypeInput');
                     }
                     break;
                 case 'damageCategory':
-                    this.getDamageInspectionViewData.damageTypeInput =data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'damagetypeInput');
                     break;
                 case 'emergency':
-                    this.getDamageInspectionViewData.emergencyInput = data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'emergencyInput');
                     break;
                 case 'description':
-                    this.getDamageInspectionViewData.commentsInput = data.target.value;
+                    this.updateInputView(data, this.getDamageInspectionViewData, 'commentsInput');
                     break;
                 case 'takePhoto':
                     this.addPhotoToView(data, this.getDamageInspectionViewData);
@@ -169,6 +177,18 @@ export const useInspectionStore = defineStore('inspections', {
         updateBacklogMaintenanceViewData(data, inputName) {
           console.log('Processing request: ' + inputName);
           switch (inputName) {
+              case 'location':
+                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'locationInput');
+                  break;
+              case 'emergency':
+                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'emergencyInput');
+                  break;
+              case 'maintenanceType':
+                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'maintenanceTypeInput');
+                  break;
+              case 'costIndication':
+                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'costIndicationInput');
+                  break;
               case 'takePhoto':
                   this.addPhotoToView(data, this.getBacklogMaintenanceViewData);
                   this.stageNewPhoto(data);

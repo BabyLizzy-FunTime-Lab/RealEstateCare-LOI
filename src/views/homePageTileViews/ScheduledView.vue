@@ -33,7 +33,9 @@ export default {
       console.log("Requesting finished");
     },
     updateBacklogMaintenanceViewData($event, inputName) {
+      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateBacklogMaintenanceViewData($event, inputName);
+      console.log("Requesting finished");
     }
   }
 }
@@ -65,14 +67,20 @@ export default {
         />
         <BacklogMaintenance
           :location="this.backlogMaintenanceData.locationInput"
+          @update:location="this.updateBacklogMaintenanceViewData($event, 'location')"
           :emergency="this.backlogMaintenanceData.emergencyInput"
+          @update:emergency="this.updateBacklogMaintenanceViewData($event, 'emergency')"
           :type="this.backlogMaintenanceData.maintenanceTypeInput"
-          :cost-indication="this.backlogMaintenanceData.costIndication"
+          @update:maintenance-type="this.updateBacklogMaintenanceViewData($event, 'maintenanceType')"
+          :cost-indication="this.backlogMaintenanceData.costIndicationInput"
+          @update:cost-indication="this.updateBacklogMaintenanceViewData($event, 'costIndication')"
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
         />
-        <TechnicalInstallationInspection/>
+        <TechnicalInstallationInspection
+
+        />
         <Modifications/>
       </ion-accordion-group>
     </base-list-layout>
