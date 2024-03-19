@@ -3,7 +3,6 @@ import {
   IonHeader, IonToolbar, IonButton, IonButtons,
   IonContent, IonImg, IonModal, IonTitle,
 } from "@ionic/vue";
-import { modalController } from "@ionic/vue";
 
 export default {
   name: "ImageViewerModal",
@@ -17,19 +16,13 @@ export default {
     isOpen: Boolean
   },
   methods: {
-    openModal(isOpen) {
-      this.isModalOpen = isOpen
-      if(!isOpen) this.dismissModal();
-    },
-    async dismissModal() {
-      await modalController.dismiss();
-    },
-  },
-  data() {
-    return {
-      isModalOpen: false,
+    emitClose() {
+      this.$emit('close:modal');
     }
   },
+  emits: [
+    'close:modal',
+  ]
 }
 </script>
 
@@ -39,7 +32,7 @@ export default {
       <ion-toolbar color="primary">
         <ion-title slot="start">{{documentName}}</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="openModal(false)">Close</ion-button>
+          <ion-button @click="emitClose">Close</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>

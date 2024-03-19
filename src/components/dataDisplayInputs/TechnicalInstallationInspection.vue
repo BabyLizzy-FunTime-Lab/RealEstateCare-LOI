@@ -103,7 +103,10 @@ export default {
   <ion-item slot="content">
     <ion-label>Test procedure</ion-label>
     <BaseButton name="View" @click="openCloseProcedureModal"/>
-    <image-viewer-modal document-name="Test procedure" image="/documents/game-boy.jpg" :is-open="isModalOpen"/>
+    <image-viewer-modal
+        document-name="Test procedure" image="/documents/game-boy.jpg"
+        :is-open="isModalOpen" @close:modal="openCloseProcedureModal"
+    />
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Comments"
