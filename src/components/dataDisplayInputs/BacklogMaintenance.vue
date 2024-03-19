@@ -3,11 +3,11 @@ import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {
   IonItem, IonInput, IonSelect, IonSelectOption, IonRadioGroup,
-  IonLabel, IonRadio, IonButton, modalController
+  IonLabel, IonRadio, IonButton,
 } from "@ionic/vue";
-import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
+import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
 
@@ -37,9 +37,6 @@ export default {
   methods: {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
-    },
-    async dismissModal() {
-      await modalController.dismiss();
     },
   },
   watch: {

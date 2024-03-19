@@ -1,18 +1,19 @@
 <script>
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonTextarea} from "@ionic/vue";
-import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
+import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
 
 export default {
   name: "ModificationInspection",
   components: {
-    ImageThumbnailViewer,
-    IonButton,
-    IonTextarea, IonSelectOption, IonSelect, BaseButton, IonInput, BaseAccordionLayout, IonItem, IonLabel},
+    ImageThumbnailViewer, IonButton, IonTextarea, IonSelectOption,
+    IonSelect, BaseButton, IonInput, BaseAccordionLayout,
+    IonItem, IonLabel
+  },
   data() {
     return {
       newPhoto,
@@ -25,9 +26,12 @@ export default {
 
 <template>
 <BaseAccordionLayout header-name="Modifications" accordion-value="fourth">
+  <ion-item slot="content" lines="none">
+    <ion-label slot="start">Documented mods</ion-label>
+    <BaseButton slot="end" name="View" @click="console.log('get procedure')"/>
+  </ion-item>
   <ion-item slot="content">
-    <ion-label>Documented mods</ion-label>
-    <BaseButton name="View" @click="console.log('get procedure')"/>
+    <ion-input label="Upload PDF" label-placement="stacked" type="file" accept="application/pdf" @change="console.log('uploading')" />
   </ion-item>
   <ion-item slot="content">
     <ion-input label="Location"
