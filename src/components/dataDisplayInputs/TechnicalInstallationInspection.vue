@@ -5,6 +5,7 @@ import {
   IonSelect, IonSelectOption, IonTextarea, modalController
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
+import ImageViewerModal from "@/components/dataDisplayInputs/ImageViewerModal.vue";
 import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
@@ -15,13 +16,14 @@ export default {
   components: {
     ImageThumbnailViewer, IonButton, IonTextarea, IonRadio, IonRadioGroup,
     IonSelectOption, IonSelect, IonInput, BaseButton, BaseAccordionLayout,
-    IonItem, IonLabel
+    IonItem, IonLabel, ImageViewerModal
   },
   data() {
     return {
       newPhoto,
       photos,
-      takePhoto
+      takePhoto,
+      isModalOpen: false
     }
   },
   props: {
@@ -43,6 +45,9 @@ export default {
     async dismissModal() {
       await modalController.dismiss();
     },
+    openCloseProcedureModal() {
+      this.isModalOpen = !this.isModalOpen;
+    }
   },
   watch: {
     newPhoto() {
@@ -97,7 +102,8 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-label>Test procedure</ion-label>
-    <BaseButton name="View" @click="console.log('Display procedures as a modal.')"/>
+    <BaseButton name="View" @click="openCloseProcedureModal"/>
+    <image-viewer-modal document-name="Test procedure" image="/documents/game-boy.jpg" :is-open="isModalOpen"/>
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Comments"

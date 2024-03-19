@@ -12,7 +12,6 @@ export default {
     IonThumbnail, IonButton, IonButtons, IonImg
   },
   props: {
-    image: String,
     images: Array,
     delete: Function,
   },
