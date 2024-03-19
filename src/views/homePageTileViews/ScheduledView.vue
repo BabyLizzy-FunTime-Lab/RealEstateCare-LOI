@@ -4,13 +4,13 @@ import baseListLayout from "@/components/base/BaseListLayout.vue";
 import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
 import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
 import TechnicalInstallationInspection from "@/components/dataDisplayInputs/TechnicalInstallationInspection.vue";
-import Modifications from "@/components/dataDisplayInputs/Modifications.vue";
+import ModificationInspection from "@/components/dataDisplayInputs/ModificationInspection.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
   components: {baseListLayout, IonAccordionGroup, DamageInspection,
-    BacklogMaintenance, TechnicalInstallationInspection, Modifications},
+    BacklogMaintenance, TechnicalInstallationInspection, ModificationInspection},
   data() {
     return {
       inspectionStore: useInspectionStore(),
@@ -102,7 +102,7 @@ export default {
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
           @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
         />
-        <Modifications/>
+        <ModificationInspection/>
       </ion-accordion-group>
     </base-list-layout>
   </base-layout>

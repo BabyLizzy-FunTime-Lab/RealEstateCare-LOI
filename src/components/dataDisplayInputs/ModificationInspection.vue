@@ -8,7 +8,7 @@ import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailV
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
 
 export default {
-  name: "Modifications",
+  name: "ModificationInspection",
   components: {
     ImageThumbnailViewer,
     IonButton,
