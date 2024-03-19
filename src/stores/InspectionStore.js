@@ -41,8 +41,8 @@ export const useInspectionStore = defineStore('inspections', {
                 inspectorId: "",
                 locationInput: "",
                 installationTypeInput: "",
-                reportedFaultInput: "",
-                testProcedureInput: "",
+                clientStatementInput: "",
+                testProcedureLink: "",
                 approvedInput: "",
                 commentsInput: "",
                 images: []
@@ -208,6 +208,18 @@ export const useInspectionStore = defineStore('inspections', {
             switch(inputName) {
                 case 'location':
                     this.updateInputView(data, this.getTechnicalInstallationViewData, 'locationInput');
+                    break;
+                case 'installationType':
+                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'installationTypeInput');
+                    break;
+                case 'clientStatement':
+                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'clientStatementInput');
+                    break;
+                case 'approved':
+                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'approvedInput');
+                    break;
+                case 'comments':
+                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'commentsInput');
                     break;
                 case 'takePhoto':
                     this.addPhotoToView(data, this.getTechnicalInstallationViewData);
