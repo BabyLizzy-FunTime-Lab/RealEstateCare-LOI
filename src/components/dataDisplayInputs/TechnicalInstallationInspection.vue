@@ -2,7 +2,7 @@
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {
   IonButton, IonInput, IonItem, IonLabel, IonRadio, IonRadioGroup,
-  IonSelect, IonSelectOption, IonTextarea, modalController
+  IonSelect, IonSelectOption, IonTextarea,
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageViewerModal from "@/components/dataDisplayInputs/ImageViewerModal.vue";
@@ -23,7 +23,7 @@ export default {
       newPhoto,
       photos,
       takePhoto,
-      isModalOpen: false
+      isProcedureModalOpen: false
     }
   },
   props: {
@@ -42,11 +42,8 @@ export default {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
-    async dismissModal() {
-      await modalController.dismiss();
-    },
-    openCloseProcedureModal() {
-      this.isModalOpen = !this.isModalOpen;
+    openCloseModal() {
+      this.isProcedureModalOpen = !this.isProcedureModalOpen;
     }
   },
   watch: {
@@ -102,10 +99,10 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-label>Test procedure</ion-label>
-    <BaseButton name="View" @click="openCloseProcedureModal"/>
+    <BaseButton name="View" @click="openCloseModal(isProcedureModalOpen)"/>
     <image-viewer-modal
         document-name="Test procedure" image="/documents/game-boy.jpg"
-        :is-open="isModalOpen" @close:modal="openCloseProcedureModal"
+        :is-open="isProcedureModalOpen" @close:modal="openCloseModal"
     />
   </ion-item>
   <ion-item slot="content">
