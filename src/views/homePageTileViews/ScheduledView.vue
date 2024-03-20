@@ -49,8 +49,8 @@ export default {
     updateModificationsViewData($event, inputName) {
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateModificationsViewData($event, inputName);
-      // Not sure if this is correct. I'm calling the update view function here
-      // instead of in the InspectionStore.
+      // Not sure if this is correct. I'm calling the updateView function in the store
+      // instead of here. Am I being too redundant here?
       // this.inspectionStore.updateInputView($event, this.modificationsData, inputName)
       console.log("Requesting finished");
     }
