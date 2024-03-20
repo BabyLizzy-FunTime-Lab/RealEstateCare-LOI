@@ -2,7 +2,7 @@
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonTextarea} from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
+import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();

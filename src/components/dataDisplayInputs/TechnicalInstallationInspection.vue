@@ -5,8 +5,8 @@ import {
   IonSelect, IonSelectOption, IonTextarea,
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ImageViewerModal from "@/components/dataDisplayInputs/ImageViewerModal.vue";
-import ImageThumbnailViewer from "@/components/dataDisplayInputs/ImageThumbnailViewer.vue";
+import ImageViewerModal from "@/components/mediaViewers/ImageViewerModal.vue";
+import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
