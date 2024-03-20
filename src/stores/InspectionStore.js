@@ -49,12 +49,12 @@ export const useInspectionStore = defineStore('inspections', {
             },
             modificationsViewData: {
                 inspectorId: "",
-                historyRecordLink: "",
-                locationInput: "",
-                modifiedByInput: "",
-                descriptionInput: "",
-                necessaryActionInput: "",
-                commentsInput: "",
+                documentedMods: "",
+                location: "",
+                modifiedBy: "",
+                modDescription: "",
+                requiredAction: "",
+                comments: "",
                 images:[]
             }
         }
@@ -231,6 +231,27 @@ export const useInspectionStore = defineStore('inspections', {
                     break;
                 default:
                     console.log("Invalid Backlog input")
+            }
+        },
+        updateModificationsViewData(data, inputName) {
+            // I made the input names match the state names so I could experiment with
+            // calling updateInputView in the ScheduledView parent component.
+            console.log('Processing request: ' + inputName);
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto') {
+                switch (inputName) {
+                    case 'takePhoto':
+                        this.addPhotoToView(data, this.getModificationsViewData);
+                        this.stageNewPhoto(data);
+                        break;
+                    case 'deletePhoto':
+                        this.deletePhotoFromView(data, this.getModificationsViewData);
+                        this.unstageNewPhoto(data);
+                        break;
+                    default:
+                        console.log("Invalid Backlog input")
+                }
+            } else {
+                this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
        pushdamageInspectionViewData() {

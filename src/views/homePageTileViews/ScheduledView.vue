@@ -45,6 +45,14 @@ export default {
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateTechnicalInstallationViewData($event, inputName);
       console.log("Requesting finished");
+    },
+    updateModificationsViewData($event, inputName) {
+      console.log("Requesting update of " + inputName + " in staging state.");
+      this.inspectionStore.updateModificationsViewData($event, inputName);
+      // Not sure if this is correct. I'm calling the update view function here
+      // instead of in the InspectionStore.
+      // this.inspectionStore.updateInputView($event, this.modificationsData, inputName)
+      console.log("Requesting finished");
     }
   }
 }
@@ -102,7 +110,10 @@ export default {
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
           @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
         />
-        <ModificationInspection/>
+        <ModificationInspection
+            :location="this.modificationsData.location"
+            @update:location="this.updateModificationsViewData($event, 'location')"
+        />
       </ion-accordion-group>
     </base-list-layout>
   </base-layout>
