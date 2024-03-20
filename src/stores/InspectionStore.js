@@ -55,7 +55,7 @@ export const useInspectionStore = defineStore('inspections', {
                 modDescription: "",
                 requiredAction: "",
                 comments: "",
-                images:[]
+                images: []
             }
         }
     },

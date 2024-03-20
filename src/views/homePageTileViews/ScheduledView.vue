@@ -115,6 +115,17 @@ export default {
             @update:location="this.updateModificationsViewData($event, 'location')"
             :documented-mods="this.modificationsData.documentedMods"
             @update:documented-mods="this.updateModificationsViewData($event,'documentedMods')"
+            :modified-by="this.modificationsData.modifiedBy"
+            @update:modified-by="this.updateModificationsViewData($event,'modifiedBy')"
+            :mod-description="this.modificationsData.modDescription"
+            @update:mod-description="this.updateModificationsViewData($event,'modDescription')"
+            :required-action="this.modificationsData.requiredAction"
+            @update:required-action="this.updateModificationsViewData($event,'requiredAction')"
+            :comments="this.modificationsData.comments"
+            @update:comments="this.updateModificationsViewData($event,'comments')"
+            :images="this.modificationsData.images"
+            @update:images="this.updateModificationsViewData($event, 'takePhoto')"
+            @delete:image="this.updateModificationsViewData($event, 'deletePhoto')"
         />
       </ion-accordion-group>
     </base-list-layout>

@@ -11,7 +11,7 @@ export default {
 </script>
 
 <template>
-  <ion-button expand="full"
+  <ion-button expand="full" fill="solid"
               color="secondary">{{name}}</ion-button>
 </template>
 

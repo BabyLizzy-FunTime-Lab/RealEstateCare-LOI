@@ -1,8 +1,8 @@
 <script>
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {
-  IonButton, IonInput, IonItem, IonLabel, IonSelect,
-  IonSelectOption, IonTextarea, modalController
+  IonButton, IonInput, IonItem, IonLabel, IonSelect, IonText,
+  IonSelectOption, IonTextarea, modalController, IonButtons
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
@@ -15,13 +15,14 @@ export default {
   components: {
     ImageThumbnailViewer, IonButton, IonTextarea, IonSelectOption,
     IonSelect, BaseButton, IonInput, BaseAccordionLayout,
-    IonItem, IonLabel
+    IonItem, IonLabel, IonButtons, IonText
   },
   data() {
     return {
       newPhoto,
       photos,
-      takePhoto
+      takePhoto,
+      showChoosePDF: false
     }
   },
   props: {
@@ -46,9 +47,16 @@ export default {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
+    emitNewPDF(data, eventName) {
+      this.emitInputChange(data, eventName);
+      this.showChoosePDF = false
+    },
     async dismissModal() {
       await modalController.dismiss();
     },
+    toggleChoosePDF() {
+      this.showChoosePDF = !this.showChoosePDF;
+    }
   },
   watch: {
     newPhoto() {
@@ -66,14 +74,18 @@ export default {
 <template>
 <BaseAccordionLayout header-name="Modifications" accordion-value="fourth">
   <ion-item slot="content" lines="none">
-    <ion-label slot="start">Documented mods</ion-label>
-    <BaseButton v-if="documentedMods" slot="end" name="View" @click="console.log(documentedMods)"/>
+    <ion-label >Documented mods</ion-label>
+    <ion-buttons id="documentedMods__Buttons" v-if="documentedMods">
+      <BaseButton name="View" @click="console.log(documentedMods)"/>
+      <BaseButton v-if="!showChoosePDF" name="Update" @click="toggleChoosePDF"/>
+    </ion-buttons>
   </ion-item>
   <ion-item slot="content">
-    <ion-input
-        aria-label="Upload PDF" label-placement="stacked"
+    <ion-text v-if="documentedMods && !showChoosePDF">PDF Title: {{documentedMods.name}}</ion-text>
+    <ion-input v-if="!documentedMods || showChoosePDF"
+        label="Upload PDF" label-placement="stacked"
         type="file" accept="application/pdf"
-        @change="emitInputChange($event, 'update:documentedMods')"
+        @change="emitNewPDF($event, 'update:documentedMods')"
     />
   </ion-item>
   <ion-item slot="content">
@@ -103,7 +115,8 @@ export default {
                   placeholder="Enter the mod description"></ion-textarea>
   </ion-item>
   <ion-item slot="content">
-    <ion-select value=""
+    <ion-select :value="requiredAction"
+                @ionChange="emitInputChange($event, 'update:requiredAction')"
                 label="Required action"
                 placeholder="Select">
       <ion-select-option value="acceptance">Acceptance</ion-select-option>
@@ -115,8 +128,8 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Comments"
-                  value=""
-                  @ionChange="console.log('update:description')"
+                  :value="comments"
+                  @ionChange="emitInputChange($event, 'update:comments')"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
@@ -125,12 +138,22 @@ export default {
     <ion-label>Photos</ion-label>
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
-      <image-thumbnail-viewer
-          :images="images" @delete-event="emitInputChange($event, 'delete:image')"/>
-  <BaseButton slot="content" name="Save" @click="console.log('saving mods')"/>
+  <ion-item slot="content" v-if="images.length > 0">
+    <image-thumbnail-viewer
+        :images="images" @delete-event="emitInputChange($event, 'delete:image')"
+    />
+  </ion-item>
+  <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </BaseAccordionLayout>
 </template>
 
 <style scoped lang="scss">
-
+#documentedMods__Buttons {
+  justify-content: center;
+  align-items: center;
+  column-gap: .2em;
+  ion-button {
+    margin: 0;
+  }
+}
 </style>
