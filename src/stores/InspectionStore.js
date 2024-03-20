@@ -49,7 +49,7 @@ export const useInspectionStore = defineStore('inspections', {
             },
             modificationsViewData: {
                 inspectorId: "",
-                documentedMods: "",
+                documentedMods: null,
                 location: "",
                 modifiedBy: "",
                 modDescription: "",
@@ -128,6 +128,9 @@ export const useInspectionStore = defineStore('inspections', {
             } else {
                 viewData[propertyName] = newData
             }
+        },
+        updatePdfDocumentView(newDoc, viewData, propertyName) {
+          viewData[propertyName] = newDoc.target.files[0];
         },
         deletePhotoFromView(photoURI, viewData) {
             let findPhoto = viewData.images.indexOf(photoURI);
@@ -237,8 +240,12 @@ export const useInspectionStore = defineStore('inspections', {
             // I made the input names match the state names so I could experiment with
             // calling updateInputView in the ScheduledView parent component.
             console.log('Processing request: ' + inputName);
-            if(inputName === 'takePhoto' || inputName === 'deletePhoto') {
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'documentedMods') {
                 switch (inputName) {
+                    case 'documentedMods':
+                        console.log('Staging pdf file in de state');
+                        this.updatePdfDocumentView(data, this.getModificationsViewData, inputName);
+                        break;
                     case 'takePhoto':
                         this.addPhotoToView(data, this.getModificationsViewData);
                         this.stageNewPhoto(data);

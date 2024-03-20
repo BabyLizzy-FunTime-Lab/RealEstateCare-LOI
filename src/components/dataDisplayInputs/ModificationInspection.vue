@@ -25,7 +25,10 @@ export default {
     }
   },
   props: {
-    documentedMods: File,
+    documentedMods: {
+      type: File,
+      default: null
+    },
     location: String,
     modifiedBy: String,
     modDescription: String,
@@ -64,13 +67,13 @@ export default {
 <BaseAccordionLayout header-name="Modifications" accordion-value="fourth">
   <ion-item slot="content" lines="none">
     <ion-label slot="start">Documented mods</ion-label>
-    <BaseButton v-if="documentedMods" slot="end" name="View" @click="console.log('get procedure')"/>
+    <BaseButton v-if="documentedMods" slot="end" name="View" @click="console.log(documentedMods)"/>
   </ion-item>
   <ion-item slot="content">
     <ion-input
-        label="Upload PDF" label-placement="stacked"
+        aria-label="Upload PDF" label-placement="stacked"
         type="file" accept="application/pdf"
-        @change="console.log('uploading')"
+        @change="emitInputChange($event, 'update:documentedMods')"
     />
   </ion-item>
   <ion-item slot="content">
@@ -83,6 +86,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="modifiedBy"
+                @ionChange="emitInputChange($event, 'update:modifiedBy')"
                 label="Modified by"
                 placeholder="Select">
       <ion-select-option value="tenant">Tenant</ion-select-option>
@@ -93,7 +97,7 @@ export default {
   <ion-item slot="content">
     <ion-textarea label="Mod description"
                   :value="modDescription"
-                  @ionChange="console.log('update:modDescription')"
+                  @ionChange="emitInputChange($event, 'update:modDescription')"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter the mod description"></ion-textarea>

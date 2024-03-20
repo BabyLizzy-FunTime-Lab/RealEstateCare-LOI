@@ -113,6 +113,8 @@ export default {
         <ModificationInspection
             :location="this.modificationsData.location"
             @update:location="this.updateModificationsViewData($event, 'location')"
+            :documented-mods="this.modificationsData.documentedMods"
+            @update:documented-mods="this.updateModificationsViewData($event,'documentedMods')"
         />
       </ion-accordion-group>
     </base-list-layout>
