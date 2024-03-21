@@ -54,8 +54,16 @@ export default {
     async dismissModal() {
       await modalController.dismiss();
     },
-    toggleChoosePDF() {
-      this.showChoosePDF = !this.showChoosePDF;
+    toggleChoosePDF(setTo) {
+      if(setTo === false || setTo === true) {
+        this.showChoosePDF = setTo
+      } else {
+        this.showChoosePDF = !this.showChoosePDF;
+      }
+    },
+    viewPDF(pdf) {
+      console.log(pdf);
+      this.toggleChoosePDF(false);
     }
   },
   watch: {
@@ -73,16 +81,19 @@ export default {
 
 <template>
 <BaseAccordionLayout header-name="Modifications" accordion-value="fourth">
-  <ion-item slot="content" lines="none">
+  <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
-    <ion-buttons id="documentedMods__Buttons" v-if="documentedMods">
-      <BaseButton name="View" @click="console.log(documentedMods)"/>
+    <ion-buttons v-if="documentedMods">
+      <BaseButton name="View" @click="viewPDF(documentedMods)"/>
       <BaseButton v-if="!showChoosePDF" name="Update" @click="toggleChoosePDF"/>
     </ion-buttons>
   </ion-item>
-  <ion-item slot="content">
-    <ion-text v-if="documentedMods && !showChoosePDF">PDF Title: {{documentedMods.name}}</ion-text>
-    <ion-input v-if="!documentedMods || showChoosePDF"
+  <ion-item id="documentedModsFiles" slot="content">
+    <ion-label v-if="documentedMods">
+      <h3>Selected PDF Title:</h3>
+      <p>{{documentedMods.name}}</p>
+    </ion-label>
+    <ion-input  v-if="!documentedMods || showChoosePDF"
         label="Upload PDF" label-placement="stacked"
         type="file" accept="application/pdf"
         @change="emitNewPDF($event, 'update:documentedMods')"
@@ -148,12 +159,20 @@ export default {
 </template>
 
 <style scoped lang="scss">
-#documentedMods__Buttons {
-  justify-content: center;
-  align-items: center;
-  column-gap: .2em;
-  ion-button {
-    margin: 0;
+#documentedMods {
+  height: 2.4em;
+  ion-buttons {
+    justify-content: center;
+    align-items: center;
+    column-gap: .2em;
+    ion-button {
+      margin: 0;
+    }
+  }
+}
+#documentedModsFiles {
+  ion-label {
+    margin-bottom: 0;
   }
 }
 </style>
