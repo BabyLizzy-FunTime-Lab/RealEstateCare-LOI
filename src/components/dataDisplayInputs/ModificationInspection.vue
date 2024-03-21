@@ -1,9 +1,10 @@
 <script>
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import {
-  IonButton, IonInput, IonItem, IonLabel, IonSelect, IonText,
+  IonButton, IonInput, IonItem, IonLabel, IonSelect,
   IonSelectOption, IonTextarea, modalController, IonButtons
 } from "@ionic/vue";
+import pdfViewerModal from "@/components/mediaViewers/pdfViewerModal.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
@@ -15,14 +16,15 @@ export default {
   components: {
     ImageThumbnailViewer, IonButton, IonTextarea, IonSelectOption,
     IonSelect, BaseButton, IonInput, BaseAccordionLayout,
-    IonItem, IonLabel, IonButtons, IonText
+    IonItem, IonLabel, IonButtons, pdfViewerModal
   },
   data() {
     return {
       newPhoto,
       photos,
       takePhoto,
-      showChoosePDF: false
+      showChoosePDF: false,
+      isPdfModalOpen: false
     }
   },
   props: {
@@ -58,11 +60,16 @@ export default {
       if(setTo === false || setTo === true) {
         this.showChoosePDF = setTo
       } else {
-        this.showChoosePDF = !this.showChoosePDF;
+        this.toggleOnOff('showChoosePDF')
+        // this.showChoosePDF = !this.showChoosePDF;
       }
+    },
+    toggleOnOff(dataVariableName) {
+      this[dataVariableName] = !this[dataVariableName];
     },
     viewPDF(pdf) {
       console.log(pdf);
+      this.isPdfModalOpen = true
       this.toggleChoosePDF(false);
     }
   },
@@ -98,6 +105,7 @@ export default {
         type="file" accept="application/pdf"
         @change="emitNewPDF($event, 'update:documentedMods')"
     />
+    <pdf-viewer-modal :document="documentedMods" :is-open="isPdfModalOpen" @close:modal="toggleOnOff('isPdfModalOpen')"/>
   </ion-item>
   <ion-item slot="content">
     <ion-input label="Location"
