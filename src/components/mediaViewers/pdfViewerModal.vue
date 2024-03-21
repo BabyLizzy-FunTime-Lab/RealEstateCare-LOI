@@ -3,21 +3,35 @@ import {
   IonHeader, IonToolbar, IonButton, IonButtons,
   IonContent, IonModal, IonTitle, IonLabel
 } from "@ionic/vue";
+import VuePdfEmbed from 'vue-pdf-embed'
 
 export default {
   name: "pdfViewerModal",
   components: {
     IonHeader, IonToolbar, IonModal, IonContent,
-    IonButton, IonButtons, IonTitle, IonLabel
+    IonButton, IonButtons, IonTitle, IonLabel, VuePdfEmbed
   },
   props: {
-    document: null,
-    isOpen: Boolean
+    pdfFile: null,
+    pdfUrl: null,
+    isOpen: Boolean,
   },
   methods: {
     emitClose() {
       this.$emit('close:modal');
-    }
+    },
+    async convertToBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = (error) => {
+          reject(error);
+        };
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    },
   },
   emits: [
     'close:modal',
@@ -32,7 +46,7 @@ export default {
         <ion-title slot="start">
           <ion-label>
             <h2>Document Title: </h2>
-            <p>{{document.name}}</p>
+            <p>{{pdfFile.name}}</p>
           </ion-label>
         </ion-title>
         <ion-buttons slot="end">
@@ -41,7 +55,10 @@ export default {
       </ion-toolbar>
     </ion-header>
     <ion-content id="image--wrapper">
-      PDF here
+<!--      <pdf src="documents/game-boy.jpg"/>-->
+      <VuePdfEmbed :source="pdfUrl" />
+<!--      <VuePdfEmbed :source="pdfFile" />-->
+<!--      <VuePdfEmbed source="https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Batman_vs_Hulk_rpmacr.pdf" />-->
     </ion-content>
   </ion-modal>
 </template>

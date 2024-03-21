@@ -24,14 +24,16 @@ export default {
       photos,
       takePhoto,
       showChoosePDF: false,
-      isPdfModalOpen: false
+      isPdfModalOpen: false,
+      pdfUrl: String
     }
   },
   props: {
-    documentedMods: {
+    documentedModsFile: {
       type: File,
       default: null
     },
+    documentedModsUrl: null,
     location: String,
     modifiedBy: String,
     modDescription: String,
@@ -50,11 +52,34 @@ export default {
       this.$emit(eventName, data);
     },
     emitNewPDF(data, eventName) {
-      this.emitInputChange(data, eventName);
+      this.convertToBase64(data.target.files[0]).then(result => {
+        // console.log(result);
+        this.pdfUrl = result;
+      })
+      const dataObject = {
+        file: data.target.files[0],
+        url: this.pdfUrl
+      }
+      // this.emitInputChange(data, eventName);
+      console.log(dataObject)
+      this.emitInputChange(dataObject, eventName);
       this.showChoosePDF = false
     },
     async dismissModal() {
       await modalController.dismiss();
+    },
+    async convertToBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = (error) => {
+          reject(error);
+        };
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        console.log(file);
+        reader.readAsDataURL(file);
+      });
     },
     toggleChoosePDF(setTo) {
       if(setTo === false || setTo === true) {
@@ -69,6 +94,7 @@ export default {
     },
     viewPDF(pdf) {
       console.log(pdf);
+      console.log(this.pdfUrl)
       this.isPdfModalOpen = true
       this.toggleChoosePDF(false);
     }
@@ -90,22 +116,25 @@ export default {
 <BaseAccordionLayout header-name="Modifications" accordion-value="fourth">
   <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
-    <ion-buttons v-if="documentedMods">
-      <BaseButton name="View" @click="viewPDF(documentedMods)"/>
+    <ion-buttons v-if="documentedModsFile">
+      <BaseButton name="View" @click="viewPDF(documentedModsFile)"/>
       <BaseButton v-if="!showChoosePDF" name="Update" @click="toggleChoosePDF"/>
     </ion-buttons>
   </ion-item>
   <ion-item id="documentedModsFiles" slot="content">
-    <ion-label v-if="documentedMods">
+    <ion-label v-if="documentedModsFile">
       <h3>Selected PDF Title:</h3>
-      <p>{{documentedMods.name}}</p>
+      <p>{{documentedModsFile.name}}</p>
     </ion-label>
-    <ion-input  v-if="!documentedMods || showChoosePDF"
+    <ion-input  v-if="!documentedModsFile || showChoosePDF"
         label="Upload PDF" label-placement="stacked"
         type="file" accept="application/pdf"
         @change="emitNewPDF($event, 'update:documentedMods')"
     />
-    <pdf-viewer-modal :document="documentedMods" :is-open="isPdfModalOpen" @close:modal="toggleOnOff('isPdfModalOpen')"/>
+    <pdf-viewer-modal
+        :pdf-url="pdfUrl" :pdf-file="documentedModsFile"
+        :is-open="isPdfModalOpen" @close:modal="toggleOnOff('isPdfModalOpen')"
+    />
   </ion-item>
   <ion-item slot="content">
     <ion-input label="Location"

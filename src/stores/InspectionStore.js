@@ -49,7 +49,8 @@ export const useInspectionStore = defineStore('inspections', {
             },
             modificationsViewData: {
                 inspectorId: "",
-                documentedMods: null,
+                documentedModsFile: null,
+                documentedModsUrl: null,
                 location: "",
                 modifiedBy: "",
                 modDescription: "",
@@ -130,7 +131,8 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         updatePdfDocumentView(newDoc, viewData, propertyName) {
-          viewData[propertyName] = newDoc.target.files[0];
+          // viewData[propertyName] = newDoc.target.files[0];
+            viewData[propertyName] = newDoc;
         },
         deletePhotoFromView(photoURI, viewData) {
             let findPhoto = viewData.images.indexOf(photoURI);
@@ -240,11 +242,13 @@ export const useInspectionStore = defineStore('inspections', {
             // I made the input names match the state names so I could experiment with
             // calling updateInputView in the ScheduledView parent component.
             console.log('Processing request: ' + inputName);
-            if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'documentedMods') {
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'documentedModsFile') {
                 switch (inputName) {
-                    case 'documentedMods':
+                    case 'documentedModsFile':
                         console.log('Staging pdf file in de state');
-                        this.updatePdfDocumentView(data, this.getModificationsViewData, inputName);
+                        // this.updatePdfDocumentView(data);
+                        this.getModificationsViewData.documentedModsFile = data.file;
+                        this.getModificationsViewData.documentedModsUrl = data.url;
                         break;
                     case 'takePhoto':
                         this.addPhotoToView(data, this.getModificationsViewData);

@@ -113,8 +113,9 @@ export default {
         <ModificationInspection
             :location="this.modificationsData.location"
             @update:location="this.updateModificationsViewData($event, 'location')"
-            :documented-mods="this.modificationsData.documentedMods"
-            @update:documented-mods="this.updateModificationsViewData($event,'documentedMods')"
+            :documented-mods-file="this.modificationsData.documentedModsFile"
+            :documented-mods-url="this.modificationsData.documentedModsUrl"
+            @update:documented-mods="this.updateModificationsViewData($event,'documentedModsFile')"
             :modified-by="this.modificationsData.modifiedBy"
             @update:modified-by="this.updateModificationsViewData($event,'modifiedBy')"
             :mod-description="this.modificationsData.modDescription"
