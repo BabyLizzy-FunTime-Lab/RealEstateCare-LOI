@@ -96,6 +96,7 @@ export default {
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
         />
         <TechnicalInstallationInspection
+          :test-procedure-url="this.technicalInstallationData.testProcedureUrl"
           :location="this.technicalInstallationData.locationInput"
           @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
           :installation-type="this.technicalInstallationData.installationTypeInput"

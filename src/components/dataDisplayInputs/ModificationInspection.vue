@@ -94,7 +94,6 @@ export default {
     },
     viewPDF(pdf) {
       console.log(pdf);
-      console.log(this.pdfUrl)
       this.isPdfModalOpen = true
       this.toggleChoosePDF(false);
     }

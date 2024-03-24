@@ -33,6 +33,17 @@ export default {
       });
     },
   },
+  computed: {
+    filename() {
+      if(this.pdfFile && this.pdfUrl) {
+        // It takes the file name out of the pdf file object.
+        return this.pdfFile.name;
+      } else {
+        // It takes the file name out of the URL.
+        return this.pdfUrl.substring(this.pdfUrl.lastIndexOf('/') + 1);
+      }
+    }
+  },
   emits: [
     'close:modal',
   ]
@@ -46,7 +57,7 @@ export default {
         <ion-title slot="start">
           <ion-label>
             <h2>Document Title: </h2>
-            <p>{{pdfFile.name}}</p>
+            <p>{{filename}}</p>
           </ion-label>
         </ion-title>
         <ion-buttons slot="end">
@@ -55,10 +66,7 @@ export default {
       </ion-toolbar>
     </ion-header>
     <ion-content id="image--wrapper">
-<!--      <pdf src="documents/game-boy.jpg"/>-->
-      <VuePdfEmbed :source="pdfUrl" />
-<!--      <VuePdfEmbed :source="pdfFile" />-->
-<!--      <VuePdfEmbed source="https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Batman_vs_Hulk_rpmacr.pdf" />-->
+      <VuePdfEmbed :source="pdfUrl"/>
     </ion-content>
   </ion-modal>
 </template>
@@ -66,5 +74,8 @@ export default {
 <style scoped lang="scss">
 ion-modal {
   --ion-background-color: var(--ion-color-modal-dark-background);
+  VuePdfEmbed {
+    width: 100%;
+  }
 }
 </style>

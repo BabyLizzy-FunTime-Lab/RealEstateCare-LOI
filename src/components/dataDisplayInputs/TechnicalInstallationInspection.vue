@@ -6,6 +6,7 @@ import {
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageViewerModal from "@/components/mediaViewers/ImageViewerModal.vue";
+import pdfViewerModal from "@/components/mediaViewers/pdfViewerModal.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
@@ -16,7 +17,7 @@ export default {
   components: {
     ImageThumbnailViewer, IonButton, IonTextarea, IonRadio, IonRadioGroup,
     IonSelectOption, IonSelect, IonInput, BaseButton, BaseAccordionLayout,
-    IonItem, IonLabel, ImageViewerModal
+    IonItem, IonLabel, ImageViewerModal, pdfViewerModal
   },
   data() {
     return {
@@ -31,7 +32,7 @@ export default {
     installationType: String,
     clientStatement: String,
     approved: String,
-    testProcedure: String,
+    testProcedureUrl: String,
     comments: String,
     images: {
       default: [],
@@ -100,9 +101,9 @@ export default {
   <ion-item slot="content">
     <ion-label>Test procedure</ion-label>
     <BaseButton name="View" @click="openCloseModal(isProcedureModalOpen)"/>
-    <image-viewer-modal
-        document-name="Test procedure" image="/documents/game-boy.jpg"
-        :is-open="isProcedureModalOpen" @close:modal="openCloseModal"
+    <pdf-viewer-modal
+        :is-open="isProcedureModalOpen" :pdf-url="testProcedureUrl"
+        @close:modal="openCloseModal"
     />
   </ion-item>
   <ion-item slot="content">

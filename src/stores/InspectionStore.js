@@ -7,6 +7,7 @@ const { photos } = usePhotoCamera();
 
 // Default variables.
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
+// const testProcedureUrl = this.fetchTestProcedureUrl();
 const loginStore = useLoginStore();
 
 export const useInspectionStore = defineStore('inspections', {
@@ -42,7 +43,7 @@ export const useInspectionStore = defineStore('inspections', {
                 locationInput: "",
                 installationTypeInput: "",
                 clientStatementInput: "",
-                testProcedureLink: "",
+                testProcedureUrl: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf",
                 approvedInput: "",
                 commentsInput: "",
                 images: []
@@ -109,6 +110,9 @@ export const useInspectionStore = defineStore('inspections', {
                     console.log(result.data);
                     this.loadingStatus = false
                 })
+        },
+        fetchTestProcedureUrl() {
+          return "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf";
         },
         stageNewPhoto(newPhoto) {
             this.generalLocalPhotoStaging = [newPhoto, ...this.generalLocalPhotoStaging];
