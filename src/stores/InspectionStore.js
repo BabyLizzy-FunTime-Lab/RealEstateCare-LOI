@@ -5,9 +5,14 @@ import { usePhotoCamera} from "@/composables/usePhotoCamera.js";
 
 const { photos } = usePhotoCamera();
 
-// Default variables.
+// Default variables. These should have a table in the data base and a fetch function in the loginStore.
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
-// const testProcedureUrl = this.fetchTestProcedureUrl();
+const knowledgeBase = {
+    testProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf",
+    companyStandards: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855977/CV-images/LOI-cursus/pdf/Company_Standards.pdf",
+    basicContract: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855968/CV-images/LOI-cursus/pdf/Basic_Contract.pdf",
+    emergencyProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
+};
 const loginStore = useLoginStore();
 
 export const useInspectionStore = defineStore('inspections', {
@@ -43,7 +48,7 @@ export const useInspectionStore = defineStore('inspections', {
                 locationInput: "",
                 installationTypeInput: "",
                 clientStatementInput: "",
-                testProcedureUrl: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf",
+                testProcedureUrl: knowledgeBase.testProcedure,
                 approvedInput: "",
                 commentsInput: "",
                 images: []
@@ -110,9 +115,6 @@ export const useInspectionStore = defineStore('inspections', {
                     console.log(result.data);
                     this.loadingStatus = false
                 })
-        },
-        fetchTestProcedureUrl() {
-          return "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf";
         },
         stageNewPhoto(newPhoto) {
             this.generalLocalPhotoStaging = [newPhoto, ...this.generalLocalPhotoStaging];

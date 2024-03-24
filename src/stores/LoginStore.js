@@ -4,7 +4,15 @@ import axios from "axios";
 // Default variables.
 // const baseDbUrl = "https://my-json-server.typicode.com/BabyLizzy-FunTime-Lab/RealEstateCare";
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
+const knowledgeBase = {
+    testProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf",
+    companyStandards: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855977/CV-images/LOI-cursus/pdf/Company_Standards.pdf",
+    basicContract: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855968/CV-images/LOI-cursus/pdf/Basic_Contract.pdf",
+    emergencyProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
+};
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
+
+// A fetch is needed to get general app information like basic URL and the knowledge base.
 
 export const useLoginStore = defineStore('login', {
     state: () => {
