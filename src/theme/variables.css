@@ -3,6 +3,8 @@ http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
 :root {
+  /** Custom modal **/
+  --ion-color-modal-background: #7d787885;
   /** primary **/
   /*Custom primary colors*/
   --ion-color-primary: #141b1f;

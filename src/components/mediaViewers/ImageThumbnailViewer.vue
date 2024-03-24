@@ -66,10 +66,14 @@ export default {
 </template>
 
 <style scoped lang="scss">
+
+ion-modal {
+  --ion-background-color: var(--ion-color-modal-background);
+}
 #image--wrapper {
   ion-img {
-    padding-top: 1em;
-    height: 80vh;
+    height: 100%;
+    background-color: transparent;
   }
 }
 #thumbnail--container {
