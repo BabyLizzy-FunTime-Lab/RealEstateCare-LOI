@@ -4,7 +4,7 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
   /** Custom modal **/
-  --ion-color-modal-background: #7d787885;
+  --ion-color-modal-dark-background: #141b1f90;
   /** primary **/
   /*Custom primary colors*/
   --ion-color-primary: #141b1f;

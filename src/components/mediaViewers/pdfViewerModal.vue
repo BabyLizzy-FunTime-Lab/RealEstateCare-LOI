@@ -64,5 +64,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-
+ion-modal {
+  --ion-background-color: var(--ion-color-modal-dark-background);
+}
 </style>
