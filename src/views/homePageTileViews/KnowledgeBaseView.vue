@@ -1,12 +1,20 @@
 <script>
+import BaseListLayout from "@/components/base/BaseListLayout.vue";
+import {IonAccordionGroup} from "@ionic/vue";
+
 export default {
-  name: "KnowledgeBaseView"
+  name: "KnowledgeBaseView",
+  components: {IonAccordionGroup, BaseListLayout}
 }
 </script>
 
 <template>
   <base-layout>
-    <h2>Knowledge Base</h2>
+    <base-list-layout list-header-name="Knowledge Base">
+      <ion-accordion-group :multiple="true">
+
+      </ion-accordion-group>
+    </base-list-layout>
   </base-layout>
 </template>
 
