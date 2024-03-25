@@ -2,18 +2,13 @@ import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import axios from "axios";
 import { usePhotoCamera} from "@/composables/usePhotoCamera.js";
-
+const loginStore = useLoginStore();
 const { photos } = usePhotoCamera();
 
-// Default variables. These should have a table in the data base and a fetch function in the loginStore.
-const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
-const knowledgeBase = {
-    testProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf",
-    companyStandards: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855977/CV-images/LOI-cursus/pdf/Company_Standards.pdf",
-    basicContract: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855968/CV-images/LOI-cursus/pdf/Basic_Contract.pdf",
-    emergencyProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
-};
-const loginStore = useLoginStore();
+// Default variables.
+// These should have a table in the data base and a fetch function in the loginStore.
+const baseDbUrl = loginStore.fetchBaseDbUrl();
+const knowledgeBase = loginStore.fetchKnowledgeBase();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -272,7 +267,7 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
        pushdamageInspectionViewData() {
-            // Images are saved with another function that returns the nessasery
+            // Images are saved with another function that returns the nessasery cloudinary
             // medialinks on success. These links need to be added to the push data
             // before they go to the db. Images are only saved locally if no contact could be made
            // with the DB. So we will need a try and catch.

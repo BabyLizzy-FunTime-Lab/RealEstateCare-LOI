@@ -60,6 +60,12 @@ export const useLoginStore = defineStore('login', {
                     console.warn("We got an error on login", this.errorMessage);
                 })
         },
+        fetchKnowledgeBase() {
+            return knowledgeBase;
+        },
+        fetchBaseDbUrl() {
+            return baseDbUrl;
+        },
         setErrorMessage(errValue) {
             this.errorMessage = errValue;
         },
