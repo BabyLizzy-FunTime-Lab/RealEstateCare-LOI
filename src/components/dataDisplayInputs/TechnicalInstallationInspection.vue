@@ -5,9 +5,9 @@ import {
   IonSelect, IonSelectOption, IonTextarea,
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ImageViewerModal from "@/components/mediaViewers/ImageViewerModal.vue";
-import pdfViewerModal from "@/components/mediaViewers/pdfViewerModal.vue";
+import pdfViewerModal from "@/components/mediaViewers/PdfViewerModal.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
+import {useInspectionStore} from "@/stores/InspectionStore.js";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
@@ -17,10 +17,11 @@ export default {
   components: {
     ImageThumbnailViewer, IonButton, IonTextarea, IonRadio, IonRadioGroup,
     IonSelectOption, IonSelect, IonInput, BaseButton, BaseAccordionLayout,
-    IonItem, IonLabel, ImageViewerModal, pdfViewerModal
+    IonItem, IonLabel, pdfViewerModal
   },
   data() {
     return {
+      inspectionStore: useInspectionStore(),
       newPhoto,
       photos,
       takePhoto,
@@ -32,7 +33,6 @@ export default {
     installationType: String,
     clientStatement: String,
     approved: String,
-    testProcedureUrl: String,
     comments: String,
     images: {
       default: [],
@@ -50,6 +50,13 @@ export default {
   watch: {
     newPhoto() {
       this.$emit('update:images', newPhoto.value);
+    }
+  },
+  computed: {
+    testProcedureUrl() {
+      console.log(this.inspectionStore.getTestProcedureDocumentUrl);
+      // return this.inspectionStore.getTestProcedureDocumentUrl;
+      return "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
     }
   },
   emits: [

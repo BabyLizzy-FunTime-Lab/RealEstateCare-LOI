@@ -14,6 +14,7 @@ export default {
   props: {
     pdfFile: null,
     pdfUrl: null,
+    pdfName: null,
     isOpen: Boolean,
   },
   methods: {
@@ -35,7 +36,9 @@ export default {
   },
   computed: {
     filename() {
-      if(this.pdfFile && this.pdfUrl) {
+      if(this.pdfName) {
+        return this.pdfName;
+      } else if(this.pdfFile && this.pdfUrl) {
         // It takes the file name out of the pdf file object.
         return this.pdfFile.name;
       } else {

@@ -4,7 +4,7 @@ import {
   IonButton, IonInput, IonItem, IonLabel, IonSelect,
   IonSelectOption, IonTextarea, modalController, IonButtons
 } from "@ionic/vue";
-import pdfViewerModal from "@/components/mediaViewers/pdfViewerModal.vue";
+import pdfViewerModal from "@/components/mediaViewers/PdfViewerModal.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
