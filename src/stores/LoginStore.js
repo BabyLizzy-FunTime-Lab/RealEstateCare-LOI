@@ -4,12 +4,6 @@ import axios from "axios";
 // Default variables.
 // const baseDbUrl = "https://my-json-server.typicode.com/BabyLizzy-FunTime-Lab/RealEstateCare";
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
-// const knowledgeBase = {
-//     testProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf",
-//     companyStandards: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855977/CV-images/LOI-cursus/pdf/Company_Standards.pdf",
-//     basicContract: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855968/CV-images/LOI-cursus/pdf/Basic_Contract.pdf",
-//     emergencyProcedure: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
-// };
 const knowledgeBase = [
     {
         name: "Test Procedure",
@@ -79,19 +73,26 @@ export const useLoginStore = defineStore('login', {
                 })
         },
         fetchKnowledgeBase() {
+            // this needs to be async
             return knowledgeBase;
         },
         fetchBaseDbUrl() {
             return baseDbUrl;
         },
-        fetchKnowledgeBaseDocumentUrl(documentName) {
+        fetchKnowledgeBaseDocument(documentName) {
+            // this needs to be async
             knowledgeBase.forEach((document) => {
                 if(document.name === documentName) {
-                    console.log(document.url);
-                    return "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf";
-                    // return document.url;
+                    console.log(document);
+                    return document;
                 }
             })
+        },
+        fetchTestProcedureSimple() {
+            return {
+                name: "Test Procedure",
+                url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
+            };
         },
         setErrorMessage(errValue) {
             this.errorMessage = errValue;

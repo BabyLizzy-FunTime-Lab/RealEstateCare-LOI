@@ -9,7 +9,9 @@ const { photos } = usePhotoCamera();
 // These should have a table in the data base and a fetch function in the loginStore.
 const baseDbUrl = loginStore.fetchBaseDbUrl();
 const knowledgeBase = loginStore.fetchKnowledgeBase();
-// const testProcedureUrl = loginStore.fetchKnowledgeBaseDocumentUrl("Test Procedure");
+const testProcedureDoc = loginStore.fetchKnowledgeBaseDocument("Test Procedure");
+const testProcedureSimple = loginStore.fetchTestProcedureSimple();
+console.log(testProcedureSimple);
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -43,6 +45,7 @@ export const useInspectionStore = defineStore('inspections', {
                 inspectorId: "",
                 locationInput: "",
                 installationTypeInput: "",
+                testProcedure: testProcedureSimple,
                 clientStatementInput: "",
                 approvedInput: "",
                 commentsInput: "",
@@ -299,8 +302,8 @@ export const useInspectionStore = defineStore('inspections', {
         getKnowledgeBase() {
             return knowledgeBase;
         },
-        getTestProcedureDocumentUrl() {
-            return loginStore.fetchKnowledgeBaseDocumentUrl("Test Procedure");
+        getTestProcedureDocument() {
+            return testProcedureSimple;
         }
     }
 })

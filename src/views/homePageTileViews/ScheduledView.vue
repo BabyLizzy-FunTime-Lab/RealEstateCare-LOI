@@ -17,13 +17,20 @@ export default {
       damageInspectionData: Object,
       backlogMaintenanceData: Object,
       technicalInstallationData: Object,
-      modificationsData: Object
+      modificationsData: Object,
+      testData: {
+        name: "Test Procedure",
+        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
+      },
     }
   },
   mounted() {
     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
     this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
     this.technicalInstallationData = this.inspectionStore.getTechnicalInstallationViewData;
+    // this.technicalInstallationData.testProcedure = this.inspectionStore.getTestProcedureDocument;
+    // for some reason, I can't pass this into my Technical Installation component. It see it as null.
+    console.log(this.technicalInstallationData);
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {
@@ -95,7 +102,13 @@ export default {
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
         />
+
+<!--        test-procedure works with the testData but not with the data I put in the state.
+            It should work with this.technicalInstallationData.testProcedure but the component sees that as
+            null. However when testing with console.log testProcedure has the information.
+            :test-procedure="testData" -->
         <TechnicalInstallationInspection
+          :test-procedure="this.technicalInstallationData.testProcedure"
           :location="this.technicalInstallationData.locationInput"
           @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
           :installation-type="this.technicalInstallationData.installationTypeInput"

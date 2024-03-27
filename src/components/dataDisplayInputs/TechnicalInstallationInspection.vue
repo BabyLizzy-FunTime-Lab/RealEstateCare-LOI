@@ -5,9 +5,8 @@ import {
   IonSelect, IonSelectOption, IonTextarea,
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import pdfViewerModal from "@/components/mediaViewers/PdfViewerModal.vue";
+import DocumentViewer from "@/components/mediaViewers/DocumentViewer.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
-import {useInspectionStore} from "@/stores/InspectionStore.js";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
@@ -17,21 +16,20 @@ export default {
   components: {
     ImageThumbnailViewer, IonButton, IonTextarea, IonRadio, IonRadioGroup,
     IonSelectOption, IonSelect, IonInput, BaseButton, BaseAccordionLayout,
-    IonItem, IonLabel, pdfViewerModal
+    IonItem, IonLabel, DocumentViewer
   },
   data() {
     return {
-      inspectionStore: useInspectionStore(),
       newPhoto,
       photos,
       takePhoto,
-      isProcedureModalOpen: false
     }
   },
   props: {
     location: String,
     installationType: String,
     clientStatement: String,
+    testProcedure: Object,
     approved: String,
     comments: String,
     images: {
@@ -43,20 +41,10 @@ export default {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
-    openCloseModal() {
-      this.isProcedureModalOpen = !this.isProcedureModalOpen;
-    }
   },
   watch: {
     newPhoto() {
       this.$emit('update:images', newPhoto.value);
-    }
-  },
-  computed: {
-    testProcedureUrl() {
-      console.log(this.inspectionStore.getTestProcedureDocumentUrl);
-      // return this.inspectionStore.getTestProcedureDocumentUrl;
-      return "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
     }
   },
   emits: [
@@ -105,14 +93,7 @@ export default {
       <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
-  <ion-item slot="content">
-    <ion-label>Test procedure</ion-label>
-    <BaseButton name="View" @click="openCloseModal(isProcedureModalOpen)"/>
-    <pdf-viewer-modal
-        :is-open="isProcedureModalOpen" :pdf-url="testProcedureUrl"
-        @close:modal="openCloseModal"
-    />
-  </ion-item>
+  <DocumentViewer slot="content" :document-info="testProcedure" />
   <ion-item slot="content">
     <ion-textarea label="Comments"
                   :value="comments"
