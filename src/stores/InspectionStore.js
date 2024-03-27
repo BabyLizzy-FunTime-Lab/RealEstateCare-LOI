@@ -43,12 +43,12 @@ export const useInspectionStore = defineStore('inspections', {
             },
             technicalInstallationViewData: {
                 inspectorId: "",
-                locationInput: "",
-                installationTypeInput: "",
+                location: "",
+                installationType: "",
                 testProcedure: testProcedureSimple,
-                clientStatementInput: "",
-                approvedInput: "",
-                commentsInput: "",
+                clientStatement: "",
+                approved: "",
+                comments: "",
                 images: []
             },
             modificationsViewData: {
@@ -216,32 +216,21 @@ export const useInspectionStore = defineStore('inspections', {
         },
         updateTechnicalInstallationViewData(data, inputName) {
             console.log('Processing request: ' + inputName);
-            switch(inputName) {
-                case 'location':
-                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'locationInput');
-                    break;
-                case 'installationType':
-                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'installationTypeInput');
-                    break;
-                case 'clientStatement':
-                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'clientStatementInput');
-                    break;
-                case 'approved':
-                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'approvedInput');
-                    break;
-                case 'comments':
-                    this.updateInputView(data, this.getTechnicalInstallationViewData, 'commentsInput');
-                    break;
-                case 'takePhoto':
-                    this.addPhotoToView(data, this.getTechnicalInstallationViewData);
-                    this.stageNewPhoto(data);
-                    break;
-                case 'deletePhoto':
-                    this.deletePhotoFromView(data, this.getTechnicalInstallationViewData);
-                    this.unstageNewPhoto(data);
-                    break;
-                default:
-                    console.log("Invalid Backlog input")
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto') {
+                switch(inputName) {
+                    case 'takePhoto':
+                        this.addPhotoToView(data, this.getTechnicalInstallationViewData);
+                        this.stageNewPhoto(data);
+                        break;
+                    case 'deletePhoto':
+                        this.deletePhotoFromView(data, this.getTechnicalInstallationViewData);
+                        this.unstageNewPhoto(data);
+                        break;
+                    default:
+                        console.log("Invalid Backlog input")
+                }
+            } else {
+                this.updateInputView(data, this.getTechnicalInstallationViewData, inputName);
             }
         },
         updateModificationsViewData(data, inputName) {
