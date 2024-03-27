@@ -106,9 +106,11 @@ export default {
 <!--        test-procedure works with the testData but not with the data I put in the state.
             It should work with this.technicalInstallationData.testProcedure but the component sees that as
             null. However when testing with console.log testProcedure has the information.
+          :test-procedure="this.technicalInstallationData.testProcedure"
+
             :test-procedure="testData" -->
         <TechnicalInstallationInspection
-          :test-procedure="this.technicalInstallationData.testProcedure"
+            :test-procedure="testData"
           :location="this.technicalInstallationData.locationInput"
           @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
           :installation-type="this.technicalInstallationData.installationTypeInput"
