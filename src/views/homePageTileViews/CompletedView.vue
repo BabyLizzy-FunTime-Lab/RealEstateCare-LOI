@@ -1,7 +1,7 @@
 <script>
+import BaseListLayout from "@/components/base/BaseListLayout.vue";
 import {IonAccordionGroup} from "@ionic/vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
-import BaseListLayout from "@/components/base/BaseListLayout.vue";
 
 export default {
   name: "CompletedView",

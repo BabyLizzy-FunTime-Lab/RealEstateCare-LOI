@@ -23,7 +23,6 @@ const knowledgeBase = [
     }
 ];
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
-
 // A fetch is needed to get general app information like basic URL and the knowledge base.
 
 export const useLoginStore = defineStore('login', {
@@ -35,6 +34,7 @@ export const useLoginStore = defineStore('login', {
             userInfo: Object,
             userAvatar: defaultAvatar,
             errorMessage: null,
+            knowledgeBaseDocs: null
         }
     },
     actions: {
@@ -96,6 +96,9 @@ export const useLoginStore = defineStore('login', {
         },
         setErrorMessage(errValue) {
             this.errorMessage = errValue;
+        },
+        setLoadingStatus(status) {
+            this.loadingStatus = status;
         },
         logoutUser() {
             console.log("Logging out...");

@@ -69,14 +69,16 @@ export const useInspectionStore = defineStore('inspections', {
             return loginStore.getUserInfo.id;
         },
         fetchInspections() {
-                this.loadingStatus = true;
+                loginStore.setLoadingStatus(true);
+                // this.loadingStatus = true;
                 let user_id = this.fetchUserId();
                 // call the independent fetch functions.
                 this.fetchDamageInspections(user_id);
                 this.fetchBacklogMaintenance(user_id);
                 this.fetchModifications(user_id);
                 this.fetchTechnicalInstallations(user_id);
-                this.loadingStatus = false
+                loginStore.setLoadingStatus(false);
+                // this.loadingStatus = false
             },
         fetchDamageInspections(user_id) {
             this.loadingStatus = true;

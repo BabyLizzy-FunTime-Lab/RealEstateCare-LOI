@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 
-export const useHouseStore = defineStore('houses', {
+export const useHouseStore = defineStore('CompletedActions', {
     state: () => {
         return {
             storeTestVar: 'Store works!'
