@@ -24,21 +24,21 @@ export const useInspectionStore = defineStore('inspections', {
             generalLocalPhotoStaging: [],
             damageInspectionViewData: {
                 inspectorId: "",
-                locationInput: "",
-                newDamageInput: "",
-                dateInput: new Date().toISOString(),
+                location: "",
+                newDamage: "",
+                date: new Date().toISOString(),
                 selectedDamageTypeOption: "",
-                damageTypeInput: "",
-                emergencyInput: "",
-                commentsInput: "",
+                damageType: "",
+                emergency: "",
+                comments: "",
                 images: []
             },
             backlogMaintenanceViewData: {
                 inspectorId: "",
-                locationInput: "",
-                emergencyInput: "",
-                maintenanceTypeInput: "",
-                costIndicationInput: "",
+                location: "",
+                emergency: "",
+                maintenanceType: "",
+                costIndication: "",
                 images: []
             },
             technicalInstallationViewData: {
@@ -127,6 +127,12 @@ export const useInspectionStore = defineStore('inspections', {
             viewData.images =
                 [newPhoto.webviewPath, ...viewData.images];
         },
+        deletePhotoFromView(photoURI, viewData) {
+            let findPhoto = viewData.images.indexOf(photoURI);
+            if(findPhoto !== -1) {
+                viewData.images.splice(findPhoto, 1);
+            }
+        },
         updateInputView(newData, viewData, propertyName) {
             // This is a good spot to implement input validation.
             // If it recieved an event object, it will seek the target.value
@@ -140,79 +146,51 @@ export const useInspectionStore = defineStore('inspections', {
           // viewData[propertyName] = newDoc.target.files[0];
             viewData[propertyName] = newDoc;
         },
-        deletePhotoFromView(photoURI, viewData) {
-            let findPhoto = viewData.images.indexOf(photoURI);
-            if(findPhoto !== -1) {
-                viewData.images.splice(findPhoto, 1);
-            }
-        },
         updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
-            switch (inputName) {
-                case 'location':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'locationInput');
-                    break;
-                case 'newDamage':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'newDamageInput');
-                    break;
-                case 'completeDate':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'dateInput');
-                    break;
-                case 'selectedDamageCategory':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'selectedDamageTypeOption');
-                    if (data.target.value === 'other') {
-                        this.updateInputView('', this.getDamageInspectionViewData, 'damageTypeInput');
-                    } else {
-                        this.updateInputView(data, this.getDamageInspectionViewData, 'damageTypeInput');
-                    }
-                    break;
-                case 'damageCategory':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'damagetypeInput');
-                    break;
-                case 'emergency':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'emergencyInput');
-                    break;
-                case 'description':
-                    this.updateInputView(data, this.getDamageInspectionViewData, 'commentsInput');
-                    break;
-                case 'takePhoto':
-                    this.addPhotoToView(data, this.getDamageInspectionViewData);
-                    this.stageNewPhoto(data);
-                    break;
-                case 'deletePhoto':
-                    this.deletePhotoFromView(data, this.getDamageInspectionViewData);
-                    this.unstageNewPhoto(data);
-                    break;
-                default:
-                    console.log("Invalid DamageInspection input");
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'selectedDamageCategory') {
+                switch(inputName) {
+                    case 'selectedDamageCategory':
+                        this.updateInputView(data, this.getDamageInspectionViewData, 'selectedDamageTypeOption');
+                        if (data.target.value === 'other') {
+                            this.updateInputView('', this.getDamageInspectionViewData, 'damageType');
+                        } else {
+                            this.updateInputView(data, this.getDamageInspectionViewData, 'damageType');
+                        }
+                        break;
+                    case 'takePhoto':
+                        this.addPhotoToView(data, this.getDamageInspectionViewData);
+                        this.stageNewPhoto(data);
+                        break;
+                    case 'deletePhoto':
+                        this.deletePhotoFromView(data, this.getDamageInspectionViewData);
+                        this.unstageNewPhoto(data);
+                        break;
+                    default:
+                        console.log("Invalid Backlog input")
+                }
+            } else {
+                this.updateInputView(data, this.getDamageInspectionViewData, inputName);
             }
         },
         updateBacklogMaintenanceViewData(data, inputName) {
             console.log('Processing request: ' + inputName);
-            switch (inputName) {
-              case 'location':
-                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'locationInput');
-                  break;
-              case 'emergency':
-                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'emergencyInput');
-                  break;
-              case 'maintenanceType':
-                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'maintenanceTypeInput');
-                  break;
-              case 'costIndication':
-                  this.updateInputView(data, this.getBacklogMaintenanceViewData, 'costIndicationInput');
-                  break;
-              case 'takePhoto':
-                  this.addPhotoToView(data, this.getBacklogMaintenanceViewData);
-                  this.stageNewPhoto(data);
-                  break;
-              case 'deletePhoto':
-                  this.deletePhotoFromView(data, this.getBacklogMaintenanceViewData);
-                  this.unstageNewPhoto(data);
-                  break;
-              default:
-                  console.log("Invalid Backlog input")
-          }
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto') {
+                switch(inputName) {
+                    case 'takePhoto':
+                        this.addPhotoToView(data, this.getBacklogMaintenanceViewData);
+                        this.stageNewPhoto(data);
+                        break;
+                    case 'deletePhoto':
+                        this.deletePhotoFromView(data, this.getBacklogMaintenanceViewData);
+                        this.unstageNewPhoto(data);
+                        break;
+                    default:
+                        console.log("Invalid Backlog input")
+                }
+            } else {
+                this.updateInputView(data, this.getBacklogMaintenanceViewData, inputName);
+            }
         },
         updateTechnicalInstallationViewData(data, inputName) {
             console.log('Processing request: ' + inputName);

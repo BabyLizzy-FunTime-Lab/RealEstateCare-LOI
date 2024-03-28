@@ -39,6 +39,7 @@ export default {
       this.inspectionStore.pushdamageInspectionViewData();
     },
     updateDamageInspectionViewData($event, inputName) {
+      // Am I being too redundant here?
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateDamageInspectionViewData($event, inputName);
       console.log("Requesting finished");
@@ -56,9 +57,6 @@ export default {
     updateModificationsViewData($event, inputName) {
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateModificationsViewData($event, inputName);
-      // Not sure if this is correct. I'm calling the updateView function in the store
-      // instead of here. Am I being too redundant here?
-      // this.inspectionStore.updateInputView($event, this.modificationsData, inputName)
       console.log("Requesting finished");
     }
   }
@@ -70,33 +68,33 @@ export default {
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
         <DamageInspection
-            :location="this.damageInspectionData.locationInput"
+            :location="this.damageInspectionData.location"
             @update:location="updateDamageInspectionViewData($event, 'location')"
-            :new-damage="this.damageInspectionData.newDamageInput"
+            :new-damage="this.damageInspectionData.newDamage"
             @update:new-damage="updateDamageInspectionViewData($event, 'newDamage')"
-            :complete-date="this.damageInspectionData.dateInput"
-            @update:complete-date="updateDamageInspectionViewData($event, 'completeDate')"
+            :date="this.damageInspectionData.date"
+            @update:date="updateDamageInspectionViewData($event, 'date')"
             :selected-damage-category="this.damageInspectionData.selectedDamageTypeOption"
             @update:selected-damage-category="updateDamageInspectionViewData($event, 'selectedDamageCategory')"
-            :damage-category="this.damageInspectionData.damageTypeInput"
-            @update:damage-category="updateDamageInspectionViewData($event, 'damageCategory')"
-            :emergency="this.damageInspectionData.emergencyInput"
+            :damage-type="this.damageInspectionData.damageType"
+            @update:damage-type="updateDamageInspectionViewData($event, 'damageType')"
+            :emergency="this.damageInspectionData.emergency"
             @update:emergency="updateDamageInspectionViewData($event, 'emergency')"
-            :description="this.damageInspectionData.commentsInput"
-            @update:description="updateDamageInspectionViewData($event, 'description')"
+            :comments="this.damageInspectionData.comments"
+            @update:comments="updateDamageInspectionViewData($event, 'comments')"
             :images="this.damageInspectionData.images"
             @update:images="this.updateDamageInspectionViewData($event,'takePhoto')"
             @delete:image="this.updateDamageInspectionViewData($event,'deletePhoto')"
             :save-data-request="saveDataRequest"
         />
         <BacklogMaintenance
-          :location="this.backlogMaintenanceData.locationInput"
+          :location="this.backlogMaintenanceData.location"
           @update:location="this.updateBacklogMaintenanceViewData($event, 'location')"
-          :emergency="this.backlogMaintenanceData.emergencyInput"
+          :emergency="this.backlogMaintenanceData.emergency"
           @update:emergency="this.updateBacklogMaintenanceViewData($event, 'emergency')"
-          :type="this.backlogMaintenanceData.maintenanceTypeInput"
+          :type="this.backlogMaintenanceData.maintenanceType"
           @update:maintenance-type="this.updateBacklogMaintenanceViewData($event, 'maintenanceType')"
-          :cost-indication="this.backlogMaintenanceData.costIndicationInput"
+          :cost-indication="this.backlogMaintenanceData.costIndication"
           @update:cost-indication="this.updateBacklogMaintenanceViewData($event, 'costIndication')"
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
@@ -106,8 +104,7 @@ export default {
 <!--        test-procedure works with the testData but not with the data I put in the state.
             It should work with this.technicalInstallationData.testProcedure but the component sees that as
             null. However when testing with console.log testProcedure has the information.
-          :test-procedure="this.technicalInstallationData.testProcedure"
-
+            :test-procedure="this.technicalInstallationData.testProcedure"
             :test-procedure="testData" -->
         <TechnicalInstallationInspection
             :test-procedure="testData"

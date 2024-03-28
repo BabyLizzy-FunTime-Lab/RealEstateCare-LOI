@@ -28,11 +28,11 @@ export default {
   props: {
     location: String,
     newDamage: String,
-    completeDate: String,
+    date: String,
     selectedDamageCategory: String,
-    damageCategory: String,
+    damageType: String,
     emergency: String,
-    description: String,
+    comments: String,
     images: {
       default: [],
       required: false
@@ -55,9 +55,9 @@ export default {
     }
   },
   emits: [
-      'update:location', 'update:newDamage', 'update:completeDate',
-      'update:selectedDamageCategory', 'update:damageCategory',
-      'update:emergency', 'update:description', 'update:images', 'delete:image'
+      'update:location', 'update:newDamage', 'update:date',
+      'update:selectedDamageCategory', 'update:damageType',
+      'update:emergency', 'update:comments', 'update:images', 'delete:image'
   ]
 }
 </script>
@@ -76,8 +76,8 @@ export default {
     <ion-label>Date</ion-label>
     <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
     <ion-modal :keep-contents-mounted="true">
-      <ion-datetime :value="completeDate"
-                    @ionChange="emitInputChange($event, 'update:completeDate')"
+      <ion-datetime :value="date"
+                    @ionChange="emitInputChange($event, 'update:date')"
                     displayFormat="MMM D, YYYY"
                     pickerFormat="MMM D YYYY"
                     presentation="date" id="date"></ion-datetime>
@@ -98,10 +98,12 @@ export default {
     </ion-select>
   </ion-item>
   <ion-item slot="content" v-if="selectedDamageCategory === 'other'">
-    <ion-input :value="damageCategory"
-               @input="emitInputChange($event, 'update:damageCategory')"
-               label="Input damage type"
-               label-placement="floating" placeholder="Here" type="text"></ion-input>
+    <ion-input
+        :value="damageType"
+        @input="emitInputChange($event, 'update:damageType')"
+        label="Input damage type"
+        label-placement="floating" placeholder="Here" type="text"
+    />
   </ion-item>
   <ion-item slot="content">
     <ion-label>New Damage?</ion-label>
@@ -123,8 +125,8 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Comments"
-                  :value="description"
-                  @ionChange="emitInputChange($event, 'update:description')"
+                  :value="comments"
+                  @ionChange="emitInputChange($event, 'update:comments')"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
