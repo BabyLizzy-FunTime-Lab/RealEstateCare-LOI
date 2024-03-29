@@ -8,20 +8,24 @@ export default {
   components: {IonAccordionGroup, BaseListLayout},
   data() {
     return {
-      inspectionStore: useInspectionStore()
+      inspectionStore: useInspectionStore(),
+      inspectionsAll: Object,
     }
   },
   mounted() {
-    this.inspectionStore.fetchInspections();
-  }
+    this.inspectionStore.fetchInspections().then(inspections => {
+      this.inspectionsAll = inspections;
+    });
+  },
 }
 </script>
 
 <template>
   <base-layout>
     <base-list-layout list-header-name="Completed Tasks">
-      <ion-accordion-group :multiple="true">
-
+      <ion-accordion-group v-for="(inspectionOfType, type) of inspectionsAll" :key="type" :multiple="true">
+        <div>{{type}}</div>
+        {{inspectionOfType[0].id}}
       </ion-accordion-group>
     </base-list-layout>
   </base-layout>
