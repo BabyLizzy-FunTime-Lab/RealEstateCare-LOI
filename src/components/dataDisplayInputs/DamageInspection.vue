@@ -26,6 +26,10 @@ export default {
     }
   },
   props: {
+    headerName: {
+      value: String,
+      default: "Damage Inspection"
+    },
     location: String,
     newDamage: String,
     date: String,
@@ -63,7 +67,7 @@ export default {
 </script>
 
 <template>
-  <base-accordion-layout header-name="Damage Inspection" accordion-value="first">
+  <base-accordion-layout :header-name="headerName" accordion-value="first">
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"

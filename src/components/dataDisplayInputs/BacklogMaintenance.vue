@@ -25,6 +25,10 @@ export default {
     }
   },
   props: {
+    headerName: {
+      value: String,
+      default: "Backlog Maintenance"
+    },
     location: String,
     emergency: String,
     type: String,
@@ -52,7 +56,7 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout header-name="Backlog Maintenance" accordion-value="second">
+<BaseAccordionLayout :header-name="headerName" accordion-value="second">
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"

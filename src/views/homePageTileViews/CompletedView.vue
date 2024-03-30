@@ -1,20 +1,21 @@
 <script>
 import BaseListLayout from "@/components/base/BaseListLayout.vue";
 import {IonAccordionGroup} from "@ionic/vue";
+import CompletedTasksViewer from "@/components/dataViewers/CompletedTasksViewer.vue";
 // import {useInspectionStore} from "@/stores/InspectionStore.js";
-import {useCompletedActionStore} from "@/stores/CompletedActionsStore.js"
+import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js"
 
 export default {
   name: "CompletedView",
-  components: {IonAccordionGroup, BaseListLayout},
+  components: {IonAccordionGroup, BaseListLayout, CompletedTasksViewer},
   data() {
     return {
-      completedActionStore: useCompletedActionStore(),
+      completedActionStore: useCompletedTasksStore(),
       inspectionsAll: Object,
     }
   },
   mounted() {
-    this.completedActionStore.fetchInspections().then(inspections => {
+    this.completedActionStore.fetchCompletedTasks().then(inspections => {
       this.inspectionsAll = inspections;
     });
   },
@@ -24,10 +25,11 @@ export default {
 <template>
   <base-layout>
     <base-list-layout list-header-name="Completed Tasks">
-      <ion-accordion-group v-for="(inspectionOfType, type) of inspectionsAll" :key="type" :multiple="true">
-        <div>{{type}}</div>
-        {{inspectionOfType[0].id}}
-      </ion-accordion-group>
+      <base-list-layout
+          v-for="(inspectionsOfType, type) of inspectionsAll"
+          :key="type" :list-header-name="type" style-color="secondary" :back-button="false" :multiple="true">
+        <CompletedTasksViewer :type="type" :inspections-of-type="inspectionsOfType"/>
+      </base-list-layout>
     </base-list-layout>
   </base-layout>
 </template>

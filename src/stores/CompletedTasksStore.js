@@ -6,7 +6,7 @@ const loginStore = useLoginStore();
 // Default variables
 const baseDbUrl = loginStore.fetchBaseDbUrl();
 
-export const useCompletedActionStore = defineStore('CompletedActions', {
+export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
         return {
             storeTestVar: 'Store works!'
@@ -16,7 +16,7 @@ export const useCompletedActionStore = defineStore('CompletedActions', {
         fetchUserId() {
             return loginStore.getUserInfo.id;
         },
-        async fetchInspections() {
+        async fetchCompletedTasks() {
             loginStore.setLoadingStatus(true);
             let user_id = this.fetchUserId();
             try{

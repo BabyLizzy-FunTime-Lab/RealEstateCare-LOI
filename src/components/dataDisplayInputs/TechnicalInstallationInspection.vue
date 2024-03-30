@@ -26,6 +26,10 @@ export default {
     }
   },
   props: {
+    headerName: {
+      value: String,
+      default: "Technical Installation Inspection"
+    },
     location: String,
     installationType: String,
     clientStatement: String,
@@ -55,7 +59,7 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout header-name="Technical Installation Inspection" accordion-value="third">
+<BaseAccordionLayout :header-name="headerName" accordion-value="third">
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"

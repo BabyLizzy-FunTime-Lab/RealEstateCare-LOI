@@ -29,6 +29,10 @@ export default {
     }
   },
   props: {
+    headerName: {
+      value: String,
+      default: "Modifications"
+    },
     documentedModsFile: {
       type: File,
       default: null
@@ -112,7 +116,7 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout header-name="Modifications" accordion-value="fourth">
+<BaseAccordionLayout :header-name="headerName" accordion-value="fourth">
   <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
     <ion-buttons v-if="documentedModsFile">
