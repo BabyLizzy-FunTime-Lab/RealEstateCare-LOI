@@ -1,19 +1,20 @@
 <script>
 import BaseListLayout from "@/components/base/BaseListLayout.vue";
 import {IonAccordionGroup} from "@ionic/vue";
-import {useInspectionStore} from "@/stores/InspectionStore.js";
+// import {useInspectionStore} from "@/stores/InspectionStore.js";
+import {useCompletedActionStore} from "@/stores/CompletedActionsStore.js"
 
 export default {
   name: "CompletedView",
   components: {IonAccordionGroup, BaseListLayout},
   data() {
     return {
-      inspectionStore: useInspectionStore(),
+      completedActionStore: useCompletedActionStore(),
       inspectionsAll: Object,
     }
   },
   mounted() {
-    this.inspectionStore.fetchInspections().then(inspections => {
+    this.completedActionStore.fetchInspections().then(inspections => {
       this.inspectionsAll = inspections;
     });
   },
