@@ -7,13 +7,17 @@ export default {
   props: {
     headerName: String,
     accordionValue: String,
+    colorStyle: {
+      value: String,
+      default: "light"
+    }
   }
 }
 </script>
 
 <template>
   <ion-accordion :value="accordionValue">
-    <ion-item slot="header" color="light">
+    <ion-item slot="header" :color="colorStyle">
       <ion-label>{{ headerName }}</ion-label>
     </ion-item>
     <slot></slot>

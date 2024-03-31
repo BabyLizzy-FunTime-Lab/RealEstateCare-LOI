@@ -17,67 +17,69 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             return loginStore.getUserInfo.id;
         },
         async fetchCompletedTasks() {
-            loginStore.setLoadingStatus(true);
             let user_id = this.fetchUserId();
-            try{
-                let damageInspectionsPromise = new Promise((resolve, reject) => {
-                    let result = this.fetchDamageInspections(user_id);
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(new Error("Failed to fetch damage inspections data."));
-                    }
-                });
-                let backlogMaintenancePromise = new Promise((resolve, reject) => {
-                    let result = this.fetchBacklogMaintenance(user_id);
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(new Error("Failed to fetch backlog maintenance data."));
-                    }
-                });
-                let modificationsPromise = new Promise((resolve, reject) => {
-                    let result = this.fetchModifications(user_id);
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(new Error("Failed to fetch backlog maintenance data."));
-                    }
-                });
-                let technicalInstallationsPromise = new Promise((resolve, reject) => {
-                    let result = this.fetchTechnicalInstallations(user_id);
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(new Error("Failed to fetch backlog maintenance data."));
-                    }
-                });
-                let [
-                    damageInspections,
-                    backlogMaintenance,
-                    modifications,
-                    technicalInstallations
-                ] = await Promise.all([
-                    damageInspectionsPromise,
-                    backlogMaintenancePromise,
-                    modificationsPromise,
-                    technicalInstallationsPromise
-                ]);
+            if (user_id) {
+                loginStore.setLoadingStatus(true);
+                try {
+                    let damageInspectionsPromise = new Promise((resolve, reject) => {
+                        let result = this.fetchDamageInspections(user_id);
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(new Error("Failed to fetch damage inspections data."));
+                        }
+                    });
+                    let backlogMaintenancePromise = new Promise((resolve, reject) => {
+                        let result = this.fetchBacklogMaintenance(user_id);
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(new Error("Failed to fetch backlog maintenance data."));
+                        }
+                    });
+                    let modificationsPromise = new Promise((resolve, reject) => {
+                        let result = this.fetchModifications(user_id);
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(new Error("Failed to fetch backlog maintenance data."));
+                        }
+                    });
+                    let technicalInstallationsPromise = new Promise((resolve, reject) => {
+                        let result = this.fetchTechnicalInstallations(user_id);
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(new Error("Failed to fetch backlog maintenance data."));
+                        }
+                    });
+                    let [
+                        damageInspections,
+                        backlogMaintenance,
+                        modifications,
+                        technicalInstallations
+                    ] = await Promise.all([
+                        damageInspectionsPromise,
+                        backlogMaintenancePromise,
+                        modificationsPromise,
+                        technicalInstallationsPromise
+                    ]);
 
-                let inspections = {
-                    damageInspections,
-                    backlogMaintenance,
-                    modifications,
-                    technicalInstallations
-                };
-                console.log("Fetched inspections userId:" + user_id);
-                console.log(inspections);
-                loginStore.setLoadingStatus(false);
-                return inspections;
-            } catch (err) {
-                console.error("Error fetching inspections:", err);
-                loginStore.setLoadingStatus(false);
-                throw err; // Propagate the error
+                    let inspections = {
+                        damageInspections,
+                        backlogMaintenance,
+                        modifications,
+                        technicalInstallations
+                    };
+                    console.log("Fetched completed tasks of userId:" + user_id);
+                    console.log(inspections);
+                    loginStore.setLoadingStatus(false);
+                    return inspections;
+                } catch (err) {
+                    console.error("Error fetching completed tasks:", err);
+                    loginStore.setLoadingStatus(false);
+                    throw err; // Propagate the error
+                }
             }
         },
         fetchDamageInspections(user_id) {

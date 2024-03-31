@@ -25,11 +25,8 @@ export default {
 <template>
   <base-layout>
     <base-list-layout list-header-name="Completed Tasks">
-      <base-list-layout
-          v-for="(inspectionsOfType, type) of inspectionsAll"
-          :key="type" :list-header-name="type" style-color="secondary" :back-button="false" :multiple="true">
-        <CompletedTasksViewer :type="type" :inspections-of-type="inspectionsOfType"/>
-      </base-list-layout>
+        <CompletedTasksViewer :inspections="inspectionsAll.damageInspections"/>
+<!--      {{inspectionsAll.damageInspections}}-->
     </base-list-layout>
   </base-layout>
 </template>
