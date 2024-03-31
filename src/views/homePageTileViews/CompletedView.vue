@@ -1,13 +1,12 @@
 <script>
 import BaseListLayout from "@/components/base/BaseListLayout.vue";
-import {IonAccordionGroup} from "@ionic/vue";
-import CompletedTasksViewer from "@/components/dataViewers/CompletedTasksViewer.vue";
+import DamageInspectionsViewer from "@/components/dataViewers/DamageInspectionsViewer.vue";
 // import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js"
 
 export default {
   name: "CompletedView",
-  components: {IonAccordionGroup, BaseListLayout, CompletedTasksViewer},
+  components: {BaseListLayout, DamageInspectionsViewer},
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),
@@ -19,14 +18,19 @@ export default {
       this.inspectionsAll = inspections;
     });
   },
+  computed: {
+    damageInspections() {
+      return this.inspectionsAll.damageInspections
+    }
+  }
 }
 </script>
 
 <template>
   <base-layout>
     <base-list-layout list-header-name="Completed Tasks">
-        <CompletedTasksViewer :inspections="inspectionsAll.damageInspections"/>
-<!--      {{inspectionsAll.damageInspections}}-->
+        <DamageInspectionsViewer :inspections="damageInspections"/>
+      {{inspectionsAll}}
     </base-list-layout>
   </base-layout>
 </template>

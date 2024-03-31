@@ -6,7 +6,6 @@ export default {
   components: {IonItem, IonLabel, IonAccordion,},
   props: {
     headerName: String,
-    accordionValue: String,
     colorStyle: {
       value: String,
       default: "light"
@@ -16,7 +15,7 @@ export default {
 </script>
 
 <template>
-  <ion-accordion :value="accordionValue">
+  <ion-accordion>
     <ion-item slot="header" :color="colorStyle">
       <ion-label>{{ headerName }}</ion-label>
     </ion-item>

@@ -1,15 +1,13 @@
 <script>
-import baseListLayout from "@/components/base/BaseListLayout.vue";
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
 
-
 export default {
-  name: "CompletedTasksViewer",
-  components: {baseListLayout, IonAccordionGroup, BaseAccordionLayout, DamageInspection},
+  name: "DamageInspectionsViewer",
+  components: {IonAccordionGroup, BaseAccordionLayout, DamageInspection},
   props: {
-    inspections: Array
+    inspections: null
   }
 
 }
@@ -18,11 +16,12 @@ export default {
 <template>
 <!--  We need to start here with a base accordion layout. -->
   <ion-accordion-group>
-    <base-accordion-layout header-name="Damage Inspections" >
+    <base-accordion-layout header-name="Damage Inspections" color-style="secondary">
       <ion-accordion-group slot="content">
         <DamageInspection
-            v-for="inspection of inspections" slot="content"
-            :key="inspection.id" :location="inspection.location"
+            v-for="inspection of inspections" :key="inspection.id"
+            :header-name="inspection.date"
+            :location="inspection.location"
         />
       </ion-accordion-group>
     </base-accordion-layout>

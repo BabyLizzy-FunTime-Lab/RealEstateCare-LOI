@@ -116,7 +116,7 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout :header-name="headerName" accordion-value="fourth">
+<BaseAccordionLayout :header-name="headerName">
   <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
     <ion-buttons v-if="documentedModsFile">

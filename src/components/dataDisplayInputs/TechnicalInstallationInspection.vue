@@ -59,7 +59,7 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout :header-name="headerName" accordion-value="third">
+<BaseAccordionLayout :header-name="headerName">
   <ion-item slot="content">
     <ion-input label="Location"
                :value="location"
