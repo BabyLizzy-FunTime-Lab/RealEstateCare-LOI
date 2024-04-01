@@ -54,11 +54,12 @@ export default {
   },
   mounted() {
     // this.procedure = this.inspectionStore.getTestProcedureDocument;
-    this.loginStore.fetchKnowledgeBaseDocument("Test Procedure").then(result => {
+    // We need an async fetch function here
+    // this.loginStore.fetchKnowledgeBaseDocument("Test Procedure").then(result => {
       // this.procedure = result;
       // console.log(this.procedure);
-      console.log(result);
-    })
+      // console.log(result);
+    // })
   },
   methods: {
     emitInputChange(data, eventName) {
