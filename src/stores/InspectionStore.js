@@ -188,6 +188,7 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
        pushdamageInspectionViewData() {
+            // Don't forget to fix the spelling of the method name.
             // Images are saved with another function that returns the nessasery cloudinary
             // medialinks on success. These links need to be added to the push data
             // before they go to the db. Images are only saved locally if no contact could be made

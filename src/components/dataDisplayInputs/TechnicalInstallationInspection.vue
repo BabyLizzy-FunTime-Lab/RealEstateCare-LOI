@@ -7,6 +7,7 @@ import {
 import BaseButton from "@/components/base/BaseButton.vue";
 import DocumentViewer from "@/components/mediaViewers/DocumentViewer.vue";
 import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
+import {useInspectionStore} from "@/stores/InspectionStore.js";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
 const { takePhoto, photos, newPhoto } = usePhotoCamera();
@@ -20,6 +21,8 @@ export default {
   },
   data() {
     return {
+      inspectionStore: useInspectionStore(),
+      procedure: null,
       newPhoto,
       photos,
       takePhoto,
@@ -33,13 +36,22 @@ export default {
     location: String,
     installationType: String,
     clientStatement: String,
-    testProcedure: Object,
+    testProcedure: {
+      type: Object,
+      default: {
+        name: "Test Procedure",
+        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
+      }
+    },
     approved: String,
     comments: String,
     images: {
       default: [],
       required: false
     }
+  },
+  mounted() {
+    this.procedure = this.inspectionStore.getTestProcedureDocument;
   },
   methods: {
     emitInputChange(data, eventName) {
@@ -97,7 +109,7 @@ export default {
       <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
-  <DocumentViewer slot="content" :document-info="testProcedure" />
+  <DocumentViewer slot="content" :document-info="procedure" />
   <ion-item slot="content">
     <ion-textarea label="Comments"
                   :value="comments"

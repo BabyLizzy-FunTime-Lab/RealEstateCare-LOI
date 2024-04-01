@@ -1,11 +1,11 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
-import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
+import ModificationInspection from "@/components/dataDisplayInputs/ModificationInspection.vue";
 
 export default {
-  name: "DamageInspectionsViewer",
-  components: {IonAccordionGroup, BaseAccordionLayout, DamageInspection},
+  name: "ModificationsViewer",
+  components: {IonAccordionGroup, BaseAccordionLayout, ModificationInspection},
   props: {
     inspections: null
   }
@@ -14,9 +14,9 @@ export default {
 
 <template>
   <ion-accordion-group>
-    <base-accordion-layout header-name="Damage Inspections" color-style="secondary">
+    <base-accordion-layout header-name="Modification Inspections" color-style="secondary">
       <ion-accordion-group slot="content">
-        <DamageInspection
+        <ModificationInspection
             v-for="inspection of inspections" :key="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
@@ -26,6 +26,6 @@ export default {
   </ion-accordion-group>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 
 </style>
