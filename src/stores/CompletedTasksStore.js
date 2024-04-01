@@ -85,36 +85,24 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         fetchDamageInspections(user_id) {
             return axios.get(baseDbUrl + "/damage_inspection?inspectorId=" + user_id)
                 .then(result => {
-                    // this.loadingStatus = false
-                    // return result.data
-                    // console.log(result.data);
                     return result.data
                 }).catch(err => console.log(err));
         },
         fetchBacklogMaintenance(user_id) {
             return axios.get(baseDbUrl + "/backlog_maintenance?inspectorId=" + user_id)
                 .then(result => {
-                    // this.loadingStatus = false
-                    // return result.data
-                    // console.log(result.data);
                     return result.data
                 }).catch(err => console.log(err));
         },
         fetchModifications(user_id) {
             return axios.get(baseDbUrl + "/modifications?inspectorId=" + user_id)
                 .then(result => {
-                    // this.loadingStatus = false
-                    // return result.data
-                    // console.log(result.data);
                     return result.data
                 }).catch(err => console.log(err));
         },
         fetchTechnicalInstallations(user_id) {
             return axios.get(baseDbUrl + "/technical_installation_inspection?inspectorId=" + user_id)
                 .then(result => {
-                    // this.loadingStatus = false
-                    // return result.data
-                    // console.log(result.data);
                     return result.data
                 }).catch(err => console.log(err));
         },

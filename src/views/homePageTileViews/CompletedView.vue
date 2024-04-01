@@ -30,7 +30,6 @@ export default {
     },
     backlogMaintenance() {
       return this.inspectionsAll.backlogMaintenance
-
     },
     modifications() {
       return this.inspectionsAll.modifications

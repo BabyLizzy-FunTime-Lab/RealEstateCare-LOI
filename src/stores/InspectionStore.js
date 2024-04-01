@@ -7,7 +7,7 @@ const loginStore = useLoginStore();
 // These should have a table in the data base and a fetch function in the loginStore.
 const baseDbUrl = loginStore.fetchBaseDbUrl();
 const knowledgeBase = loginStore.fetchKnowledgeBase();
-const testProcedureDoc = loginStore.fetchKnowledgeBaseDocument("Test Procedure");
+// const testProcedureDoc = loginStore.fetchKnowledgeBaseDocument("Test Procedure");
 const testProcedureSimple = loginStore.fetchTestProcedureSimple();
 
 export const useInspectionStore = defineStore('inspections', {

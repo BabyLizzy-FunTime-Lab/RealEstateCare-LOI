@@ -24,7 +24,12 @@ export default {
     return {
       inspectionStore: useInspectionStore(),
       loginStore: useLoginStore(),
-      procedure: null,
+      procedure: {
+        default: {
+          name: "Procedure Test",
+          url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
+        }
+      },
       newPhoto,
       photos,
       takePhoto,
@@ -38,13 +43,6 @@ export default {
     location: String,
     installationType: String,
     clientStatement: String,
-    testProcedure: {
-      type: Object,
-      default: {
-        name: "Test Procedure",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
-      }
-    },
     approved: String,
     comments: String,
     images: {
@@ -53,13 +51,16 @@ export default {
     }
   },
   mounted() {
-    // this.procedure = this.inspectionStore.getTestProcedureDocument;
-    // We need an async fetch function here
-    // this.loginStore.fetchKnowledgeBaseDocument("Test Procedure").then(result => {
-      // this.procedure = result;
-      // console.log(this.procedure);
-      // console.log(result);
-    // })
+    // Getting the Test Procedure pdf works like this.
+    // this.procedure = this.loginStore.getBaseSiteInfo.knowledgeBase[0];
+
+    this.loginStore.fetchBaseDocument("Test Procedure")
+        .then(document => {
+          this.procedure = document
+        })
+        .catch(error => {
+          console.log(error);
+        })
   },
   methods: {
     emitInputChange(data, eventName) {
@@ -117,7 +118,7 @@ export default {
       <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
-  <DocumentViewer slot="content" :document-info="testProcedure" />
+  <DocumentViewer slot="content" :document-info="procedure" />
   <ion-item slot="content">
     <ion-textarea label="Comments"
                   :value="comments"

@@ -34,14 +34,19 @@ export const useLoginStore = defineStore('login', {
             userInfo: Object,
             userAvatar: defaultAvatar,
             errorMessage: null,
-            knowledgeBaseDocs: null
+            baseSiteInformation: null
         }
     },
     actions: {
-        fetchUser(inputName, inputPassword) {
+        async loginUser(inputName, inputPassword) {
             this.loadingStatus = true
+
+            // Here we get the general information about the site.
+            await this.fetchBaseSiteInformation();
+
             // This should happen on the server.
-            axios.get(baseDbUrl + "/user_inspector?name=" + inputName + "&password=" + inputPassword)
+            // Here we fetch the User data if it's available.
+            await axios.get(baseDbUrl + "/user_inspector?name=" + inputName + "&password=" + inputPassword)
                 .then(result => {
                     // The JSON server returns 200 even if it didn't find a match so we have to check the
                     // return data length to see if any matches were found.
@@ -54,15 +59,6 @@ export const useLoginStore = defineStore('login', {
                             access: data.access,
                             avatar: data.avatar
                         }
-                        // Here we get the general information for the site.
-                        // axios.get(baseDbUrl+ "/base_site_information")
-                        //     .then(result => {
-                        //         console.log(result.data)
-                        //         this.knowledgeBaseDocs = result.data.knowledgeBase;
-                        //         return result.data;
-                        //     })
-                        // this.knowledgeBaseDocs = baseSiteData.knowledgeBase;
-                        // console.log(this.knowledgeBaseDocs);
                         if(data.avatar !== "") {
                             this.userInfo.avater = defaultAvatar ;
                         }
@@ -84,30 +80,6 @@ export const useLoginStore = defineStore('login', {
         fetchKnowledgeBase() {
             // this needs to be async
             return knowledgeBaseTemp;
-        },
-        fetchKnowledgeBaseDocument(documentName) {
-            // this needs to be async
-            console.log(documentName);
-            // console.log(this.knowledgeBaseDocs[0]);
-            // return this.knowledgeBaseDocs[0]
-            // this.knowledgeBaseDocs.forEach((document) => {
-            //     if(document.name === documentName) {
-            //         console.log(document);
-            //         return document;
-            //     }
-            // })
-            axios.get(baseDbUrl+ "/base_site_information")
-                .then(result => {
-                    console.log(result.data)
-                    // this.knowledgeBaseDocs = result.data.knowledgeBase;
-                    // result.data.forEach((document) => {
-                    //     if(document.name === documentName) {
-                    //         console.log(document);
-                    //         return document;
-                    //     }
-                    // })
-                    return result.data;
-                })
         },
         fetchBaseDbUrl() {
             return baseDbUrl;
@@ -131,6 +103,26 @@ export const useLoginStore = defineStore('login', {
             this.userInfo = {};
             this.errorMessage = null;
             console.log("Logout complete.");
+        },
+        async fetchBaseDocument(documentName) {
+            return new Promise((resolve, reject) => {
+                const document = this.getBaseSiteInfo.knowledgeBase.find(doc => doc.name === documentName);
+                console.log(document);
+                if(document) {
+                    resolve(document);
+                } else {
+                    reject(new Error('Document not found is BasSiteInformation'));
+                }
+            })
+        },
+        async fetchBaseSiteInformation() {
+            try {
+                const result = await axios.get(baseDbUrl + "/base_site_information");
+                this.baseSiteInformation = result.data;
+            } catch (error) {
+                console.error("Error fetching base site information:", error);
+                throw error;
+            }
         }
     },
     getters: {
@@ -147,5 +139,8 @@ export const useLoginStore = defineStore('login', {
         getUserAvatar(state) {
             return state.userInfo.avatar;
         },
+        getBaseSiteInfo(state) {
+            return state.baseSiteInformation;
+        }
     }
 })

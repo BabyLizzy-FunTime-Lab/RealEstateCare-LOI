@@ -19,7 +19,7 @@ export default {
   methods: {
     login(username, password) {
       this.$router.replace({path:'/'});
-      this.loginStore.fetchUser(username, password);
+      this.loginStore.loginUser(username, password);
     }
   }
 }
