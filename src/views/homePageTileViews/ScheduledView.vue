@@ -28,8 +28,6 @@ export default {
     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
     this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
     this.technicalInstallationData = this.inspectionStore.getTechnicalInstallationViewData;
-    // this.technicalInstallationData.testProcedure = this.inspectionStore.getTestProcedureDocument;
-    // for some reason, I can't pass this into my Technical Installation component. It see it as null.
     console.log(this.technicalInstallationData);
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
@@ -101,13 +99,7 @@ export default {
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
         />
 
-<!--        test-procedure works with the testData but not with the data I put in the state.
-            It should work with this.technicalInstallationData.testProcedure but the component sees that as
-            null. However when testing with console.log testProcedure has the information.
-            :test-procedure="this.technicalInstallationData.testProcedure"
-            :test-procedure="testData" -->
         <TechnicalInstallationInspection
-            :test-procedure="testData"
           :location="this.technicalInstallationData.location"
           @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
           :installation-type="this.technicalInstallationData.installationType"

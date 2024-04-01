@@ -42,7 +42,6 @@ export const useInspectionStore = defineStore('inspections', {
                 inspectorId: "",
                 location: "",
                 installationType: "",
-                testProcedure: testProcedureSimple,
                 clientStatement: "",
                 approved: "",
                 comments: "",

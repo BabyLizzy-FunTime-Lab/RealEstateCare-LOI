@@ -4,7 +4,7 @@ import axios from "axios";
 // Default variables.
 // const baseDbUrl = "https://my-json-server.typicode.com/BabyLizzy-FunTime-Lab/RealEstateCare";
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
-const knowledgeBase = [
+const knowledgeBaseTemp = [
     {
         name: "Test Procedure",
         url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
@@ -54,6 +54,15 @@ export const useLoginStore = defineStore('login', {
                             access: data.access,
                             avatar: data.avatar
                         }
+                        // Here we get the general information for the site.
+                        // axios.get(baseDbUrl+ "/base_site_information")
+                        //     .then(result => {
+                        //         console.log(result.data)
+                        //         this.knowledgeBaseDocs = result.data.knowledgeBase;
+                        //         return result.data;
+                        //     })
+                        // this.knowledgeBaseDocs = baseSiteData.knowledgeBase;
+                        // console.log(this.knowledgeBaseDocs);
                         if(data.avatar !== "") {
                             this.userInfo.avater = defaultAvatar ;
                         }
@@ -74,19 +83,34 @@ export const useLoginStore = defineStore('login', {
         },
         fetchKnowledgeBase() {
             // this needs to be async
-            return knowledgeBase;
-        },
-        fetchBaseDbUrl() {
-            return baseDbUrl;
+            return knowledgeBaseTemp;
         },
         fetchKnowledgeBaseDocument(documentName) {
             // this needs to be async
-            knowledgeBase.forEach((document) => {
-                if(document.name === documentName) {
-                    console.log(document);
-                    return document;
-                }
-            })
+            console.log(documentName);
+            // console.log(this.knowledgeBaseDocs[0]);
+            // return this.knowledgeBaseDocs[0]
+            // this.knowledgeBaseDocs.forEach((document) => {
+            //     if(document.name === documentName) {
+            //         console.log(document);
+            //         return document;
+            //     }
+            // })
+            axios.get(baseDbUrl+ "/base_site_information")
+                .then(result => {
+                    console.log(result.data)
+                    // this.knowledgeBaseDocs = result.data.knowledgeBase;
+                    // result.data.forEach((document) => {
+                    //     if(document.name === documentName) {
+                    //         console.log(document);
+                    //         return document;
+                    //     }
+                    // })
+                    return result.data;
+                })
+        },
+        fetchBaseDbUrl() {
+            return baseDbUrl;
         },
         fetchTestProcedureSimple() {
             return {
