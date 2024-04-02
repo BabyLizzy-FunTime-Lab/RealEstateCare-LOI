@@ -37,9 +37,15 @@ Uses sass for better CSS. (Installed with "npm install")
 npm install -D sass
 ```
 
+## Vue PDF renderer.
+Uses [vue-pdf-embed](https://github.com/hrynko/vue-pdf-embed) to render pdf files and pdf objects. (Installed with "npm install")
+```sh
+npm install -d vue-pdf-embed
+```
+
 ## Dummy data
-- Data db: Uses [my-json-server](https://my-json-server.typicode.com/) for dummy data.
-- Media db: Images and PDF's are stored in [Cloudinary](https://cloudinary.com/).
+- Data db: Uses [RealEstateCareJSON](https://github.com/BabyLizzy-FunTime-Lab/RealEstateCareJSON) for dummy data. It's my private heroku JSON server.
+- Media db: Images and PDF's are fetched from my private [Cloudinary](https://cloudinary.com/) account. This is also where they will be saved. 
 
 
 
