@@ -5,10 +5,7 @@ const loginStore = useLoginStore();
 
 // Default variables.
 // These should have a table in the data base and a fetch function in the loginStore.
-const baseDbUrl = loginStore.fetchBaseDbUrl();
-const knowledgeBase = loginStore.fetchKnowledgeBase();
-// const testProcedureDoc = loginStore.fetchKnowledgeBaseDocument("Test Procedure");
-const testProcedureSimple = loginStore.fetchTestProcedureSimple();
+// const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -216,12 +213,6 @@ export const useInspectionStore = defineStore('inspections', {
         },
         getModificationsViewData(state) {
             return state.modificationsViewData;
-        },
-        getKnowledgeBase() {
-            return knowledgeBase;
-        },
-        getTestProcedureDocument() {
-            return testProcedureSimple;
         }
     }
 })

@@ -4,24 +4,6 @@ import axios from "axios";
 // Default variables.
 // const baseDbUrl = "https://my-json-server.typicode.com/BabyLizzy-FunTime-Lab/RealEstateCare";
 const baseDbUrl = "https://real-estate-care-json-1205608aa6ef.herokuapp.com";
-const knowledgeBaseTemp = [
-    {
-        name: "Test Procedure",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
-    },
-    {
-        name: "Company Standards",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855977/CV-images/LOI-cursus/pdf/Company_Standards.pdf"
-    },
-    {
-        name: "Basic Contract",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855968/CV-images/LOI-cursus/pdf/Basic_Contract.pdf"
-    },
-    {
-        name: "Emergency Procedure",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
-    }
-];
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
 // A fetch is needed to get general app information like basic URL and the knowledge base.
 
@@ -77,18 +59,8 @@ export const useLoginStore = defineStore('login', {
                     console.warn("We got an error on login", this.errorMessage);
                 })
         },
-        fetchKnowledgeBase() {
-            // this needs to be async
-            return knowledgeBaseTemp;
-        },
         fetchBaseDbUrl() {
             return baseDbUrl;
-        },
-        fetchTestProcedureSimple() {
-            return {
-                name: "Test Procedure",
-                url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
-            };
         },
         setErrorMessage(errValue) {
             this.errorMessage = errValue;
