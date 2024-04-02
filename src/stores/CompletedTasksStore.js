@@ -72,7 +72,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                         technicalInstallations
                     };
                     console.log("Fetched completed tasks of userId:" + user_id);
-                    console.log(inspections);
                     loginStore.setLoadingStatus(false);
                     return inspections;
                 } catch (err) {

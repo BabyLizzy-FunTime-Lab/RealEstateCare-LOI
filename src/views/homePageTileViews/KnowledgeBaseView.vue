@@ -3,7 +3,7 @@ import BaseListLayout from "@/components/base/BaseListLayout.vue";
 import {IonAccordionGroup} from "@ionic/vue";
 import DocumentViewer from "@/components/mediaViewers/DocumentViewer.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
-
+import {useLoginStore} from "@/stores/LoginStore.js";
 
 export default {
   name: "KnowledgeBaseView",
@@ -11,13 +11,13 @@ export default {
   data() {
     return {
       inspectionStore: useInspectionStore(),
+      loginStore: useLoginStore(),
+      allPdfDocuments: null
     }
   },
-  computed: {
-    documents() {
-      return this.inspectionStore.getKnowledgeBase;
-    }
-  },
+  mounted() {
+    this.allPdfDocuments = this.loginStore.getAllBaseDocuments
+  }
 }
 </script>
 
@@ -26,7 +26,7 @@ export default {
     <base-list-layout list-header-name="Knowledge Base">
       <ion-accordion-group :multiple="true">
         <DocumentViewer
-            v-for="document of documents"
+            v-for="document of allPdfDocuments"
             :key="document.name"
             :document-info="document"
         />

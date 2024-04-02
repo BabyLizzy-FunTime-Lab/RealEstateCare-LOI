@@ -24,7 +24,6 @@ export default {
   },
   computed: {
     documentName() {
-      console.log(this.documentInfo);
       return this.documentInfo.name;
     },
     documentUrl() {

@@ -107,7 +107,6 @@ export const useLoginStore = defineStore('login', {
         async fetchBaseDocument(documentName) {
             return new Promise((resolve, reject) => {
                 const document = this.getBaseSiteInfo.knowledgeBase.find(doc => doc.name === documentName);
-                console.log(document);
                 if(document) {
                     resolve(document);
                 } else {
@@ -141,6 +140,9 @@ export const useLoginStore = defineStore('login', {
         },
         getBaseSiteInfo(state) {
             return state.baseSiteInformation;
+        },
+        getAllBaseDocuments(state) {
+            return state.baseSiteInformation.knowledgeBase;
         }
     }
 })

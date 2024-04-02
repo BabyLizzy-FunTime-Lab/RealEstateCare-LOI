@@ -28,7 +28,6 @@ export default {
     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
     this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
     this.technicalInstallationData = this.inspectionStore.getTechnicalInstallationViewData;
-    console.log(this.technicalInstallationData);
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {

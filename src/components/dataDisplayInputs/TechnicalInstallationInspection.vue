@@ -51,9 +51,7 @@ export default {
     }
   },
   mounted() {
-    // Getting the Test Procedure pdf works like this.
-    // this.procedure = this.loginStore.getBaseSiteInfo.knowledgeBase[0];
-
+    // Here we fetch the 'Test Procedure' pdf document.
     this.loginStore.fetchBaseDocument("Test Procedure")
         .then(document => {
           this.procedure = document
