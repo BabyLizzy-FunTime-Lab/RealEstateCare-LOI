@@ -10,6 +10,8 @@ State Management is done with [Pinia](https://pinia.vuejs.org/).
 ## Typescript disabled
 This project was build with plain JS.
 
+## Latest app version is on the main branch
+
 ## Install project
 ```sh
 npm install
