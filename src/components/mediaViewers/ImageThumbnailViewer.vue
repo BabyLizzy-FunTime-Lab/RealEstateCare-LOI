@@ -4,10 +4,12 @@ import {
   IonContent, IonImg, IonModal, IonThumbnail
 } from "@ionic/vue";
 import { modalController } from "@ionic/vue";
+import ImageViewerModal from "@/components/mediaViewers/ImageViewerModal.vue";
 
 export default {
   name: "ImageThumbnailViewer",
   components: {
+    ImageViewerModal,
     IonHeader, IonToolbar, IonModal, IonContent,
     IonThumbnail, IonButton, IonButtons, IonImg
   },
@@ -45,6 +47,10 @@ export default {
     <ion-thumbnail v-for="(image, index) in images" :key="index"
                    :image="image" @click="openModal">
       <ion-img :src="image"></ion-img>
+<!--      all the modals are being opened at the same time.-->
+<!--      the modal needs it's own open and close methods.-->
+<!--      ImageViewerModal isn't being used so we'll convert that to have it's own open and-->
+<!--      close method. All the modals are listening to the same isModalOpen var. -->
       <ion-modal :is-open="isModalOpen" can-dismiss="true">
         <ion-header>
           <ion-toolbar color="primary">
