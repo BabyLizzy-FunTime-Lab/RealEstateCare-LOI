@@ -6,22 +6,21 @@ import {
 } from "@ionic/vue";
 import pdfViewerModal from "@/components/mediaViewers/PdfViewerModal.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
+import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
-const { takePhoto, photos, newPhoto } = usePhotoCamera();
+const { takePhoto, newPhoto } = usePhotoCamera();
 
 export default {
   name: "ModificationInspection",
   components: {
-    ImageThumbnailViewer, IonButton, IonTextarea, IonSelectOption,
+    IonButton, IonTextarea, IonSelectOption,
     IonSelect, BaseButton, IonInput, BaseAccordionLayout,
-    IonItem, IonLabel, IonButtons, pdfViewerModal
+    IonItem, IonLabel, IonButtons, pdfViewerModal, PhotoViewer
   },
   data() {
     return {
       newPhoto,
-      photos,
       takePhoto,
       showChoosePDF: false,
       isPdfModalOpen: false,
@@ -190,9 +189,7 @@ export default {
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item slot="content" v-if="images.length > 0">
-    <image-thumbnail-viewer
-        :images="images" @delete-event="emitInputChange($event, 'delete:image')"
-    />
+    <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </BaseAccordionLayout>

@@ -1,28 +1,26 @@
 <script>
 import {
   IonItem, IonLabel, IonInput, IonTextarea, IonDatetime, IonDatetimeButton, IonModal,
-  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton, IonThumbnail
+  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
+import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { modalController } from "@ionic/vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
-const { takePhoto, photos, newPhoto } = usePhotoCamera();
+const { takePhoto, newPhoto } = usePhotoCamera();
 
 export default {
   name: "DamageInspection",
   components: {
-    IonThumbnail,
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton, ImageThumbnailViewer
+    IonSelectOption, BaseButton, PhotoViewer
   },
   data() {
     return {
       newPhoto,
-      photos,
       takePhoto
     }
   },
@@ -141,23 +139,12 @@ export default {
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-    <div id="thumbnail--container">
-      <image-thumbnail-viewer v-for="(image, index) in images" :key="index"
-          :image="image" @delete-event="emitInputChange($event, 'delete:image')"/>
-    </div>
+    <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>
 </template>
 
 <style scoped lang="scss">
-#thumbnail--container {
-  width: 100%;
-  margin-bottom: .5em;
-  display: grid;
-  justify-items: center;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto;
-  gap: .5em .5em;
-}
+
 </style>

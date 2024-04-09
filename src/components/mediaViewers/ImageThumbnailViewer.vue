@@ -13,7 +13,6 @@ export default {
   },
   props: {
     image: String,
-    // delete: Function,
   },
   methods: {
     openModal() {
@@ -41,26 +40,24 @@ export default {
 </script>
 
 <template>
-
-    <ion-thumbnail :image="image" @click="openModal">
-      <ion-img :src="image"></ion-img>
-      <ion-modal :is-open="isModalOpen" can-dismiss="true">
-        <ion-header>
-          <ion-toolbar color="primary">
-            <ion-buttons slot="start">
-              <ion-button @click="emitDeletePhoto(image)" >Delete</ion-button>
-            </ion-buttons>
-            <ion-buttons slot="end">
-              <ion-button @click="closeModal">Close</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content id="image--wrapper">
-          <ion-img :src="image"/>
-        </ion-content>
-      </ion-modal>
-    </ion-thumbnail>
-
+  <ion-thumbnail :image="image" @click="openModal">
+    <ion-img :src="image"></ion-img>
+    <ion-modal :is-open="isModalOpen" can-dismiss="true">
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-buttons slot="start">
+            <ion-button @click="emitDeletePhoto(image)" >Delete</ion-button>
+          </ion-buttons>
+          <ion-buttons slot="end">
+            <ion-button @click="closeModal">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content id="image--wrapper">
+        <ion-img :src="image"/>
+      </ion-content>
+    </ion-modal>
+  </ion-thumbnail>
 </template>
 
 <style scoped lang="scss">

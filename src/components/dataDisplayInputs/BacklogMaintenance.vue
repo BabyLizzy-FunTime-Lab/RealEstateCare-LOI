@@ -6,21 +6,21 @@ import {
   IonLabel, IonRadio, IonButton,
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
-import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
+import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
-const { takePhoto, photos, newPhoto } = usePhotoCamera();
+const { takePhoto, newPhoto } = usePhotoCamera();
 
 export default {
   name: "BacklogMaintenance",
   components: {
-    ImageThumbnailViewer, IonButton, BaseButton, IonRadio, IonLabel, IonRadioGroup,
-    BaseAccordionLayout, IonItem, IonInput, IonSelect, IonSelectOption},
+    IonButton, BaseButton, IonRadio, IonLabel, IonRadioGroup,
+    BaseAccordionLayout, IonItem, IonInput, IonSelect, IonSelectOption, PhotoViewer
+  },
   data() {
     return {
       inspectionStore: useInspectionStore(),
       newPhoto,
-      photos,
       takePhoto
     }
   },
@@ -101,10 +101,7 @@ export default {
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-    <div id="thumbnail--container">
-      <image-thumbnail-viewer :images="images"
-                              @delete-event="emitInputChange($event, 'delete:image')"/>
-    </div>
+    <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="console.log('saving backlog')"/>
 </BaseAccordionLayout>

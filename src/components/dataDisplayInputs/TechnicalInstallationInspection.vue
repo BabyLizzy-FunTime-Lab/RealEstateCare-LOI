@@ -6,19 +6,19 @@ import {
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import DocumentViewer from "@/components/mediaViewers/DocumentViewer.vue";
-import ImageThumbnailViewer from "@/components/mediaViewers/ImageThumbnailViewer.vue";
+import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
 
-const { takePhoto, photos, newPhoto } = usePhotoCamera();
+const { takePhoto, newPhoto } = usePhotoCamera();
 
 export default {
   name: "TechnicalInstallationInspection",
   components: {
-    ImageThumbnailViewer, IonButton, IonTextarea, IonRadio, IonRadioGroup,
+    IonButton, IonTextarea, IonRadio, IonRadioGroup,
     IonSelectOption, IonSelect, IonInput, BaseButton, BaseAccordionLayout,
-    IonItem, IonLabel, DocumentViewer
+    IonItem, IonLabel, DocumentViewer, PhotoViewer
   },
   data() {
     return {
@@ -31,7 +31,6 @@ export default {
         }
       },
       newPhoto,
-      photos,
       takePhoto,
     }
   },
@@ -130,8 +129,7 @@ export default {
     <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-      <image-thumbnail-viewer
-          :images="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
   <BaseButton slot="content" name="Save" @click="console.log('saving technical')"/>
 </BaseAccordionLayout>
