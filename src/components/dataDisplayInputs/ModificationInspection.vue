@@ -56,17 +56,15 @@ export default {
     },
     emitNewPDF(data, eventName) {
       this.convertToBase64(data.target.files[0]).then(result => {
-        // console.log(result);
         this.pdfUrl = result;
+        const dataObject = {
+          file: data.target.files[0],
+          url: this.pdfUrl
+        }
+        // console.log(dataObject)
+        this.emitInputChange(dataObject, eventName);
+        this.showChoosePDF = false
       })
-      const dataObject = {
-        file: data.target.files[0],
-        url: this.pdfUrl
-      }
-      // this.emitInputChange(data, eventName);
-      console.log(dataObject)
-      this.emitInputChange(dataObject, eventName);
-      this.showChoosePDF = false
     },
     async dismissModal() {
       await modalController.dismiss();
@@ -80,7 +78,7 @@ export default {
         reader.onload = () => {
           resolve(reader.result);
         };
-        console.log(file);
+        // console.log(file);
         reader.readAsDataURL(file);
       });
     },
@@ -89,14 +87,12 @@ export default {
         this.showChoosePDF = setTo
       } else {
         this.toggleOnOff('showChoosePDF')
-        // this.showChoosePDF = !this.showChoosePDF;
       }
     },
     toggleOnOff(dataVariableName) {
       this[dataVariableName] = !this[dataVariableName];
     },
-    viewPDF(pdf) {
-      console.log(pdf);
+    viewPDF() {
       this.isPdfModalOpen = true
       this.toggleChoosePDF(false);
     }
@@ -104,6 +100,9 @@ export default {
   watch: {
     newPhoto() {
       this.$emit('update:images', newPhoto.value);
+    },
+    documentedModsUrl() {
+      this.pdfUrl = this.documentedModsUrl;
     }
   },
   emits: [
@@ -119,7 +118,7 @@ export default {
   <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
     <ion-buttons v-if="documentedModsFile">
-      <BaseButton name="View" @click="viewPDF(documentedModsFile)"/>
+      <BaseButton name="View" @click="viewPDF()"/>
       <BaseButton v-if="!showChoosePDF" name="Update" @click="toggleChoosePDF"/>
     </ion-buttons>
   </ion-item>

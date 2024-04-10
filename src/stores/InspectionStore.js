@@ -164,7 +164,6 @@ export const useInspectionStore = defineStore('inspections', {
                 switch (inputName) {
                     case 'documentedModsFile':
                         console.log('Staging pdf file in de state');
-                        // this.updatePdfDocumentView(data);
                         this.getModificationsViewData.documentedModsFile = data.file;
                         this.getModificationsViewData.documentedModsUrl = data.url;
                         break;
