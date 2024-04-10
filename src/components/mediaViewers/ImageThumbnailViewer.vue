@@ -53,7 +53,7 @@ export default {
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content id="image--wrapper">
+      <ion-content :scrollX="true" :scrollY="true" id="image--wrapper">
         <ion-img :src="image"/>
       </ion-content>
     </ion-modal>
