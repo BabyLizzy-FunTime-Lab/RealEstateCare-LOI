@@ -63,6 +63,14 @@ export default {
 </template>
 
 <style scoped lang="scss">
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ion-list {
+  width: 100%;
+}
 ion-list-header {
   margin-bottom: .5em;
 }

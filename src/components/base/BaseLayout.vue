@@ -35,7 +35,7 @@ export default {
   <IonPage>
     <ion-header :translucent="true">
       <div class="top-decoration"></div>
-      <div>
+      <div class="toolbar--wrapper">
         <ion-toolbar class="toolbar--top" >
           <ion-img
               router-link="/"
@@ -84,6 +84,9 @@ export default {
 </template>
 
 <style scoped lang="scss">
+.ion-page {
+  align-items: center;
+}
 .top-decoration {
   height: 1.1em;
   background-color: var(--ion-color-secondary);
@@ -91,8 +94,13 @@ export default {
 .toolbar--top, .toolbar--bottom {
   --color: white;
 }
+.toolbar--wrapper {
+  background-color: var(--ion-color-primary);
+}
 .toolbar--top {
   --background: var(--ion-color-primary);
+  max-width: 80em;
+  margin: auto;
   .toolbar__logo {
     height: 2.3em;
     padding-left: .5em;
@@ -111,10 +119,13 @@ export default {
   --background: var(--ion-color-secondary);
   ion-buttons {
     justify-content: space-between;
+    max-width: 40em;
+    margin: auto;
   }
 }
 ion-content {
   --padding-start: .2em;
   --padding-end: .2em;
+  max-width: 40em;
 }
 </style>
