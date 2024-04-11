@@ -2,12 +2,16 @@
 import {IonList, IonItem, IonInput,
   IonListHeader, IonLabel, IonButton,
   IonAlert, IonContent, useIonRouter} from "@ionic/vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 import {useLoginStore} from "@/stores/LoginStore.js";
 
 export default {
   name: "LoginForm",
-  components: {IonList, IonItem, IonInput,
-    IonListHeader, IonLabel, IonButton, IonAlert, IonContent},
+  components: {
+    IonList, IonItem, IonInput, IonListHeader,
+    IonLabel, IonButton, IonAlert, IonContent,
+    BaseButton
+  },
   data() {
     return {
       loginStore: useLoginStore(),
@@ -55,9 +59,7 @@ export default {
                    label="password:"
                    @keyup.enter="login(username, password)"/>
       </ion-item>
-      <ion-button expand="full"
-                  color="primary"
-                  @click="login(username, password)">Go!</ion-button>
+      <base-button name="Login" expand="block" @click="login(username, password)"/>
     </ion-list>
   </form>
 </template>
@@ -76,5 +78,8 @@ ion-list-header {
 }
 ion-button {
   margin-top: 2em;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
