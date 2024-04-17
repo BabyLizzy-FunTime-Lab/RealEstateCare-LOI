@@ -77,6 +77,12 @@ export default {
 <style scoped lang="scss">
 ion-modal {
   --ion-background-color: var(--ion-color-modal-dark-background);
+  --height: 100vh;
+  --width: 100vw;
+  --max-width: 40em;
+  ion-title {
+    max-width: 75%;
+  }
   VuePdfEmbed {
     width: 100%;
   }

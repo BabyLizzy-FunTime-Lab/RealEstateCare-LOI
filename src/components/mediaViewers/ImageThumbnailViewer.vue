@@ -63,6 +63,10 @@ export default {
 <style scoped lang="scss">
 ion-modal {
   --ion-background-color: var(--ion-color-modal-dark-background);
+  --width: 100vw;
+  --max-width: 80em;
+  --height: 100vh;
+  --max-height: 50em;
 }
 #image--wrapper {
   ion-img {
