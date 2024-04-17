@@ -20,6 +20,11 @@ export default {
             v-for="inspection of inspections" :key="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
+            :installation-type="inspection.installationType"
+            :client-statement="inspection.clientStatement"
+            :approved="inspection.approved"
+            :comments="inspection.comments"
+            :images="inspection.images"
         />
       </ion-accordion-group>
     </base-accordion-layout>

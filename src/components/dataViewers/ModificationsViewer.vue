@@ -20,6 +20,12 @@ export default {
             v-for="inspection of inspections" :key="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
+            :documented-mods-url="inspection.documentedModsUrl"
+            :modified-by="inspection.modifiedBy"
+            :mod-description="inspection.modDescription"
+            :required-action="inspection.requiredAction"
+            :comments="inspection.comments"
+            :images="inspection.images"
         />
       </ion-accordion-group>
     </base-accordion-layout>
