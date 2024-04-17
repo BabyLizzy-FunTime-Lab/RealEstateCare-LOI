@@ -77,7 +77,7 @@ export default {
 <style scoped lang="scss">
 ion-modal {
   --ion-background-color: var(--ion-color-modal-dark-background);
-  --height: 100vh;
+  --height: 100%;
   --width: 100vw;
   --max-width: 40em;
   ion-title {

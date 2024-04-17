@@ -65,7 +65,7 @@ ion-modal {
   --ion-background-color: var(--ion-color-modal-dark-background);
   --width: 100vw;
   --max-width: 80em;
-  --height: 100vh;
+  --height: 100%;
   --max-height: 50em;
 }
 #image--wrapper {
