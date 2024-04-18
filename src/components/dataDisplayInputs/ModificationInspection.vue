@@ -24,7 +24,7 @@ export default {
       takePhoto,
       showChoosePDF: false,
       isPdfModalOpen: false,
-      pdfUrl: String
+      pdfUrl: String,
     }
   },
   props: {
@@ -105,6 +105,19 @@ export default {
       this.pdfUrl = this.documentedModsUrl;
     }
   },
+  computed: {
+    pdfName() {
+      if(this.documentedModsFile) {
+        return this.documentedModsFile.name;
+      } else if(this.documentedModsUrl) {
+        return this.documentedModsUrl.substring(this.documentedModsUrl.lastIndexOf('/') + 1);
+      }
+      return "no title selected";
+    }
+  },
+  mounted() {
+    this.pdfUrl = this.documentedModsUrl;
+  },
   emits: [
     'update:location', 'update:documentedMods', 'update:modDescription',
     'update:requiredAction', 'update:comments', 'update:modifiedBy',
@@ -117,17 +130,17 @@ export default {
 <BaseAccordionLayout :header-name="headerName">
   <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
-    <ion-buttons v-if="documentedModsFile">
+    <ion-buttons v-if="documentedModsFile || documentedModsUrl">
       <BaseButton name="View" @click="viewPDF()"/>
       <BaseButton v-if="!showChoosePDF" name="Update" @click="toggleChoosePDF"/>
     </ion-buttons>
   </ion-item>
   <ion-item id="documentedModsFiles" slot="content">
-    <ion-label v-if="documentedModsFile">
+    <ion-label v-if="documentedModsFile || documentedModsUrl">
       <h3>Selected PDF Title:</h3>
-      <p>{{documentedModsFile.name}}</p>
+      <p>{{pdfName}}</p>
     </ion-label>
-    <ion-input  v-if="!documentedModsFile || showChoosePDF"
+    <ion-input  v-if="!documentedModsUrl || showChoosePDF"
         label="Upload PDF" label-placement="stacked"
         type="file" accept="application/pdf"
         @change="emitNewPDF($event, 'update:documentedMods')"
