@@ -21,7 +21,8 @@ export default {
   data() {
     return {
       newPhoto,
-      takePhoto
+      takePhoto,
+      readOnly: false
     }
   },
   props: {
@@ -43,6 +44,10 @@ export default {
     saveDataRequest: {
       type: Function,
     },
+    readOnlyProp: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(data, eventName) {
@@ -51,11 +56,17 @@ export default {
     async dismissModal() {
       await modalController.dismiss();
     },
+    readOnlyToggle() {
+      this.readOnly = !this.readOnly;
+    }
   },
   watch: {
     newPhoto() {
       this.$emit('update:images', newPhoto.value);
     }
+  },
+  mounted() {
+    this.readOnly = this.readOnlyProp
   },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
