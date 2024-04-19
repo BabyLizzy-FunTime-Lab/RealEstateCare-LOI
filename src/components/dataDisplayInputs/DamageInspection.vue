@@ -58,6 +58,7 @@ export default {
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
+      console.log("test")
     }
   },
   watch: {
@@ -91,6 +92,7 @@ export default {
     <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
     <ion-modal :keep-contents-mounted="true">
       <ion-datetime :value="date"
+                    :readonly="readOnly"
                     @ionChange="emitInputChange($event, 'update:date')"
                     displayFormat="MMM D, YYYY"
                     pickerFormat="MMM D YYYY"
@@ -152,7 +154,9 @@ export default {
   <ion-item  slot="content" v-if="images.length > 0">
     <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
-  <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
+  <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
+  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
 </base-accordion-layout>
 </template>
 

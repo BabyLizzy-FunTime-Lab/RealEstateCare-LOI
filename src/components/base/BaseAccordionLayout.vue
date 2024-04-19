@@ -3,13 +3,25 @@ import {IonAccordion, IonItem, IonLabel} from "@ionic/vue";
 
 export default {
   name: "BaseAccordionLayout",
-  components: {IonItem, IonLabel, IonAccordion,},
+  components: {IonItem, IonLabel, IonAccordion},
   props: {
     headerName: String,
     colorStyle: {
       value: String,
       default: "light"
-    }
+    },
+    // showButton: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    // buttonName: {
+    //   type: String,
+    //   default: null
+    // },
+    // buttonFunction: {
+    //   type: Function,
+    //   default: null
+    // }
   }
 }
 </script>

@@ -18,6 +18,7 @@ export default {
       <ion-accordion-group slot="content">
         <DamageInspection
             v-for="inspection of inspections" :key="inspection.id"
+            :read-only-prop="true"
             :header-name="inspection.location"
             :location="inspection.location"
             :new-damage="inspection.newDamage"

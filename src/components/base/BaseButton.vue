@@ -5,14 +5,25 @@ export default {
   name: "BaseButton",
   components: {IonButton},
   props: {
-    name: ""
+    name: {
+      default: "No Name"
+    },
+    buttonColor: {
+      default: "secondary"
+    },
+    buttonExpand: {
+      default: "full"
+    }
   }
 }
 </script>
 
 <template>
-  <ion-button expand="full" fill="solid"
-              color="secondary">{{name}}</ion-button>
+  <ion-button
+      :expand="buttonExpand"
+      fill="solid"
+      :color="buttonColor"
+  >{{name}}</ion-button>
 </template>
 
 <style scoped lang="scss">
