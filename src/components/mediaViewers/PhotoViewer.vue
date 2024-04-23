@@ -6,7 +6,11 @@ export default {
     ImageThumbnailViewer
   },
   props: {
-    photos: Array
+    photos: Array,
+    readOnly: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(data, eventName) {
@@ -21,6 +25,7 @@ export default {
   <div id="thumbnail--container">
     <ImageThumbnailViewer
         v-for="(photo, index) in photos"
+        :read-only="readOnly"
         :key="index"
         :image="photo"
         @delete-event="emitInputChange($event, 'delete-event')"

@@ -13,6 +13,10 @@ export default {
   },
   props: {
     image: String,
+    readOnly: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     openModal() {
@@ -46,7 +50,7 @@ export default {
       <ion-header>
         <ion-toolbar color="primary">
           <ion-buttons slot="start">
-            <ion-button @click="emitDeletePhoto(image)" >Delete</ion-button>
+            <ion-button v-if="!readOnly" @click="emitDeletePhoto(image)" >Delete</ion-button>
           </ion-buttons>
           <ion-buttons slot="end">
             <ion-button @click="closeModal">Close</ion-button>
