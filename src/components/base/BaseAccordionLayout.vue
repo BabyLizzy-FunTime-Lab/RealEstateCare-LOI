@@ -9,19 +9,7 @@ export default {
     colorStyle: {
       value: String,
       default: "light"
-    },
-    // showButton: {
-    //   type: Boolean,
-    //   default: false
-    // },
-    // buttonName: {
-    //   type: String,
-    //   default: null
-    // },
-    // buttonFunction: {
-    //   type: Function,
-    //   default: null
-    // }
+    }
   }
 }
 </script>
@@ -29,7 +17,7 @@ export default {
 <template>
   <ion-accordion>
     <ion-item slot="header" :color="colorStyle">
-      <ion-label>{{ headerName }}</ion-label>
+      <ion-label slot="start">{{ headerName }}</ion-label>
     </ion-item>
     <slot></slot>
   </ion-accordion>
@@ -42,4 +30,5 @@ ion-item {
   border-left: 2px solid var(--ion-color-secondary);
   box-sizing: border-box;
 }
+
 </style>

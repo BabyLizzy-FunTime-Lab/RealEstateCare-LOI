@@ -30,6 +30,7 @@ export default {
       value: String,
       default: "Damage Inspection"
     },
+    inspectionId: String,
     location: String,
     newDamage: String,
     date: String,
@@ -69,6 +70,15 @@ export default {
   mounted() {
     this.readOnly = this.readOnlyProp
   },
+  computed: {
+    damageTypeBorder() {
+      if (this.selectedDamageCategory === 'other') {
+        return "none"
+      } else {
+        return "inset"
+      }
+    }
+  },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageCategory', 'update:damageType',
@@ -79,6 +89,9 @@ export default {
 
 <template>
   <base-accordion-layout :header-name="headerName">
+  <ion-item slot="content" v-if="inspectionId">
+    <ion-input  label-placement="floating" label="Inspection ID" readonly :value="inspectionId"/>
+  </ion-item>
   <ion-item slot="content">
     <ion-input label="Location"
                :readonly="readOnly"
@@ -101,7 +114,7 @@ export default {
       <ion-button @click="dismissModal" >OK</ion-button>
     </ion-modal>
   </ion-item>
-  <ion-item slot="content" class="damageType-border" lines="inset">
+  <ion-item slot="content" :lines="damageTypeBorder">
     <ion-select :value="selectedDamageCategory"
                 :disabled="readOnly"
                 label="Damage Type"

@@ -19,6 +19,7 @@ export default {
         <DamageInspection
             v-for="inspection of inspections" :key="inspection.id"
             :read-only-prop="true"
+            :inspection-id="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
             :new-damage="inspection.newDamage"
