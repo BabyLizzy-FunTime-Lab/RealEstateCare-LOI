@@ -88,10 +88,7 @@ export default {
 </script>
 
 <template>
-  <base-accordion-layout :header-name="headerName">
-  <ion-item slot="content" v-if="inspectionId">
-    <ion-input  label-placement="floating" label="Inspection ID" readonly :value="inspectionId"/>
-  </ion-item>
+  <base-accordion-layout :header-name="headerName" :inspection-id="inspectionId">
   <ion-item slot="content">
     <ion-input label="Location"
                :readonly="readOnly"

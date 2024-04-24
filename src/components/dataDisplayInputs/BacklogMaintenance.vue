@@ -21,7 +21,8 @@ export default {
     return {
       inspectionStore: useInspectionStore(),
       newPhoto,
-      takePhoto
+      takePhoto,
+      readOnly: false
     }
   },
   props: {
@@ -29,6 +30,7 @@ export default {
       value: String,
       default: "Backlog Maintenance"
     },
+    inspectionId: String,
     location: String,
     emergency: String,
     type: String,
@@ -36,17 +38,28 @@ export default {
     images: {
       default: []
     },
+    readOnlyProp: {
+      type: Boolean,
+      default: false
+    },
     saveDataRequest: Function
   },
   methods: {
     emitInputChange(data, eventName) {
       this.$emit(eventName, data);
     },
+    readOnlyToggle() {
+      this.readOnly = !this.readOnly;
+      console.log("test")
+    }
   },
   watch: {
     newPhoto() {
       this.$emit('update:images', newPhoto.value);
     }
+  },
+  mounted() {
+    this.readOnly = this.readOnlyProp
   },
   emits: [
       'update:images', 'delete:image', 'update:location', 'update:emergency',
@@ -56,9 +69,10 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout :header-name="headerName">
+<BaseAccordionLayout :header-name="headerName" :inspection-id="inspectionId">
   <ion-item slot="content">
     <ion-input label="Location"
+               :readonly="readOnly"
                :value="location"
                @input="emitInputChange($event, 'update:location')"
                placeholder="Input address"
@@ -70,12 +84,13 @@ export default {
     <ion-radio-group :value="emergency"
                      @ionChange="emitInputChange($event, 'update:emergency')"
                      name="emergency">
-      <ion-radio aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
-      <ion-radio aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+      <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
+      <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="type"
+                :disabled="readOnly"
                 @ionChange="emitInputChange($event, 'update:maintenanceType')"
                 label="Maintenance Type"
                 placeholder="Select">
@@ -88,6 +103,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="costIndication"
+                :disabled="readOnly"
                 @ionChange="emitInputChange($event, 'update:costIndication')"
                 label="Cost Prediction"
                 placeholder="Select">
@@ -98,15 +114,19 @@ export default {
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-    <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer :read-only="readOnly" :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
-  <BaseButton slot="content" name="Save" @click="console.log('saving backlog')"/>
+  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
+  <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
+  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
 </BaseAccordionLayout>
 </template>
 
 <style scoped lang="scss">
-
+.select-disabled, .item-select-disabled ion-label {
+  opacity: 1;
+}
 </style>

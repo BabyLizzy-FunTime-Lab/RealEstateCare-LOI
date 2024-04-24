@@ -18,6 +18,8 @@ export default {
       <ion-accordion-group slot="content">
         <BacklogMaintenance
             v-for="inspection of inspections" :key="inspection.id"
+            :inspection-id="inspection.id"
+            :read-only-prop="true"
             :header-name="inspection.location"
             :location="inspection.location"
             :emergency="inspection.emergency"
