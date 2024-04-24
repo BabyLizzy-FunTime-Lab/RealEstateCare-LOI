@@ -80,7 +80,7 @@ ion-modal {
 }
 ion-thumbnail {
   --size: 8em;
-  max-width: calc(20vw);
-  max-height: calc(20vw);
+  max-width: 20vw;
+  max-height: 20vw;
 }
 </style>
