@@ -22,6 +22,7 @@ export default {
     return {
       newPhoto,
       takePhoto,
+      readOnly: false,
       showChoosePDF: false,
       isPdfModalOpen: false,
       pdfUrl: String,
@@ -37,6 +38,7 @@ export default {
       default: null
     },
     documentedModsUrl: null,
+    inspectionId: String,
     location: String,
     modifiedBy: String,
     modDescription: String,
@@ -45,6 +47,10 @@ export default {
     images: {
       default: [],
       required: false
+    },
+    readOnlyProp: {
+      type: Boolean,
+      default: false
     },
     saveDataRequest: {
       type: Function,
@@ -95,6 +101,10 @@ export default {
     viewPDF() {
       this.isPdfModalOpen = true
       this.toggleChoosePDF(false);
+    },
+    readOnlyToggle() {
+      this.readOnly = !this.readOnly;
+      console.log("test")
     }
   },
   watch: {
@@ -127,12 +137,12 @@ export default {
 </script>
 
 <template>
-<BaseAccordionLayout :header-name="headerName">
+<BaseAccordionLayout :header-name="headerName" :inspection-id="inspectionId">
   <ion-item id="documentedMods" slot="content" lines="none">
     <ion-label >Documented mods</ion-label>
     <ion-buttons v-if="documentedModsFile || documentedModsUrl">
       <BaseButton name="View" @click="viewPDF()"/>
-      <BaseButton v-if="!showChoosePDF" name="Update" @click="toggleChoosePDF"/>
+      <BaseButton v-if="!showChoosePDF && !readOnly" name="Update" @click="toggleChoosePDF"/>
     </ion-buttons>
   </ion-item>
   <ion-item id="documentedModsFiles" slot="content">
@@ -152,6 +162,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-input label="Location"
+               :readonly="readOnly"
                :value="location"
                @input="emitInputChange($event, 'update:location')"
                placeholder="Input address"
@@ -160,6 +171,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="modifiedBy"
+                :disabled="readOnly"
                 @ionChange="emitInputChange($event, 'update:modifiedBy')"
                 label="Modified by"
                 placeholder="Select">
@@ -170,6 +182,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-textarea label="Mod description"
+                  :readonly="readOnly"
                   :value="modDescription"
                   @ionChange="emitInputChange($event, 'update:modDescription')"
                   label-placement="floating"
@@ -178,6 +191,7 @@ export default {
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="requiredAction"
+                :disabled="readOnly"
                 @ionChange="emitInputChange($event, 'update:requiredAction')"
                 label="Required action"
                 placeholder="Select">
@@ -191,6 +205,7 @@ export default {
   <ion-item slot="content">
     <ion-textarea label="Comments"
                   :value="comments"
+                  :readonly="readOnly"
                   @ionChange="emitInputChange($event, 'update:comments')"
                   label-placement="floating"
                   :auto-grow="true"
@@ -198,12 +213,14 @@ export default {
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item slot="content" v-if="images.length > 0">
-    <PhotoViewer :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer :read-only="readOnly" :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
   </ion-item>
-  <BaseButton slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
+  <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
+  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
 </BaseAccordionLayout>
 </template>
 
@@ -223,5 +240,8 @@ export default {
   ion-label {
     margin-bottom: 0;
   }
+}
+.select-disabled, .item-select-disabled ion-label {
+  opacity: 1;
 }
 </style>

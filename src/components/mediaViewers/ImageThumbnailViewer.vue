@@ -45,7 +45,7 @@ export default {
 
 <template>
   <ion-thumbnail :image="image" @click="openModal">
-    <ion-img :src="image"></ion-img>
+    <ion-img class="test" :src="image"></ion-img>
     <ion-modal :is-open="isModalOpen" can-dismiss="true">
       <ion-header>
         <ion-toolbar color="primary">
@@ -77,5 +77,8 @@ ion-modal {
     height: 100%;
     background-color: transparent;
   }
+}
+ion-thumbnail {
+  --size: 100%;
 }
 </style>

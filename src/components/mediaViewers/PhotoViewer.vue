@@ -38,7 +38,7 @@ export default {
   width: 100%;
   margin-bottom: .5em;
   display: grid;
-  justify-items: center;
+  justify-items: left;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
   gap: .5em .5em;
