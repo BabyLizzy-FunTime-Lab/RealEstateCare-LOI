@@ -78,7 +78,18 @@ ion-modal {
     background-color: transparent;
   }
 }
+//ion-thumbnail {
+//  --size: 5rem;
+//}
 ion-thumbnail {
-  --size: 100%;
+  --size: 8em;
+  max-width: calc(20vw);
+  max-height: calc(20vw);
+  //min-width: 5rem;
+  //min-height: 5rem;
+  //img {
+  //  max-width: 5rem;
+  //  min-width: 5rem;
+  //}
 }
 </style>
