@@ -127,6 +127,7 @@ export default {
   },
   mounted() {
     this.pdfUrl = this.documentedModsUrl;
+    this.readOnly = this.readOnlyProp;
   },
   emits: [
     'update:location', 'update:documentedMods', 'update:modDescription',

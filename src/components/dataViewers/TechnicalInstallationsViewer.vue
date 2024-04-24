@@ -18,6 +18,8 @@ export default {
       <ion-accordion-group slot="content">
         <TechnicalInstallationInspection
             v-for="inspection of inspections" :key="inspection.id"
+            :read-only-prop="true"
+            :inspection-id="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
             :installation-type="inspection.installationType"
