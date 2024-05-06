@@ -93,9 +93,9 @@ export const useInspectionStore = defineStore('inspections', {
         },
         updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
-            if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'selectedDamageCategory') {
+            if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'selectedDamageTypeOption') {
                 switch(inputName) {
-                    case 'selectedDamageCategory':
+                    case 'selectedDamageTypeOption':
                         this.updateInputView(data, this.getDamageInspectionViewData, 'selectedDamageTypeOption');
                         if (data.target.value === 'other') {
                             this.updateInputView('', this.getDamageInspectionViewData, 'damageType');

@@ -24,7 +24,7 @@ export default {
             :location="inspection.location"
             :new-damage="inspection.newDamage"
             :date="inspection.date"
-            :selected-damage-category="inspection.selectedDamageTypeOption"
+            :selected-damage-type-option="inspection.selectedDamageTypeOption"
             :damage-type="inspection.damageType"
             :emergency="inspection.emergency"
             :comments="inspection.comments"

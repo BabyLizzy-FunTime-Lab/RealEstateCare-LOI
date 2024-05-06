@@ -34,7 +34,7 @@ export default {
     location: String,
     newDamage: String,
     date: String,
-    selectedDamageCategory: String,
+    selectedDamageTypeOption: String,
     damageType: String,
     emergency: String,
     comments: String,
@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     damageTypeBorder() {
-      if (this.selectedDamageCategory === 'other') {
+      if (this.selectedDamageTypeOption === 'other') {
         return "none"
       } else {
         return "inset"
@@ -81,7 +81,7 @@ export default {
   },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
-      'update:selectedDamageCategory', 'update:damageType',
+      'update:selectedDamageTypeOption', 'update:damageType',
       'update:emergency', 'update:comments', 'update:images', 'delete:image'
   ]
 }
@@ -112,11 +112,11 @@ export default {
     </ion-modal>
   </ion-item>
   <ion-item slot="content" :lines="damageTypeBorder">
-    <ion-select :value="selectedDamageCategory"
+    <ion-select :value="selectedDamageTypeOption"
                 :disabled="readOnly"
                 label="Damage Type"
                 placeholder="Select"
-                @ionChange="emitInputChange($event, 'update:selectedDamageCategory')">
+                @ionChange="emitInputChange($event, 'update:selectedDamageTypeOption')">
       <ion-select-option value="deliberately">Deliberately</ion-select-option>
       <ion-select-option value="wear">Wear</ion-select-option>
       <ion-select-option value="violence">Violence</ion-select-option>
@@ -125,7 +125,7 @@ export default {
       <ion-select-option value="other">Other</ion-select-option>
     </ion-select>
   </ion-item>
-  <ion-item slot="content" v-if="selectedDamageCategory === 'other'" lines="inset">
+  <ion-item slot="content" v-if="selectedDamageTypeOption === 'other'" lines="inset">
     <ion-input
         :value="damageType"
         :readonly="readOnly"
