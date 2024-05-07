@@ -89,7 +89,7 @@ export default {
           @update:location="this.updateBacklogMaintenanceViewData($event, 'location')"
           :emergency="this.backlogMaintenanceData.emergency"
           @update:emergency="this.updateBacklogMaintenanceViewData($event, 'emergency')"
-          :type="this.backlogMaintenanceData.maintenanceType"
+          :maintenance-type="this.backlogMaintenanceData.maintenanceType"
           @update:maintenance-type="this.updateBacklogMaintenanceViewData($event, 'maintenanceType')"
           :cost-indication="this.backlogMaintenanceData.costIndication"
           @update:cost-indication="this.updateBacklogMaintenanceViewData($event, 'costIndication')"

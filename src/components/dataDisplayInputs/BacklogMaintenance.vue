@@ -33,7 +33,7 @@ export default {
     inspectionId: String,
     location: String,
     emergency: String,
-    type: String,
+    maintenanceType: String,
     costIndication: String,
     images: {
       default: []
@@ -89,7 +89,7 @@ export default {
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
-    <ion-select :value="type"
+    <ion-select :value="maintenanceType"
                 :disabled="readOnly"
                 @ionChange="emitInputChange($event, 'update:maintenanceType')"
                 label="Maintenance Type"
