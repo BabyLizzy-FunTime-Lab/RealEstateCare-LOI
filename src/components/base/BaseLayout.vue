@@ -5,16 +5,17 @@ import {IonPage, IonButtons, IonImg,
   IonButton, IonContent, IonHeader,
   IonToolbar, IonFooter, IonProgressBar, IonAvatar} from "@ionic/vue";
 import { build, search, alertCircle } from 'ionicons/icons';
-import BottomToolbarButton from "@/components/toolbar/BottomToolbarButton.vue";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import LoginForm from "@/components/login/LoginForm.vue";
+import BaseLayoutBottomToolbarButton from "@/components/base/BaseLayoutBottomToolbarButton.vue";
 
 export default {
   name: "BaseLayout",
   components: {
-    BottomToolbarButton, IonPage, IonButtons, IonImg,
+    BaseLayoutBottomToolbarButton, IonPage, IonButtons, IonImg,
     IonButton, IonContent, IonHeader, IonToolbar,
-    IonFooter, LoginForm, IonProgressBar, IonAvatar},
+    IonFooter, LoginForm, IonProgressBar, IonAvatar
+  },
   setup() {
     return { alertCircle, build, search };
   },
@@ -74,9 +75,9 @@ export default {
     <ion-footer>
       <ion-toolbar class="toolbar--bottom">
         <ion-buttons>
-          <bottom-toolbar-button label="Active Task" :icon="build" path="/scheduled"/>
-          <bottom-toolbar-button label="Search" :icon="search" path="/completed"/>
-          <bottom-toolbar-button label="Information" :icon="alertCircle" path="/knowledge-base"/>
+          <base-layout-bottom-toolbar-button label="Active Task" :icon="build" path="/scheduled"/>
+          <base-layout-bottom-toolbar-button label="Search" :icon="search" path="/completed"/>
+          <base-layout-bottom-toolbar-button label="Information" :icon="alertCircle" path="/knowledge-base"/>
         </ion-buttons>
       </ion-toolbar>
     </ion-footer>
