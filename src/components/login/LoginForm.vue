@@ -38,7 +38,7 @@ export default {
       :buttons="['OK']"
       @didDismiss="loginStore.setErrorMessage(null)"
   />
-  <form>
+  <form name="login">
     <ion-list>
       <ion-list-header color="primary">
         <ion-label>

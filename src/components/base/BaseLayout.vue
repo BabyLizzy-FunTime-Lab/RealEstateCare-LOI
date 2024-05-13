@@ -43,6 +43,7 @@ export default {
               class="toolbar__logo"
               src="/logos/real-estate-care-logo.png"
               alt="Real Estate Logo" slot="start"/>
+          <h1 class="invisible-header-title">RealEstateCare</h1>
           <ion-buttons slot="secondary">
             <ion-button v-if="loginStore.getLoginStatus" router-link="/user-info">
               <ion-avatar>
@@ -85,15 +86,23 @@ export default {
 </template>
 
 <style scoped lang="scss">
+.invisible-header-title {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .ion-page {
   align-items: center;
+  background-color: var(--ion-color-tertiary);
 }
 .top-decoration {
   height: 1.1em;
   background-color: var(--ion-color-secondary);
 }
 .toolbar--top, .toolbar--bottom {
-  --color: white;
+  --color: var(--ion-color-primary-contrast);
 }
 .toolbar--wrapper {
   background-color: var(--ion-color-primary);
@@ -112,7 +121,7 @@ export default {
   }
   ion-avatar {
     width: 1.6em;
-    background-color: lightgray;
+    background-color: var(--ion-color-primary-contrast);
     border: .2em solid var(--ion-color-secondary);
   }
 }
