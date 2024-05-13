@@ -35,8 +35,8 @@ ion-button {
   text-transform: capitalize;
   font-size: .8em;
   ion-label {
-    font-weight: 100;
     font-size: 1em;
+    font-weight: 500;
   }
 }
 </style>
