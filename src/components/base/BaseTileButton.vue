@@ -40,7 +40,8 @@ ion-button {
   text-transform: capitalize;
   font-weight: 700;
   font-size: 1em;
-  --background: --ion-background-color;
-  --color: --ion-color-primary;
+  --background: var(--ion-color-secondary-contrast);
+  --color: var(--ion-color-primary);
+  --background-hover: var(--ion-color-secondary);
 }
 </style>
