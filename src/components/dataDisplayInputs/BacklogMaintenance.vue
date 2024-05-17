@@ -27,7 +27,7 @@ export default {
   },
   props: {
     headerName: {
-      value: String,
+      type: String,
       default: "Backlog Maintenance"
     },
     inspectionId: String,
@@ -36,13 +36,16 @@ export default {
     maintenanceType: String,
     costIndication: String,
     images: {
+      type: Array,
       default: []
     },
     readOnlyProp: {
       type: Boolean,
       default: false
     },
-    saveDataRequest: Function
+    saveDataRequest: {
+      type: Function
+    },
   },
   methods: {
     emitInputChange(data, eventName) {

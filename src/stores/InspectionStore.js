@@ -182,7 +182,7 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-       pushdamageInspectionViewData() {
+       pushDamageInspectionViewData() {
             // Don't forget to fix the spelling of the method name.
             // Images are saved with another function that returns the nessasery cloudinary
             // medialinks on success. These links need to be added to the push data
@@ -191,11 +191,15 @@ export const useInspectionStore = defineStore('inspections', {
             console.log("Pushing Damage Inspection data to database");
             // Adding user id to the data.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
+
             console.log(this.getDamageInspectionViewData);
             // Triggers alert, if no connection could be made to the db.
             // In that case the data needs to be saved localy.
            // seperate store for local saves.
-       }
+       },
+        pushBacklogMaintenanceViewData() {
+            console.log("Saving BacklogMaintenance");
+        },
     },
     getters: {
         getDamageInspectionViewData(state) {

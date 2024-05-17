@@ -30,7 +30,7 @@ export default {
   },
   props: {
     headerName: {
-      value: String,
+      type: String,
       default: "Modifications"
     },
     documentedModsFile: {
@@ -45,6 +45,7 @@ export default {
     requiredAction: String,
     comments: String,
     images: {
+      type: Array,
       default: [],
       required: false
     },

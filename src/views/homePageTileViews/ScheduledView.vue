@@ -31,9 +31,18 @@ export default {
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {
-    saveDataRequest() {
-      console.log("Requesting Damage Inspection data push...");
-      this.inspectionStore.pushdamageInspectionViewData();
+    pushDamageInspectionViewData() {
+      console.log("Saving DamageInspection");
+      this.inspectionStore.pushDamageInspectionViewData();
+    },
+    pushBacklogMaintenanceViewData() {
+      console.log("Saving BacklogMaintenance")
+    },
+    pushTechnicalInstallationViewData() {
+      console.log("Saving TechnicalInstallation");
+    },
+    pushModificationsViewData() {
+      console.log("Saving Modifications");
     },
     updateDamageInspectionViewData($event, inputName) {
       // Am I being too redundant here?
@@ -82,7 +91,7 @@ export default {
             :images="this.damageInspectionData.images"
             @update:images="this.updateDamageInspectionViewData($event,'takePhoto')"
             @delete:image="this.updateDamageInspectionViewData($event,'deletePhoto')"
-            :save-data-request="saveDataRequest"
+            :save-data-request="pushDamageInspectionViewData"
         />
         <BacklogMaintenance
           :location="this.backlogMaintenanceData.location"
@@ -96,8 +105,8 @@ export default {
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
+          :save-data-request="pushBacklogMaintenanceViewData"
         />
-
         <TechnicalInstallationInspection
           :location="this.technicalInstallationData.location"
           @update:location="this.updateTechnicalInstallationViewData($event, 'location')"
@@ -112,6 +121,7 @@ export default {
           :images="this.technicalInstallationData.images"
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
           @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
+          :save-data-request="pushTechnicalInstallationViewData"
         />
         <ModificationInspection
             :location="this.modificationsData.location"
@@ -130,6 +140,7 @@ export default {
             :images="this.modificationsData.images"
             @update:images="this.updateModificationsViewData($event, 'takePhoto')"
             @delete:image="this.updateModificationsViewData($event, 'deletePhoto')"
+            :save-data-request="pushModificationsViewData"
         />
       </ion-accordion-group>
     </base-list-layout>

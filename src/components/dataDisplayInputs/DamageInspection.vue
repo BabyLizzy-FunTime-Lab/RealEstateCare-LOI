@@ -27,7 +27,7 @@ export default {
   },
   props: {
     headerName: {
-      value: String,
+      type: String,
       default: "Damage Inspection"
     },
     inspectionId: String,
@@ -39,6 +39,7 @@ export default {
     emergency: String,
     comments: String,
     images: {
+      type: Array,
       default: [],
       required: false
     },

@@ -37,7 +37,7 @@ export default {
   },
   props: {
     headerName: {
-      value: String,
+      type: String,
       default: "Technical Installation Inspection"
     },
     readOnlyProp: {
@@ -51,9 +51,13 @@ export default {
     approved: String,
     comments: String,
     images: {
+      type: Array,
       default: [],
       required: false
-    }
+    },
+    saveDataRequest: {
+      type: Function
+    },
   },
   mounted() {
     this.readOnly = this.readOnlyProp;
@@ -150,7 +154,7 @@ export default {
   </ion-item>
   <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
   <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="console.log('saving technical')"/>
+  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
 </BaseAccordionLayout>
 </template>
 
