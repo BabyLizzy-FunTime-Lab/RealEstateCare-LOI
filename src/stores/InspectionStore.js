@@ -182,9 +182,11 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-        pushImagesToCloudinary(images) {
+        pushImagesToCloudinary(imageArray) {
           console.log("Pushing Images to Cloudinary & getting image URL");
-          console.log(images);
+          console.log(imageArray);
+          // This should return an array with the coudinary url's.
+            // Tbsi will be made as a service uploadImageToCloudinary
         },
         pushDamageInspectionViewData() {
             // Don't forget to fix the spelling of the method name.
@@ -195,6 +197,7 @@ export const useInspectionStore = defineStore('inspections', {
             console.log("Pushing DamageInspectionViewData");
             // Adding user id to the data.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
+            this.pushImagesToCloudinary()
 
             console.log(this.getDamageInspectionViewData);
             // Triggers alert, if no connection could be made to the db.
