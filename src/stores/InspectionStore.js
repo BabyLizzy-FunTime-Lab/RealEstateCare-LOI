@@ -187,7 +187,7 @@ export const useInspectionStore = defineStore('inspections', {
             // Images are saved with another function that returns the nessasery cloudinary
             // medialinks on success. These links need to be added to the push data
             // before they go to the db. Images are only saved locally if no contact could be made
-           // with the DB. So we will need a try and catch.
+            // with the DB. So we will need a try and catch.
             console.log("Pushing DamageInspectionViewData");
             // Adding user id to the data.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
@@ -195,7 +195,7 @@ export const useInspectionStore = defineStore('inspections', {
             console.log(this.getDamageInspectionViewData);
             // Triggers alert, if no connection could be made to the db.
             // In that case the data needs to be saved localy.
-           // seperate store for local saves.
+            // seperate store for local saves.
         },
         pushBacklogMaintenanceViewData() {
             console.log("Pushing BacklogMaintenance");
