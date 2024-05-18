@@ -182,6 +182,10 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
+        pushImagesToCloudinary(images) {
+          console.log("Pushing Images to Cloudinary & getting image URL");
+          console.log(images);
+        },
         pushDamageInspectionViewData() {
             // Don't forget to fix the spelling of the method name.
             // Images are saved with another function that returns the nessasery cloudinary
