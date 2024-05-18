@@ -32,17 +32,16 @@ export default {
   },
   methods: {
     pushDamageInspectionViewData() {
-      console.log("Saving DamageInspection");
       this.inspectionStore.pushDamageInspectionViewData();
     },
     pushBacklogMaintenanceViewData() {
-      console.log("Saving BacklogMaintenance")
+      this.inspectionStore.pushBacklogMaintenanceViewData();
     },
     pushTechnicalInstallationViewData() {
-      console.log("Saving TechnicalInstallation");
+      this.inspectionStore.pushTechnicalInstallationViewData();
     },
     pushModificationsViewData() {
-      console.log("Saving Modifications");
+      this.inspectionStore.pushModificationsViewData();
     },
     updateDamageInspectionViewData($event, inputName) {
       // Am I being too redundant here?

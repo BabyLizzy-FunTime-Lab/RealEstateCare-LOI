@@ -68,7 +68,6 @@ export default {
           file: data.target.files[0],
           url: this.pdfUrl
         }
-        // console.log(dataObject)
         this.emitInputChange(dataObject, eventName);
         this.showChoosePDF = false
       })
@@ -85,7 +84,6 @@ export default {
         reader.onload = () => {
           resolve(reader.result);
         };
-        // console.log(file);
         reader.readAsDataURL(file);
       });
     },

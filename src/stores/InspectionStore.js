@@ -182,13 +182,13 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-       pushDamageInspectionViewData() {
+        pushDamageInspectionViewData() {
             // Don't forget to fix the spelling of the method name.
             // Images are saved with another function that returns the nessasery cloudinary
             // medialinks on success. These links need to be added to the push data
             // before they go to the db. Images are only saved locally if no contact could be made
            // with the DB. So we will need a try and catch.
-            console.log("Pushing Damage Inspection data to database");
+            console.log("Pushing DamageInspectionViewData");
             // Adding user id to the data.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
 
@@ -196,10 +196,22 @@ export const useInspectionStore = defineStore('inspections', {
             // Triggers alert, if no connection could be made to the db.
             // In that case the data needs to be saved localy.
            // seperate store for local saves.
-       },
-        pushBacklogMaintenanceViewData() {
-            console.log("Saving BacklogMaintenance");
         },
+        pushBacklogMaintenanceViewData() {
+            console.log("Pushing BacklogMaintenance");
+            this.getBacklogMaintenanceViewData.inspectorId = this.fetchUserId();
+            console.log(this.getBacklogMaintenanceViewData);
+        },
+        pushTechnicalInstallationViewData() {
+            console.log("Pushing TechnicalInstallation");
+            this.getTechnicalInstallationViewData.inspectorId = this.fetchUserId();
+            console.log(this.getTechnicalInstallationViewData);
+        },
+        pushModificationsViewData() {
+            console.log("Pushing Modifications");
+            this.getModificationsViewData.inspectorId = this.fetchUserId();
+            console.log(this.getModificationsViewData);
+        }
     },
     getters: {
         getDamageInspectionViewData(state) {
