@@ -1,7 +1,13 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
+import {cloudinaryUploader} from "@/composables/cloudinaryUploader.js";
 import axios from "axios";
+
 const loginStore = useLoginStore();
+const {
+    cloudinaryFileUploader,
+    cloudinaryResponse
+} = cloudinaryUploader();
 
 // Default variables.
 // These should have a table in the data base and a fetch function in the loginStore.
@@ -197,7 +203,14 @@ export const useInspectionStore = defineStore('inspections', {
             console.log("Pushing DamageInspectionViewData");
             // Adding user id to the data.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
-            this.pushImagesToCloudinary()
+            // Calling the cloudinary uploader service to upload images and get URL response.
+            console.log(this.generalLocalPhotoStaging);
+            cloudinaryFileUploader(this.getDamageInspectionViewData.images, "jpeg");
+            // On success, Add cloudinary response to viewdata.
+            // Push viewdata to db.
+
+            // On cloudinary or db error, save everything localy.
+            // Generate a notification.
 
             console.log(this.getDamageInspectionViewData);
             // Triggers alert, if no connection could be made to the db.

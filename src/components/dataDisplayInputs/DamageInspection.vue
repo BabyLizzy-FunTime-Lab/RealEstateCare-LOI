@@ -39,7 +39,7 @@ export default {
     emergency: String,
     comments: String,
     images: {
-      type: Array,
+      value: Array,
       default: [],
       required: false
     },

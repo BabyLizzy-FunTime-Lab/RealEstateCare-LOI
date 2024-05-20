@@ -36,7 +36,7 @@ export default {
     maintenanceType: String,
     costIndication: String,
     images: {
-      type: Array,
+      value: Array,
       default: []
     },
     readOnlyProp: {
