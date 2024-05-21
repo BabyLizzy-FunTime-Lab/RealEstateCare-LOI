@@ -4,6 +4,14 @@ import axios from "axios";
 export const cloudinaryUploader = () => {
     const cloudinaryResponse = ref([]);
 
+    const fetchBlobFromUrl = async (blobUrl) => {
+        const response = await fetch(blobUrl);
+        if(!response.ok) {
+            throw new Error('Failed to get blob from blob URL');
+        }
+        return await response.blob();
+    }
+
     const convertBlobToBase64 = (blob) =>
         new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -18,14 +26,18 @@ export const cloudinaryUploader = () => {
         const uploadPreset = "lzahfxba";
 
         const uploadPromises = fileArray.map((file, index) => {
-            convertBlobToBase64(file).then(res => {
-                const formData = new FormData();
-                console.log(res);
-                formData.append('file', res.data);
-                formData.append('upload_preset', uploadPreset);
-                return axios.post(baseCloudinaryURL, formData);
-            })
-
+            fetchBlobFromUrl(file)
+                .then(res => convertBlobToBase64(res)
+                    .then(result => {
+                        console.log(result);
+                        console.log( result.substr(result.indexOf(',')+1) );
+                        const base64String = result.substr(result.indexOf(',')+1);
+                        const formData = new FormData();
+                        formData.append('file', `data:image/png;base64,${base64String}`);
+                        formData.append('upload_preset', uploadPreset);
+                        return axios.post(baseCloudinaryURL, formData);
+                    }))
+                .catch(err => console.error(err));
         })
 
         try {

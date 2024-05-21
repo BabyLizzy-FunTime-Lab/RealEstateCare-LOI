@@ -17,6 +17,7 @@ export const usePhotoCamera = () => {
         const fileName = Date.now() + '.jpeg';
         const savedFileImage = {
             filepath: fileName,
+            file: photo,
             webviewPath: photo.webPath,
         };
 
