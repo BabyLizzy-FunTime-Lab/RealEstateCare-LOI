@@ -195,9 +195,7 @@ export const useInspectionStore = defineStore('inspections', {
             // Tbsi will be made as a service uploadImageToCloudinary
         },
         pushDamageInspectionViewData() {
-            // Don't forget to fix the spelling of the method name.
-            // Images are saved with another function that returns the nessasery cloudinary
-            // medialinks on success. These links need to be added to the push data
+            let uploadedImages = null;
             // before they go to the db. Images are only saved locally if no contact could be made
             // with the DB. So we will need a try and catch.
             console.log("Pushing DamageInspectionViewData");
@@ -205,7 +203,11 @@ export const useInspectionStore = defineStore('inspections', {
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images and get URL response.
             console.log(this.generalLocalPhotoStaging);
-            cloudinaryFileUploader(this.getDamageInspectionViewData.images, "jpeg");
+            cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
+                .then(result => {
+                    uploadedImages = result;
+                    console.log(uploadedImages);
+                });
             // On success, Add cloudinary response to viewdata.
             // Push viewdata to db.
 

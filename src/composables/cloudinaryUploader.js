@@ -22,33 +22,34 @@ export const cloudinaryUploader = () => {
 
     const cloudinaryFileUploader = async (fileArray, fileType) => {
         // Let's try the auto file type. This will have to process images and pdf's.
-        const baseCloudinaryURL = "https://api.cloudinary.com/v1_1/babylizzyevee/image/upload";
-        const uploadPreset = "lzahfxba";
+        const baseCloudinaryURL = "https://api.cloudinary.com/v1_1/babylizzyevee/" + fileType + "/upload";
+        const uploadPresetImage = "lzahfxba";
 
         const uploadPromises = fileArray.map((file, index) => {
             fetchBlobFromUrl(file)
                 .then(res => convertBlobToBase64(res)
                     .then(result => {
-                        console.log(result);
-                        console.log( result.substr(result.indexOf(',')+1) );
+                        // console.log(result);
+                        // console.log( result.substr(result.indexOf(',')+1) );
                         const base64String = result.substr(result.indexOf(',')+1);
                         const formData = new FormData();
                         formData.append('file', `data:image/png;base64,${base64String}`);
-                        formData.append('upload_preset', uploadPreset);
-                        return axios.post(baseCloudinaryURL, formData);
+                        formData.append('upload_preset', uploadPresetImage);
+                        axios.post(baseCloudinaryURL, formData).then((res) => {
+                            cloudinaryResponse.value.push(res.data.secure_url)
+                        });
                     }))
                 .catch(err => console.error(err));
         })
 
         try {
             console.log("Pushing " + fileType + " array.");
-            const responses = await Promise.all(uploadPromises);
-            cloudinaryResponse.value = responses.map(response => response.data.secure_url);
+            await Promise.all(uploadPromises);
+            // console.log(cloudinaryResponse.value);
+            return cloudinaryResponse.value;
         } catch (err) {
             console.error('Error uploading images to cloudinary: ', err);
         }
-
-        // cloudinaryResponse.value = fileArray;
     }
 
     return {
