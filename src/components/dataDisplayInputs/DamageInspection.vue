@@ -7,7 +7,7 @@ import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { modalController } from "@ionic/vue";
-import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
+import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
 const { takePhoto, newPhoto } = usePhotoCamera();
 

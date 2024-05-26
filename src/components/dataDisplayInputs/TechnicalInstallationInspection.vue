@@ -9,7 +9,7 @@ import DocumentViewer from "@/components/mediaViewers/DocumentViewer.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {useLoginStore} from "@/stores/LoginStore.js";
-import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
+import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
 const { takePhoto, newPhoto } = usePhotoCamera();
 

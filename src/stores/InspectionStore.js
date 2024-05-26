@@ -1,13 +1,17 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
-import {cloudinaryUploader} from "@/composables/cloudinaryUploader.js";
+import {cloudinaryUploader} from "@/services/cloudinaryUploader.js";
+import {dataBase} from "@/services/dataBase.js";
 import axios from "axios";
 
 const loginStore = useLoginStore();
 const {
     cloudinaryFileUploader,
-    cloudinaryResponse
+    updateViewDataImageURls
 } = cloudinaryUploader();
+const {
+    uploadToDataBase
+} = dataBase();
 
 // Default variables.
 // These should have a table in the data base and a fetch function in the loginStore.
@@ -23,6 +27,7 @@ export const useInspectionStore = defineStore('inspections', {
             inventory_of_changes_result: [],
             generalLocalPhotoStaging: [],
             damageInspectionViewData: {
+                id: "",
                 inspectorId: "",
                 location: "",
                 newDamage: "",
@@ -34,6 +39,7 @@ export const useInspectionStore = defineStore('inspections', {
                 images: []
             },
             backlogMaintenanceViewData: {
+                id: "",
                 inspectorId: "",
                 location: "",
                 emergency: "",
@@ -42,6 +48,7 @@ export const useInspectionStore = defineStore('inspections', {
                 images: []
             },
             technicalInstallationViewData: {
+                id: "",
                 inspectorId: "",
                 location: "",
                 installationType: "",
@@ -51,6 +58,7 @@ export const useInspectionStore = defineStore('inspections', {
                 images: []
             },
             modificationsViewData: {
+                id: "",
                 inspectorId: "",
                 documentedModsFile: null,
                 documentedModsUrl: null,
@@ -188,30 +196,32 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-        pushToDb(inspectiontype) {
-            // const formData = new FormData();
-
-            // axios.post(baseDbUrl + "/" + inspectiontype)
-        },
         pushDamageInspectionViewData() {
             console.log("Pushing DamageInspectionViewData");
             // Adding user id to the viewdata.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
-            cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
-                .then(uploadedImagesUrlArray => {
-                    // On success, adds cloudinary response to viewdata.
-                    this.getDamageInspectionViewData.images = uploadedImagesUrlArray
-                    console.log(this.getDamageInspectionViewData);
-                    // Push viewdata to db.
-                    // Rember to JSON.parse the data before sending.
-                    // Generate a notification.
-                })
-                .catch(err => {
-                    console.error('Could not get the uploaded image urls: ', err);
-                    // Generate a notification of error during push.
-                    // Everything gets saved locally.
-                });
+            if(this.getDamageInspectionViewData.images.length > 0) {
+                cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
+                    .then(uploadedImagesUrlArray => {
+                        // On success, adds cloudinary response to viewdata.
+                        updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
+                            console.log(result);
+                            // Push viewdata to db.
+                            uploadToDataBase(result, "damage_inspection");
+                            // Clear inputs.
+                            // Generate a notification.
+                        })
+                    })
+                    .catch(err => {
+                        console.error('Could not get the uploaded image urls: ', err);
+                        // Generate a notification of error during push.
+                        // Everything gets saved locally.
+                    });
+            } else {
+                uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
+                // Clear inputs.
+            }
 
             // On cloudinary or db error, save everything localy.
             // Triggers alert, if no connection could be made to the db.

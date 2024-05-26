@@ -7,7 +7,7 @@ import {
 import pdfViewerModal from "@/components/mediaViewers/PdfViewerModal.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
-import { usePhotoCamera } from '@/composables/usePhotoCamera.js';
+import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
 const { takePhoto, newPhoto } = usePhotoCamera();
 

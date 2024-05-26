@@ -84,6 +84,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         fetchDamageInspections(user_id) {
             return axios.get(baseDbUrl + "/damage_inspection?inspectorId=" + user_id)
                 .then(result => {
+                    console.log(result.data);
                     return result.data
                 }).catch(err => console.log(err));
         },
