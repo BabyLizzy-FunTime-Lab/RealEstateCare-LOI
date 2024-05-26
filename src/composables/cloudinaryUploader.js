@@ -25,13 +25,13 @@ export const cloudinaryUploader = () => {
         const baseCloudinaryURL = "https://api.cloudinary.com/v1_1/babylizzyevee/" + fileType + "/upload";
         const uploadPresetImage = "lzahfxba";
 
-        const uploadPromises = fileArray.map((file, index) => {
+        const uploadPromises = fileArray.map((file) => {
             fetchBlobFromUrl(file)
                 .then(res => convertBlobToBase64(res)
                     .then(result => {
                         // console.log(result);
                         // console.log( result.substr(result.indexOf(',')+1) );
-                        const base64String = result.substr(result.indexOf(',')+1);
+                        const base64String = result.substr(result.indexOf(',') +1);
                         const formData = new FormData();
                         formData.append('file', `data:image/png;base64,${base64String}`);
                         formData.append('upload_preset', uploadPresetImage);

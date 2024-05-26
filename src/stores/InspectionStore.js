@@ -11,7 +11,7 @@ const {
 
 // Default variables.
 // These should have a table in the data base and a fetch function in the loginStore.
-// const baseDbUrl = loginStore.fetchBaseDbUrl();
+const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -188,36 +188,36 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-        pushImagesToCloudinary(imageArray) {
-          console.log("Pushing Images to Cloudinary & getting image URL");
-          console.log(imageArray);
-          // This should return an array with the coudinary url's.
-            // Tbsi will be made as a service uploadImageToCloudinary
+        pushToDb(inspectiontype) {
+            // const formData = new FormData();
+
+            // axios.post(baseDbUrl + "/" + inspectiontype)
         },
         pushDamageInspectionViewData() {
-            let uploadedImages = null;
-            // before they go to the db. Images are only saved locally if no contact could be made
-            // with the DB. So we will need a try and catch.
             console.log("Pushing DamageInspectionViewData");
-            // Adding user id to the data.
+            // Adding user id to the viewdata.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
-            // Calling the cloudinary uploader service to upload images and get URL response.
-            console.log(this.generalLocalPhotoStaging);
+            // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
             cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
-                .then(result => {
-                    uploadedImages = result;
-                    console.log(uploadedImages);
+                .then(uploadedImagesUrlArray => {
+                    // On success, adds cloudinary response to viewdata.
+                    this.getDamageInspectionViewData.images = uploadedImagesUrlArray
+                    console.log(this.getDamageInspectionViewData);
+                    // Push viewdata to db.
+                    // Rember to JSON.parse the data before sending.
+                    // Generate a notification.
+                })
+                .catch(err => {
+                    console.error('Could not get the uploaded image urls: ', err);
+                    // Generate a notification of error during push.
+                    // Everything gets saved locally.
                 });
-            // On success, Add cloudinary response to viewdata.
-            // Push viewdata to db.
 
             // On cloudinary or db error, save everything localy.
-            // Generate a notification.
-
-            console.log(this.getDamageInspectionViewData);
             // Triggers alert, if no connection could be made to the db.
             // In that case the data needs to be saved localy.
             // seperate store for local saves.
+            // Once the push is complete, empty the inputs and notify success.
         },
         pushBacklogMaintenanceViewData() {
             console.log("Pushing BacklogMaintenance");
