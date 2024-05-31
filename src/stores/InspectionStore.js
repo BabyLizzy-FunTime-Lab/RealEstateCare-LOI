@@ -7,7 +7,8 @@ import axios from "axios";
 const loginStore = useLoginStore();
 const {
     cloudinaryFileUploader,
-    updateViewDataImageURls
+    updateViewDataImageURls,
+    cloudinaryResponseTest
 } = cloudinaryUploader();
 const {
     uploadToDataBase
@@ -202,10 +203,14 @@ export const useInspectionStore = defineStore('inspections', {
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
             if(this.getDamageInspectionViewData.images.length > 0) {
+                console.log(cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image"));
                 cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
-                    .then(uploadedImagesUrlArray => {
+                    .then(cloudinaryResponses => {
                         // On success, adds cloudinary response to viewdata.
-                        updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
+                        // We need to get the urls in here. Let's try a ref variable again.
+                        console.log(cloudinaryResponseTest.value);
+                        console.log(cloudinaryResponses);
+                        updateViewDataImageURls(this.getDamageInspectionViewData, cloudinaryResponses).then(result => {
                             console.log(result);
                             // Push viewdata to db.
                             uploadToDataBase(result, "damage_inspection");

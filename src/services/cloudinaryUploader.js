@@ -2,7 +2,9 @@ import { ref } from 'vue';
 import axios from "axios";
 
 export const cloudinaryUploader = () => {
-    const cloudinaryResponse = ref([]);
+    let cloudinaryResponseTest = ref([]);
+    // let cloudinaryResponse = [];
+
     /**
      * Fetch blob from blob:URL obtained from useCamera.
      * @param {String} blobUrl
@@ -15,6 +17,7 @@ export const cloudinaryUploader = () => {
         }
         return await response.blob();
     }
+
     /**
      * Converts blob to a Base64 string
      * @param blob
@@ -35,8 +38,16 @@ export const cloudinaryUploader = () => {
      * @returns {Promise<Object>}
      */
     const updateViewDataImageURls = async (viewData, uploadedImagesToCloudinary) => {
+        console.log(uploadedImagesToCloudinary);
         viewData.images = uploadedImagesToCloudinary;
         return viewData;
+    }
+
+    const uploadToCloudinary = async (baseCloudinaryURL, formData) => {
+        axios.post(baseCloudinaryURL, formData).then((res) => {
+            console.log(res);
+            return res.data.secure_url;
+        });
     }
 
     /**
@@ -60,19 +71,36 @@ export const cloudinaryUploader = () => {
                         const formData = new FormData();
                         formData.append('file', `data:image/png;base64,${base64String}`);
                         formData.append('upload_preset', uploadPresetImage);
-                        axios.post(baseCloudinaryURL, formData).then((res) => {
-                            console.log(res);
-                            cloudinaryResponse.value.push(res.data.secure_url)
-                        });
+                        // axios.post(baseCloudinaryURL, formData).then((res) => {
+                        //     console.log(res);
+                        //     // cloudinaryResponse.value.push(res.data.secure_url)
+                        //     cloudinaryResponse.push(res.data.secure_url)
+                        // });
+                        return uploadToCloudinary(baseCloudinaryURL, formData)
+                         // return axios.post(baseCloudinaryURL, formData);
                     }))
-                .catch(err => console.error(err));
+                    // .then(res => {
+                    //     console.log('Cloudinary response:', res.data); // Log the Cloudinary response
+                    //     cloudinaryResponseTest.value.push(res.data.secure_url);
+                    //     return res.data.secure_url; // Return the secure URL
+                    // })
+                    .catch(err => {
+                        console.error('Error during upload:', err);
+                        throw err; // Propagate the error
+                    });
         })
 
         try {
             console.log("Pushing " + fileType + " array.");
-            await Promise.all(uploadPromises);
+            // await Promise.all(uploadPromises);
+            const cloudinaryResponses = await Promise.all(uploadPromises).then((res) => {
+                console.log(res);
+                return res;
+            });
             // console.log(cloudinaryResponse.value);
-            return cloudinaryResponse.value;
+            // return cloudinaryResponse.value;
+            // console.log('Cloudinary responses:', cloudinaryResponses);
+            // return cloudinaryResponses;
         } catch (err) {
             console.error('Error uploading images to cloudinary: ', err);
         }
@@ -80,6 +108,7 @@ export const cloudinaryUploader = () => {
 
     return {
         cloudinaryFileUploader,
-        updateViewDataImageURls
+        updateViewDataImageURls,
+        cloudinaryResponseTest
     }
 }
