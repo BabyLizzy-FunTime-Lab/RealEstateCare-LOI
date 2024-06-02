@@ -7,7 +7,8 @@ import axios from "axios";
 const loginStore = useLoginStore();
 const {
     cloudinaryFileUploader,
-    updateViewDataImageURls
+    updateViewDataImageURls,
+    cloudinaryResponse
 } = cloudinaryUploader();
 const {
     uploadToDataBase
@@ -205,6 +206,9 @@ export const useInspectionStore = defineStore('inspections', {
                 cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
                     .then(uploadedImagesUrlArray => {
                         // On success, adds cloudinary response to viewdata.
+                        // This doesn't work. The cloudinary response turns out empty after the stringify process.
+                        // I think it's because the response just doesn't arrive on time, even with it being stated
+                        // an used as a promise. Let's try a watcher method on the cloudinaryResponse service variable.
                         updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
                             console.log(result);
                             // Push viewdata to db.
