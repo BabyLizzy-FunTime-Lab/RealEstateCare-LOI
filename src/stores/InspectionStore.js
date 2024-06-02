@@ -2,7 +2,6 @@ import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import {cloudinaryUploader} from "@/services/cloudinaryUploader.js";
 import {dataBase} from "@/services/dataBase.js";
-import axios from "axios";
 
 const loginStore = useLoginStore();
 const {
@@ -17,6 +16,7 @@ const {
 // Default variables.
 // These should have a table in the data base and a fetch function in the loginStore.
 const baseDbUrl = loginStore.fetchBaseDbUrl();
+
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -203,25 +203,26 @@ export const useInspectionStore = defineStore('inspections', {
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
             if(this.getDamageInspectionViewData.images.length > 0) {
-                cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
-                    .then(uploadedImagesUrlArray => {
-                        // On success, adds cloudinary response to viewdata.
-                        // This doesn't work. The cloudinary response turns out empty after the stringify process.
-                        // I think it's because the response just doesn't arrive on time, even with it being stated
-                        // an used as a promise. Let's try a watcher method on the cloudinaryResponse service variable.
-                        updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
-                            console.log(result);
-                            // Push viewdata to db.
-                            uploadToDataBase(result, "damage_inspection");
-                            // Clear inputs.
-                            // Generate a notification.
-                        })
-                    })
-                    .catch(err => {
-                        console.error('Could not get the uploaded image urls: ', err);
-                        // Generate a notification of error during push.
-                        // Everything gets saved locally.
-                    });
+                // cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
+                //     .then(uploadedImagesUrlArray => {
+                //         // On success, adds cloudinary response to viewdata.
+                //         // This doesn't work. The cloudinary response turns out empty after the stringify process.
+                //         // I think it's because the response just doesn't arrive on time, even with it being stated
+                //         // an used as a promise. Let's try a watcher method on the cloudinaryResponse service variable.
+                //         updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
+                //             console.log(result);
+                //             // Push viewdata to db.
+                //             uploadToDataBase(result, "damage_inspection");
+                //             // Clear inputs.
+                //             // Generate a notification.
+                //         })
+                //     })
+                //     .catch(err => {
+                //         console.error('Could not get the uploaded image urls: ', err);
+                //         // Generate a notification of error during push.
+                //         // Everything gets saved locally.
+                //     });
+                uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
             } else {
                 uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
                 // Clear inputs.

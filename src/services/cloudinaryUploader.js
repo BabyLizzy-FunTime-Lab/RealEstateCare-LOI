@@ -2,7 +2,10 @@ import { ref } from 'vue';
 import axios from "axios";
 
 export const cloudinaryUploader = () => {
-    const cloudinaryResponse = ref([]);
+    const cloudinaryResponse = ref({
+        sendImageCount: 0,
+        responseUrls: []
+    });
     /**
      * Fetch blob from blob:URL obtained from useCamera.
      * @param {String} blobUrl
@@ -49,33 +52,47 @@ export const cloudinaryUploader = () => {
         // Let's try the auto file type. This will have to process images and pdf's.
         const baseCloudinaryURL = "https://api.cloudinary.com/v1_1/babylizzyevee/" + fileType + "/upload";
         const uploadPresetImage = "lzahfxba";
+        cloudinaryResponse.value.sendImageCount = fileArray.length;
+        let responseUrls = [];
 
         const uploadPromises = fileArray.map((file) => {
             fetchBlobFromUrl(file)
                 .then(res => convertBlobToBase64(res)
                     .then(result => {
-                        // console.log(result);
-                        // console.log( result.substr(result.indexOf(',')+1) );
                         const base64String = result.substr(result.indexOf(',')+1);
                         const formData = new FormData();
                         formData.append('file', `data:image/png;base64,${base64String}`);
                         formData.append('upload_preset', uploadPresetImage);
-                        axios.post(baseCloudinaryURL, formData).then((res) => {
-                            console.log(res);
-                            cloudinaryResponse.value.push(res.data.secure_url)
-                        });
+                        // axios.post(baseCloudinaryURL, formData).then((res) => {
+                        //     console.log(res);
+                        //     cloudinaryResponse.value.responseUrls.push(res.data.secure_url)
+                        //     responseUrls.push(res.data.secure_url);
+                        // });
+                        return axios.post(baseCloudinaryURL, formData);
                     }))
                 .catch(err => console.error(err));
         })
+        // I'll return all the promises in an array and run them in the dataBase script.
+        return uploadPromises;
 
-        try {
-            console.log("Pushing " + fileType + " array.");
-            await Promise.all(uploadPromises);
-            // console.log(cloudinaryResponse.value);
-            return cloudinaryResponse.value;
-        } catch (err) {
-            console.error('Error uploading images to cloudinary: ', err);
-        }
+        // try {
+        //     console.log("Pushing " + fileType + " array.");
+        //     // await Promise.all(uploadPromises).then(() => {
+        //     //     console.log(responseUrls);
+        //     //     return responseUrls;
+        //     // })
+        //     Promise.allSettled(uploadPromises).then((results) => {
+        //         results.forEach((result) => {
+        //             responseUrls.push(result.data.secure_url);
+        //         })
+        //         console.log(responseUrls);
+        //         return responseUrls;
+        //     })
+        //     // console.log(cloudinaryResponse.value);
+        //     // return cloudinaryResponse.value.responseUrls;
+        // } catch (err) {
+        //     console.error('Error uploading images to cloudinary: ', err);
+        // }
     }
 
     return {
