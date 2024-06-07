@@ -57,20 +57,21 @@ export const cloudinaryUploader = () => {
 
         const uploadPromises = fileArray.map((file) => {
             fetchBlobFromUrl(file)
-                .then(res => convertBlobToBase64(res)
-                    .then(result => {
-                        const base64String = result.substr(result.indexOf(',')+1);
-                        const formData = new FormData();
-                        formData.append('file', `data:image/png;base64,${base64String}`);
-                        formData.append('upload_preset', uploadPresetImage);
-                        // axios.post(baseCloudinaryURL, formData).then((res) => {
-                        //     console.log(res);
-                        //     cloudinaryResponse.value.responseUrls.push(res.data.secure_url)
-                        //     responseUrls.push(res.data.secure_url);
-                        // });
-                        return axios.post(baseCloudinaryURL, formData);
-                    }))
-                .catch(err => console.error(err));
+                .then(result => {
+                    convertBlobToBase64(result)
+                        .then(result => {
+                            const base64String = result.substr(result.indexOf(',') + 1);
+                            const formData = new FormData();
+                            formData.append('file', `data:image/png;base64,${base64String}`);
+                            formData.append('upload_preset', uploadPresetImage);
+                            // axios.post(baseCloudinaryURL, formData).then((res) => {
+                            //     console.log(res);
+                            //     cloudinaryResponse.value.responseUrls.push(res.data.secure_url)
+                            //     responseUrls.push(res.data.secure_url);
+                            // });
+                            return axios.post(baseCloudinaryURL, formData);
+                        }).catch(err => console.error(err))
+                }).catch(err => console.error(err));
         })
         // I'll return all the promises in an array and run them in the dataBase script.
         return uploadPromises;

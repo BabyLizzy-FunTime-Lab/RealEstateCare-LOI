@@ -222,6 +222,16 @@ export const useInspectionStore = defineStore('inspections', {
                 //         // Generate a notification of error during push.
                 //         // Everything gets saved locally.
                 //     });
+                let responseUrls = [];
+                cloudinaryUploader(this.getDamageInspectionViewData.images, "image").then(uploadPromisesArray => {
+                    Promise.allSettled(uploadPromisesArray).then(resultsArray => {
+                        resultsArray.forEach(result => {
+                            responseUrls.push(result.data.secure_url);
+                            // Here we need to add the urls to the viewdata
+                        })
+                        // Here we push.
+                    })
+                })
                 uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
             } else {
                 uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
