@@ -62,7 +62,7 @@ export const cloudinaryUploader = () => {
                         formData.append('upload_preset', uploadPresetImage);
                         axios.post(baseCloudinaryURL, formData).then((res) => {
                             console.log(res);
-                            cloudinaryResponse.value.push(res.data.secure_url)
+                            cloudinaryResponse.value.push(res.data.secure_url);
                         });
                     }))
                 .catch(err => console.error(err));
@@ -71,8 +71,8 @@ export const cloudinaryUploader = () => {
         try {
             console.log("Pushing " + fileType + " array.");
             await Promise.all(uploadPromises);
-            // console.log(cloudinaryResponse.value);
             return cloudinaryResponse.value;
+            // console.log(cloudinaryResponse.value);
         } catch (err) {
             console.error('Error uploading images to cloudinary: ', err);
         }

@@ -1,7 +1,13 @@
 import axios from "axios";
 import {useLoginStore} from "@/stores/LoginStore.js";
+import {cloudinaryUploader} from "@/services/cloudinaryUploader.js";
 import {toRaw} from "vue";
 const loginStore = useLoginStore();
+const {
+    cloudinaryFileUploader,
+    updateViewDataImageURls,
+    cloudinaryResponse
+} = cloudinaryUploader();
 
 const baseDbUrl = loginStore.fetchBaseDbUrl();
 
@@ -21,8 +27,11 @@ export const dataBase = () => {
         // const rawData = toRaw(data);
         // const parsedData = JSON.parse(JSON.stringify(rawData));
         // console.log(parsedData.images);
-        await delay(4000);
-        await console.log(data);
+        // await delay(4000);
+        await cloudinaryFileUploader(data.images, "image").then(uploadedImages => {
+            data.images = uploadedImages;
+            console.log(data);
+        });
         await axios.post(`${baseDbUrl}/${inspectionType}`, data).then(result => {
             console.log('Data uploaded: ', result);
             return result;
@@ -30,16 +39,6 @@ export const dataBase = () => {
             console.error('Error uploading: ', err);
             throw err;
         })
-        // try {
-        //     await delay(3000);
-        //     await axios.post(`${baseDbUrl}/${inspectionType}`, data).then(result => {
-        //         console.log('Data uploaded: ', result);
-        //         return result;
-        //     });
-        // } catch (err) {
-        //     console.error('Error uploading: ', err);
-        //     throw err;
-        // }
     }
 
     return {

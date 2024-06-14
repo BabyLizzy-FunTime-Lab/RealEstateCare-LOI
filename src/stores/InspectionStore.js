@@ -203,29 +203,29 @@ export const useInspectionStore = defineStore('inspections', {
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
             if(this.getDamageInspectionViewData.images.length > 0) {
-                const imageCount = this.getDamageInspectionViewData.images.length;
-                cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
-                    .then(uploadedImagesUrlArray => {
-                        // On success, adds cloudinary response to viewdata.
-                        // This doesn't work. The cloudinary response turns out empty after the stringify process.
-                        // I think it's because the response just doesn't arrive on time, even with it being stated
-                        // an used as a promise. Let's try a watcher method on the cloudinaryResponse service variable.
-                        console.log(uploadedImagesUrlArray);
-                        this.getDamageInspectionViewData.images = uploadedImagesUrlArray;
-                        uploadToDataBase(this.getDamageInspectionViewData,"damage_inspection");
-                        // updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
-                        //     console.log(result);
-                        //     // Push viewdata to db.
-                        //     uploadToDataBase(result, "damage_inspection");
-                        //     // Clear inputs.
-                        //     // Generate a notification.
-                        // })
-                    })
-                    .catch(err => {
-                        console.error('Could not get the uploaded image urls: ', err);
-                        // Generate a notification of error during push.
-                        // Everything gets saved locally.
-                    });
+                uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
+                // cloudinaryFileUploader(this.getDamageInspectionViewData.images, "image")
+                //     .then(uploadedImagesUrlArray => {
+                //         // On success, adds cloudinary response to viewdata.
+                //         // This doesn't work. The cloudinary response turns out empty after the stringify process.
+                //         // I think it's because the response just doesn't arrive on time, even with it being stated
+                //         // an used as a promise. Let's try a watcher method on the cloudinaryResponse service variable.
+                //         console.log(uploadedImagesUrlArray);
+                //         this.getDamageInspectionViewData.images = uploadedImagesUrlArray;
+                //         uploadToDataBase(this.getDamageInspectionViewData,"damage_inspection");
+                //         // updateViewDataImageURls(this.getDamageInspectionViewData, uploadedImagesUrlArray).then(result => {
+                //         //     console.log(result);
+                //         //     // Push viewdata to db.
+                //         //     uploadToDataBase(result, "damage_inspection");
+                //         //     // Clear inputs.
+                //         //     // Generate a notification.
+                //         // })
+                //     })
+                //     .catch(err => {
+                //         console.error('Could not get the uploaded image urls: ', err);
+                //         // Generate a notification of error during push.
+                //         // Everything gets saved locally.
+                //     });
             } else {
                 uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection");
                 // Clear inputs.
