@@ -52,11 +52,11 @@ export const cloudinaryUploader = () => {
 
         const uploadPromises = fileArray.map((file) => {
             fetchBlobFromUrl(file)
-                .then(res => convertBlobToBase64(res)
-                    .then(result => {
+                .then(blob => convertBlobToBase64(blob)
+                    .then(base64Raw => {
                         // console.log(result);
                         // console.log( result.substr(result.indexOf(',')+1) );
-                        const base64String = result.substr(result.indexOf(',')+1);
+                        const base64String = base64Raw.substr(base64Raw.indexOf(',')+1);
                         const formData = new FormData();
                         formData.append('file', `data:image/png;base64,${base64String}`);
                         formData.append('upload_preset', uploadPresetImage);
