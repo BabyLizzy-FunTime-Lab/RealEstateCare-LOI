@@ -1,22 +1,13 @@
 import axios from "axios";
 import {useLoginStore} from "@/stores/LoginStore.js";
-import {toRaw} from "vue";
 const loginStore = useLoginStore();
 
 const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 export const dataBase = () => {
     /**
-     * This promise pauses the function for the given time.
-     * @param {int} ms
-     * @return {Promise<unknown>}
-     */
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    /**
      * Fetch blob from blob:URL obtained from useCamera.
-     * @param {String} blobUrl
+     * @param {string} blobUrl
      * @returns {blob}
      */
     const fetchBlobFromUrl = async (blobUrl) => {
@@ -38,6 +29,11 @@ export const dataBase = () => {
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(blob);
         });
+    /**
+     * Converts an array of images into an array of base64 encoded images.
+     * @param {array} rawImageArray
+     * @return {Promise<*[]>}
+     */
     const convertImageArray = async (rawImageArray) => {
         let base64Array = [];
         for await (const rawImage of rawImageArray) {
@@ -52,41 +48,38 @@ export const dataBase = () => {
     }
     /**
      * Upload parsed data to the JSON server.
-     * 4 inspection types: damage_inspection, backlog_maintenance, technical_installation_inspection, modifications
+     * Inspection types are: damage_inspection, backlog_maintenance, technical_installation_inspection, modifications
      * @param {object} data
-     * @param {array} imageArray
      * @param {string} inspectionType
-     * @returns
+     * @returns status
      */
     const uploadToDataBase = async (data, inspectionType) => {
         // If there are images in the data, they must be converted to base64.
+        let returnCode = "error";
         if(data.images.length > 0) {
-            await convertImageArray(data.images).then(base64Array => {
-                data.images = base64Array;
-            }).catch(err => {
+            try {
+                await convertImageArray(data.images).then(base64Array => {
+                    data.images = base64Array;
+                })
+            } catch (err) {
                 console.error('Error converting images: ', err);
-                throw err;
-            })
+                // throw err;
+                returnCode = "error converting data";
+                return returnCode;
+            }
         }
-        // await delay(4000);
-        await console.log(data);
-        await axios.post(`${baseDbUrl}/${inspectionType}`, data).then(result => {
+        try {
+            const result = await axios.post(`${baseDbUrl}/${inspectionType}`, data);
             console.log('Data uploaded: ', result);
-            return result;
-        }).catch(err => {
+            console.log(result.status);
+            returnCode = result.status;
+        } catch (err) {
             console.error('Error uploading: ', err);
-            throw err;
-        })
-        // try {
-        //     await delay(3000);
-        //     await axios.post(`${baseDbUrl}/${inspectionType}`, data).then(result => {
-        //         console.log('Data uploaded: ', result);
-        //         return result;
-        //     });
-        // } catch (err) {
-        //     console.error('Error uploading: ', err);
-        //     throw err;
-        // }
+            // throw err;
+            returnCode = "error pushing data";
+            return returnCode;
+        }
+        return returnCode;
     }
 
     return {
