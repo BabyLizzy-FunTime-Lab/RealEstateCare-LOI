@@ -8,12 +8,13 @@ import { build, search, alertCircle } from 'ionicons/icons';
 import {useLoginStore} from "@/stores/LoginStore.js";
 import LoginForm from "@/components/login/LoginForm.vue";
 import BaseLayoutBottomToolbarButton from "@/components/base/BaseLayoutBottomToolbarButton.vue";
+import BaseNotificationModal from "@/components/base/BaseNotificationModal.vue";
 
 export default {
   name: "BaseLayout",
   components: {
-    BaseLayoutBottomToolbarButton, IonPage, IonButtons, IonImg,
-    IonButton, IonContent, IonHeader, IonToolbar,
+    BaseLayoutBottomToolbarButton, BaseNotificationModal, IonPage,
+    IonButtons, IonImg, IonButton, IonContent, IonHeader, IonToolbar,
     IonFooter, LoginForm, IonProgressBar, IonAvatar
   },
   setup() {
@@ -68,6 +69,8 @@ export default {
         </ion-toolbar>
       </div>
       <ion-progress-bar v-if="loginStore.loadingStatus" color="secondary" type="indeterminate"></ion-progress-bar>
+<!--      alert modal here-->
+
     </ion-header>
     <ion-content>
       <LoginForm v-if="!loginStore.loginStatus"></LoginForm>
