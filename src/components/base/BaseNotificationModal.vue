@@ -3,6 +3,7 @@ import {
   IonModal, IonHeader, IonToolbar, IonTitle,
   IonButton, IonButtons, IonContent
 } from "@ionic/vue";
+import {useNotificationStore} from "@/stores/NotificationStore.js";
 
 // Let not uee props and give this direct access to the notification store.
 // If a notification is needed all we need is access to the store.
@@ -12,22 +13,24 @@ export default {
     IonModal, IonHeader, IonToolbar, IonTitle,
     IonButton, IonButtons, IonContent
   },
-  props: {
-    NotificationIsOpen: {
-      type: Boolean,
-      default: false
-    },
-    NotificationTitle: String,
-    NotificationMessage: String
-  },
-  methods: {
-    emitClose() {
-      this.$emit('close:NotificationModal');
+  data() {
+    return {
+      notificationStore: useNotificationStore(),
+      NotificationIsOpen: {
+        type: Boolean,
+        value: useNotificationStore().getNotificationIsOpen,
+        default: false
+      },
+      NotificationTitle: {
+        type: String,
+        value: useNotificationStore().getNotificationTitle(),
+      },
+      NotificationMessage: {
+        type: String,
+        value: useNotificationStore().getNotificationMessage,
+      },
     }
-  },
-  emits: [
-    'close:NotificationModal',
-  ]
+  }
 }
 </script>
 
@@ -37,7 +40,7 @@ export default {
       <ion-toolbar color="primary">
         <ion-title slot="start">Notification</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="emitClose">Close</ion-button>
+          <ion-button @click="notificationStore.closeNotification()">Close</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
