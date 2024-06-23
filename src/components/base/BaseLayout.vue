@@ -68,8 +68,8 @@ export default {
           </ion-buttons>
         </ion-toolbar>
       </div>
-      <ion-progress-bar v-if="loginStore.loadingStatus" color="secondary" type="indeterminate"></ion-progress-bar>
       <base-notification-modal/>
+      <ion-progress-bar v-if="loginStore.loadingStatus" color="secondary" type="indeterminate"></ion-progress-bar>
     </ion-header>
     <ion-content>
       <LoginForm v-if="!loginStore.loginStatus"></LoginForm>

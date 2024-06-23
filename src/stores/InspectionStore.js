@@ -1,10 +1,13 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
+import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {cloudinaryUploader} from "@/services/cloudinaryUploader.js";
 import {dataBase} from "@/services/dataBase.js";
 import axios from "axios";
 
 const loginStore = useLoginStore();
+const notificationStore = useNotificationStore();
+
 const {
     cloudinaryFileUploader,
     updateViewDataImageURls,
@@ -206,10 +209,12 @@ export const useInspectionStore = defineStore('inspections', {
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
-                        alert("Save successful");
+                        // alert("Save successful");
+                        notificationStore.setNotification("Data save", "Success!");
                         // Once the push is complete, empty the inputs and notify success.
                     } else {
-                        alert("Upload to data base failed: " + result)
+                        // alert("Upload to data base failed: " + result)
+                        notificationStore.setNotification("Data save", "Error");
                         // Triggers alert, if no connection could be made to the db.
                         // In that case the data needs to be saved locally.
                     }

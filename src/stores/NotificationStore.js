@@ -3,12 +3,9 @@ import {defineStore} from "pinia";
 export const useNotificationStore = defineStore('notifications', {
   state: () => {
       return {
-          notificationIsOpen: {
-              type: Boolean,
-              default: false
-          },
-          notificationTitle: String,
-          notificationMessage: String
+          notificationIsOpen: false,
+          notificationTitle: "",
+          notificationMessage: ""
       }
   },
   actions: {
@@ -16,6 +13,7 @@ export const useNotificationStore = defineStore('notifications', {
         this.notificationTitle = title;
         this.notificationMessage = message;
         this.notificationIsOpen = true;
+        console.log("Deploying notification");
     },
     closeNotification() {
         this.notificationTitle = "";
