@@ -208,7 +208,7 @@ export const useInspectionStore = defineStore('inspections', {
             // Adding user id to the viewData.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
-            uploadToDataBase(this.getDamageInspectionViewData, "modifications")
+            uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection")
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
