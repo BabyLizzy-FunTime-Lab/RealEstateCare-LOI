@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <ion-modal :is-open="notificationIsOpen" can-dismiss="true">
+  <ion-modal class="notification--modal" :is-open="notificationIsOpen" can-dismiss="true">
     <ion-header>
       <ion-toolbar color="primary">
         <ion-title slot="start">Notification</ion-title>
@@ -42,7 +42,7 @@ export default {
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content class="ion-padding">
       <ion-text color="secondary">
         <h2>{{notificationTitle}}</h2>
       </ion-text>
@@ -52,5 +52,8 @@ export default {
 </template>
 
 <style scoped>
-
+.notification--modal {
+  --height: 50%;
+  --border-radius: 16px;
+}
 </style>
