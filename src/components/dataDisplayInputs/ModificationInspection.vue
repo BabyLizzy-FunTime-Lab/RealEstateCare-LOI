@@ -37,6 +37,7 @@ export default {
       type: File,
       default: null
     },
+    documentedModsDocName: null,
     documentedModsUrl: null,
     inspectionId: String,
     location: String,
@@ -116,8 +117,11 @@ export default {
   },
   computed: {
     pdfName() {
+      // This finds the pdf name in the viewData
       if(this.documentedModsFile) {
         return this.documentedModsFile.name;
+      } else if(this.documentedModsDocName) {
+        return this.documentedModsDocName;
       } else if(this.documentedModsUrl) {
         return this.documentedModsUrl.substring(this.documentedModsUrl.lastIndexOf('/') + 1);
       }
@@ -156,7 +160,7 @@ export default {
         @change="emitNewPDF($event, 'update:documentedMods')"
     />
     <pdf-viewer-modal
-        :pdf-url="pdfUrl" :pdf-file="documentedModsFile"
+        :pdf-url="pdfUrl" :pdf-file="documentedModsFile" :pdf-name="documentedModsDocName"
         :is-open="isPdfModalOpen" @close:modal="toggleOnOff('isPdfModalOpen')"
     />
   </ion-item>

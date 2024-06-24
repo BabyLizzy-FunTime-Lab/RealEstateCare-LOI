@@ -126,6 +126,7 @@ export default {
             :location="this.modificationsData.location"
             @update:location="this.updateModificationsViewData($event, 'location')"
             :documented-mods-file="this.modificationsData.documentedModsFile"
+            :documented-mods-doc-name="this.modificationsData.documentedModsDocName"
             :documented-mods-url="this.modificationsData.documentedModsUrl"
             @update:documented-mods="this.updateModificationsViewData($event,'documentedModsFile')"
             :modified-by="this.modificationsData.modifiedBy"

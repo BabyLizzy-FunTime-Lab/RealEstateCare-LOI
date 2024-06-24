@@ -22,6 +22,7 @@ export default {
             :read-only-prop="true"
             :header-name="inspection.location"
             :location="inspection.location"
+            :documented-mods-doc-name="inspection.documentedModsDocName"
             :documented-mods-url="inspection.documentedModsUrl"
             :modified-by="inspection.modifiedBy"
             :mod-description="inspection.modDescription"

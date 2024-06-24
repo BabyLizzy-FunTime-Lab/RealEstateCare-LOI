@@ -4,6 +4,7 @@ import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {cloudinaryUploader} from "@/services/cloudinaryUploader.js";
 import {dataBase} from "@/services/dataBase.js";
 import axios from "axios";
+import cloneDeep from 'lodash/cloneDeep';
 
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
@@ -65,6 +66,7 @@ export const useInspectionStore = defineStore('inspections', {
                 id: "",
                 inspectorId: "",
                 documentedModsFile: null,
+                documentedModsDocName: null,
                 documentedModsUrl: null,
                 location: "",
                 modifiedBy: "",
@@ -183,6 +185,7 @@ export const useInspectionStore = defineStore('inspections', {
                     case 'documentedModsFile':
                         console.log('Staging pdf file in de state');
                         this.getModificationsViewData.documentedModsFile = data.file;
+                        this.getModificationsViewData.documentedModsDocName = data.file.name;
                         this.getModificationsViewData.documentedModsUrl = data.url;
                         break;
                     case 'takePhoto':
@@ -205,7 +208,7 @@ export const useInspectionStore = defineStore('inspections', {
             // Adding user id to the viewData.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
             // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
-            uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection")
+            uploadToDataBase(this.getDamageInspectionViewData, "modifications")
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
@@ -226,17 +229,69 @@ export const useInspectionStore = defineStore('inspections', {
         pushBacklogMaintenanceViewData() {
             console.log("Pushing BacklogMaintenance");
             this.getBacklogMaintenanceViewData.inspectorId = this.fetchUserId();
-            console.log(this.getBacklogMaintenanceViewData);
+            uploadToDataBase(this.getBacklogMaintenanceViewData, "backlog_maintenance")
+                .then(result => {
+                    console.log(result);
+                    if(result === 201) {
+                        // alert("Save successful");
+                        notificationStore.setNotification("Data save", "Success!");
+                        // Once the push is complete, empty the inputs and notify success.
+                    } else {
+                        // alert("Upload to data base failed: " + result)
+                        notificationStore.setNotification("Data save", "Error");
+                        // Triggers alert, if no connection could be made to the db.
+                        // In that case the data needs to be saved locally.
+                    }
+                })
+                .catch(err => {
+                    console.log("Error while pushing data to db", err);
+                })
         },
         pushTechnicalInstallationViewData() {
             console.log("Pushing TechnicalInstallation");
             this.getTechnicalInstallationViewData.inspectorId = this.fetchUserId();
-            console.log(this.getTechnicalInstallationViewData);
+            uploadToDataBase(this.getTechnicalInstallationViewData, "technical_installation_inspection")
+                .then(result => {
+                    console.log(result);
+                    if(result === 201) {
+                        // alert("Save successful");
+                        notificationStore.setNotification("Data save", "Success!");
+                        // Once the push is complete, empty the inputs and notify success.
+                    } else {
+                        // alert("Upload to data base failed: " + result)
+                        notificationStore.setNotification("Data save", "Error");
+                        // Triggers alert, if no connection could be made to the db.
+                        // In that case the data needs to be saved locally.
+                    }
+                })
+                .catch(err => {
+                    console.log("Error while pushing data to db", err);
+                })
         },
         pushModificationsViewData() {
             console.log("Pushing Modifications");
             this.getModificationsViewData.inspectorId = this.fetchUserId();
-            console.log(this.getModificationsViewData);
+            // Remove documentedModsFile before push.
+            const dataCopy = cloneDeep(this.getModificationsViewData);
+            const {documentedModsFile, ...readyToSendData} = dataCopy;
+
+            uploadToDataBase(readyToSendData, "modifications")
+                .then(result => {
+                    console.log(result);
+                    if(result === 201) {
+                        // alert("Save successful");
+                        notificationStore.setNotification("Data save", "Success!");
+                        // Once the push is complete, empty the inputs and notify success.
+                    } else {
+                        // alert("Upload to data base failed: " + result)
+                        notificationStore.setNotification("Data save", "Error");
+                        // Triggers alert, if no connection could be made to the db.
+                        // In that case the data needs to be saved locally.
+                    }
+                })
+                .catch(err => {
+                    console.log("Error while pushing data to db", err);
+                })
         }
     },
     getters: {
