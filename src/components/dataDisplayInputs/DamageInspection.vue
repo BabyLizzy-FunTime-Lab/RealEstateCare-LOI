@@ -22,7 +22,7 @@ export default {
     return {
       newPhoto,
       takePhoto,
-      readOnly: false
+      readOnly: false,
     }
   },
   props: {
@@ -100,15 +100,17 @@ export default {
                type="text"/>
   </ion-item>
   <ion-item slot="content" lines="inset">
-    <ion-label>Date</ion-label>
-    <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
+    <ion-input label="Date" :value="date" v-if="readOnly" type="text" label-placement="floating"/>
+    <ion-label v-if="!readOnly">Date</ion-label>
+    <ion-datetime-button aria-label="Date" presentation="date" datetime="date" :disabled="readOnly" v-if="!readOnly"/>
     <ion-modal :keep-contents-mounted="true">
       <ion-datetime :value="date"
-                    :readonly="readOnly"
                     @ionChange="emitInputChange($event, 'update:date')"
                     displayFormat="MMM D, YYYY"
                     pickerFormat="MMM D YYYY"
-                    presentation="date" id="date"></ion-datetime>
+                    presentation="date"
+                    id="date"
+      />
       <ion-button @click="dismissModal" >OK</ion-button>
     </ion-modal>
   </ion-item>
