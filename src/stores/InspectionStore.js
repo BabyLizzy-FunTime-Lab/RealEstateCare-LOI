@@ -1,26 +1,14 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
-import {cloudinaryUploader} from "@/services/cloudinaryUploader.js";
 import {dataBase} from "@/services/dataBase.js";
-import axios from "axios";
 import cloneDeep from 'lodash/cloneDeep';
+import clearViewData from "@/mixins/clearViewData.js";
 
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
-const {
-    cloudinaryFileUploader,
-    updateViewDataImageURls,
-    cloudinaryResponse
-} = cloudinaryUploader();
-const {
-    uploadToDataBase
-} = dataBase();
-
-// Default variables.
-// These should have a table in the data base and a fetch function in the loginStore.
-const baseDbUrl = loginStore.fetchBaseDbUrl();
+const {uploadToDataBase} = dataBase();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -106,10 +94,6 @@ export const useInspectionStore = defineStore('inspections', {
             } else {
                 viewData[propertyName] = newData
             }
-        },
-        updatePdfDocumentView(newDoc, viewData, propertyName) {
-          // viewData[propertyName] = newDoc.target.files[0];
-            viewData[propertyName] = newDoc;
         },
         updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
@@ -214,6 +198,7 @@ export const useInspectionStore = defineStore('inspections', {
                     if(result === 201) {
                         // alert("Save successful");
                         notificationStore.setNotification("Data save", "Success!");
+                        // clearViewData.methods.clearViewData(this.getDamageInspectionViewData);
                         // Once the push is complete, empty the inputs and notify success.
                     } else {
                         // alert("Upload to data base failed: " + result)

@@ -1,5 +1,7 @@
 import axios from "axios";
 import {useLoginStore} from "@/stores/LoginStore.js";
+import clearViewData from "@/mixins/clearViewData.js";
+
 const loginStore = useLoginStore();
 
 const baseDbUrl = loginStore.fetchBaseDbUrl();
@@ -78,6 +80,9 @@ export const dataBase = () => {
             // throw err;
             returnCode = "error pushing data";
             return returnCode;
+        }
+        if(returnCode === 201) {
+            clearViewData.methods.clearViewData(data);
         }
         return returnCode;
     }
