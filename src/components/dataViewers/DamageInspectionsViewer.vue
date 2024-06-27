@@ -8,6 +8,20 @@ export default {
   components: {IonAccordionGroup, BaseAccordionLayout, DamageInspection},
   props: {
     inspections: null
+  },
+  methods: {
+    updateInspectionData(property, newValue) {
+      // Change the values of the inspections object.
+    },
+    updateInspectionImageArray(oldData, newImageArray) {
+      // Replace the old Array with the new one.
+    },
+    cancelChanges(inspectionType) {
+      // Call the fetch function for an inspection type.
+    },
+    pushChangesToDb(dataObjectArray, inspectionId) {
+      // This could replace all data of inspection id with the new data.
+    }
   }
 }
 </script>
