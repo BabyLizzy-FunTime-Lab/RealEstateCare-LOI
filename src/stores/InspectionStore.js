@@ -260,7 +260,7 @@ export const useInspectionStore = defineStore('inspections', {
             const dataCopy = cloneDeep(this.getModificationsViewData);
             const {documentedModsFile, ...readyToSendData} = dataCopy;
 
-            uploadToDataBase(readyToSendData, "modifications")
+            uploadToDataBase(readyToSendData, "modifications", this.getModificationsViewData)
                 .then(result => {
                     console.log(result);
                     if(result === 201) {

@@ -51,17 +51,18 @@ export const dataBase = () => {
     /**
      * Upload parsed data to the JSON server.
      * Inspection types are: damage_inspection, backlog_maintenance, technical_installation_inspection, modifications
-     * @param {object} data
+     * @param {object} sendData
+     * @param {object || string} viewData
      * @param {string} inspectionType
      * @returns status
      */
-    const uploadToDataBase = async (data, inspectionType) => {
+    const uploadToDataBase = async (sendData, inspectionType, viewData = "Needed if sendData != viewData") => {
         // If there are images in the data, they must be converted to base64.
         let returnCode = "error";
-        if(data.images.length > 0) {
+        if(sendData.images.length > 0) {
             try {
-                await convertImageArray(data.images).then(base64Array => {
-                    data.images = base64Array;
+                await convertImageArray(sendData.images).then(base64Array => {
+                    sendData.images = base64Array;
                 })
             } catch (err) {
                 console.error('Error converting images: ', err);
@@ -71,7 +72,7 @@ export const dataBase = () => {
             }
         }
         try {
-            const result = await axios.post(`${baseDbUrl}/${inspectionType}`, data);
+            const result = await axios.post(`${baseDbUrl}/${inspectionType}`, sendData);
             console.log('Data uploaded: ', result);
             console.log(result.status);
             returnCode = result.status;
@@ -81,8 +82,10 @@ export const dataBase = () => {
             returnCode = "error pushing data";
             return returnCode;
         }
-        if(returnCode === 201) {
-            clearViewData.methods.clearViewData(data);
+        if(returnCode === 201 && typeof viewData != "string" ) {
+            clearViewData.methods.clearViewData(viewData);
+        } else if(returnCode === 201) {
+            clearViewData.methods.clearViewData(sendData);
         }
         return returnCode;
     }
