@@ -20,14 +20,11 @@ export default {
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),
-      inspectionsAll: Object,
     }
   },
   methods: {
     fetchAllInspections() {
-      this.completedActionStore.fetchCompletedTasks().then(inspections => {
-        this.inspectionsAll = inspections;
-      });
+      this.completedActionStore.fetchCompletedTasks();
     }
   },
   mounted() {
@@ -35,16 +32,16 @@ export default {
   },
   computed: {
     damageInspections() {
-      return this.inspectionsAll.damageInspections
+      return this.completedActionStore.getAllInspections.damageInspections
     },
     backlogMaintenance() {
-      return this.inspectionsAll.backlogMaintenance
+      return this.completedActionStore.getAllInspections.backlogMaintenance
     },
     modifications() {
-      return this.inspectionsAll.modifications
+      return this.completedActionStore.getAllInspections.modifications
     },
     technicalInstallations() {
-      return this.inspectionsAll.technicalInstallations
+      return this.completedActionStore.getAllInspections.technicalInstallations
     }
   }
 }

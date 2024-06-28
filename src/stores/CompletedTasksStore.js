@@ -9,7 +9,7 @@ const baseDbUrl = loginStore.fetchBaseDbUrl();
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
         return {
-            storeTestVar: 'Store works!'
+            allInspections: Object,
         }
     },
     actions: {
@@ -73,7 +73,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     };
                     console.log("Fetched completed tasks of userId:" + user_id);
                     loginStore.setLoadingStatus(false);
-                    return inspections;
+                    this.allInspections = inspections;
                 } catch (err) {
                     console.error("Error fetching completed tasks:", err);
                     loginStore.setLoadingStatus(false);
@@ -106,10 +106,19 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     return result.data
                 }).catch(err => console.log(err));
         },
+        updateDamageInspection(newData) {
+          // This is needed to update the state.
+        },
+        pushUpdatedDamageInspection(stateData) {
+            // This should run to make the push to the database.
+            return axios.put(baseDbUrl + "/damage_inspection?id=" + data.id, data).then(result => {
+                console.log(result);
+            })
+        }
     },
     getters: {
-        getStoreTest(state) {
-            return state.storeTestVar;
+        getAllInspections(state) {
+            return state.allInspections;
         }
     }
 })
