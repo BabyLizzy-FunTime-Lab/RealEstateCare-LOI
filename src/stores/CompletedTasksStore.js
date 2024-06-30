@@ -106,13 +106,20 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     return result.data
                 }).catch(err => console.log(err));
         },
-        updateDamageInspection(newData) {
-          // This is needed to update the state.
+        updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
+            // This is needed to update the state.
+            let allInspectionsOfType = this.getAllInspections[inspectionType];
+            console.log(allInspectionsOfType);
+            allInspectionsOfType.forEach(inspection => {
+                    if(inspection.id === inspectionId) {
+                        inspection[propertyName] = newValue;
+                    }
+            })
         },
         pushUpdatedDamageInspection(stateData) {
             // This should run to make the push to the database.
-            return axios.put(baseDbUrl + "/damage_inspection?id=" + data.id, data).then(result => {
-                console.log(result);
+            return axios.put(baseDbUrl + `/damage_inspection/${stateData.id}`).then(response => {
+                console.log(response);
             })
         }
     },

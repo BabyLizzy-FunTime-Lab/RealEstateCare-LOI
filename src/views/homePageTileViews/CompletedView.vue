@@ -55,7 +55,10 @@ export default {
       </ion-fab-button>
     </ion-fab>
     <base-list-layout list-header-name="Completed Tasks">
-      <DamageInspectionsViewer :inspections="damageInspections"/>
+      <DamageInspectionsViewer
+          :inspections="damageInspections"
+          @cancel:updates="this.fetchAllInspections"
+      />
       <BacklogMaintenanceViewer :inspections="backlogMaintenance"/>
       <ModificationsViewer :inspections="modifications"/>
       <TechnicalInstallationsViewer :inspections="technicalInstallations"/>
