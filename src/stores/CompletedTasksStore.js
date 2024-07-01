@@ -1,7 +1,11 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import axios from "axios";
+import {useNotificationStore} from "@/stores/NotificationStore.js";
+
 const loginStore = useLoginStore();
+const notificationStore = useNotificationStore();
+
 
 // Default variables
 const baseDbUrl = loginStore.fetchBaseDbUrl();
@@ -111,16 +115,46 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             let allInspectionsOfType = this.getAllInspections[inspectionType];
             console.log(allInspectionsOfType);
             allInspectionsOfType.forEach(inspection => {
-                    if(inspection.id === inspectionId) {
-                        inspection[propertyName] = newValue;
+                // If propertyName is image we push the new image
+                if(inspection.id === inspectionId) {
+                    switch (propertyName) {
+                        case "images":
+                            inspection[propertyName].push(newValue);
+                            break;
+                        case "delete:image":
+                            // If the image is found it is deleted.
+                            if(inspection["images"].indexOf(newValue) !== -1) {
+                                inspection["images"].splice(inspection["images"].indexOf(newValue), 1);
+                            }
+                            break;
+                        default:
+                            inspection[propertyName] = newValue;
                     }
+                }
             })
         },
-        pushUpdatedDamageInspection(stateData) {
+        pushUpdatedDamageInspection(inspectionId) {
             // This should run to make the push to the database.
-            return axios.put(baseDbUrl + `/damage_inspection/${stateData.id}`).then(response => {
-                console.log(response);
-            })
+            let dataToSend = null;
+            this.getAllInspections["damageInspections"].forEach(inspection => {
+                if(inspection.id === inspectionId) {
+                    dataToSend = inspection;
+                }
+            });
+            // console.log(dataToSend);
+            return axios.put(baseDbUrl + `/damage_inspection/${inspectionId}`, dataToSend)
+                .then(response => {
+                    console.log(response);
+                    notificationStore.setNotification(
+                        `Data Update: ${response.status}`,
+                        "Message: Success!")
+                })
+                .catch(err => {
+                    notificationStore.setNotification(
+                        `Data Update: ${err.response.status}`,
+                        `Message: ${err.response.statusText}`)
+                    console.log(err.response);
+                })
         }
     },
     getters: {

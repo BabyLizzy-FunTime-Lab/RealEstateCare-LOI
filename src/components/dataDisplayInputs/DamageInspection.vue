@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates") {
+      if(eventName === "cancel:updates" || eventName === "save:data") {
         this.readOnlyToggle();
         this.$emit(eventName);
       } else {
@@ -65,7 +65,6 @@ export default {
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-      console.log("test")
     }
   },
   watch: {
@@ -92,7 +91,7 @@ export default {
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageTypeOption', 'update:damageType',
       'update:emergency', 'update:comments', 'update:images',
-      'delete:image', 'cancel:updates'
+      'delete:image', 'cancel:updates', 'save:data'
   ]
 }
 </script>
@@ -194,7 +193,8 @@ export default {
       @click="emitInputChange('cancel:updates')"
   />
   <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="emitInputChange('save:data')"/>
+
 </base-accordion-layout>
 </template>
 

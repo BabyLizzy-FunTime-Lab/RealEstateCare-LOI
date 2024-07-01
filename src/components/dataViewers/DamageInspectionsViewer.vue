@@ -17,22 +17,12 @@ export default {
   },
   methods: {
     updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
-      // Change the values of the inspections object.
+      // This calls for a state update with the new value.
       this.completedActionStore.updateInspectionData(inspectionType, inspectionId, propertyName, newValue)
-      // this.inspections.forEach(inspection => {
-      //   if(inspection.id === inspectionId) {
-      //     inspection[propertyName] = newValue;
-      //   }
-      // })
     },
-    updateInspectionImageArray(oldData, newImageArray) {
-      // Replace the old Array with the new one.
-    },
-    cancelChanges(inspectionType) {
-      // Call the fetch function for an inspection type.
-    },
-    pushChangesToDb(dataObjectArray, inspectionId) {
-      // This could replace all data of inspection id with the new data.
+    pushChangesToDb(inspectionId) {
+      // This triggers a push of the data object with the inspection id.
+      this.completedActionStore.pushUpdatedDamageInspection(inspectionId);
     }
   },
   emits: [
@@ -86,7 +76,14 @@ export default {
                     'damageInspections',inspection.id,
                     'comments', $event.target.value)"
             :images="inspection.images"
+            @update:images="updateInspectionData(
+                    'damageInspections',inspection.id,
+                    'images', $event.webviewPath)"
+            @delete:image="updateInspectionData(
+                    'damageInspections',inspection.id,
+                    'delete:image', $event)"
             @cancel:updates="this.$emit('cancel:updates')"
+            @save:data="pushChangesToDb(inspection.id)"
         />
       </ion-accordion-group>
     </base-accordion-layout>
