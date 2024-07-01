@@ -144,16 +144,17 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             // console.log(dataToSend);
             return axios.put(baseDbUrl + `/damage_inspection/${inspectionId}`, dataToSend)
                 .then(response => {
-                    console.log(response);
                     notificationStore.setNotification(
-                        `Data Update: ${response.status}`,
-                        "Message: Success!")
+                        `Data Update`,
+                        `Message: ${response.statusText} (${response.status})`
+                    )
                 })
                 .catch(err => {
                     notificationStore.setNotification(
-                        `Data Update: ${err.response.status}`,
-                        `Message: ${err.response.statusText}`)
-                    console.log(err.response);
+                        `Data Update`,
+                        `Message: ${err.response.statusText} (${err.response.status})`
+                    )
+                    console.log("Error pushing updates:", err);
                 })
         }
     },
