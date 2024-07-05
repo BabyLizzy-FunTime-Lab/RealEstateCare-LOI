@@ -56,7 +56,11 @@ export const dataBase = () => {
      * @param {string} inspectionType
      * @returns status
      */
-    const uploadToDataBase = async (sendData, inspectionType, viewData = "Needed if sendData != viewData") => {
+    const uploadToDataBase = async (
+        sendData,
+        inspectionType,
+        viewData = "Needed if sendData != viewData"
+    ) => {
         // If there are images in the data, they must be converted to base64.
         let returnCode = "error";
         if(sendData.images.length > 0) {
@@ -89,8 +93,34 @@ export const dataBase = () => {
         }
         return returnCode;
     }
-
+    /**
+     * Pushes updates to a specific inspection entry.
+     * @param {string} inspectionType
+     * @param {string} inspectionId
+     * @param {object} dataToSend
+     * @return {object}
+     */
+    const pushUpdatesToDataBase = async (inspectionType, inspectionId, dataToSend) => {
+    if(dataToSend.images.length > 0) {
+        try {
+            await convertImageArray(dataToSend.images).then(base64Array => {
+                dataToSend.images = base64Array;
+            })
+        } catch (err) {
+            console.error('Error converting images: ', err);
+        }
+    }
+    try {
+        const result = await axios.put(baseDbUrl + `/${inspectionType}/${inspectionId}`, dataToSend);
+        console.log(result);
+        return result;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}
     return {
-        uploadToDataBase
+        uploadToDataBase,
+        pushUpdatesToDataBase
     }
 }

@@ -2,10 +2,12 @@ import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import axios from "axios";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
+import {dataBase} from "@/services/dataBase.js";
 
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
+const {pushUpdatesToDataBase} = dataBase()
 
 // Default variables
 const baseDbUrl = loginStore.fetchBaseDbUrl();
@@ -141,21 +143,31 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     dataToSend = inspection;
                 }
             });
-            // console.log(dataToSend);
-            return axios.put(baseDbUrl + `/damage_inspection/${inspectionId}`, dataToSend)
+            pushUpdatesToDataBase("damage_inspection", inspectionId, dataToSend)
                 .then(response => {
                     notificationStore.setNotification(
-                        `Data Update`,
-                        `Message: ${response.statusText} (${response.status})`
-                    )
+                                `Data Update`,
+                                `Message: ${response.statusText} (${response.status})`
+                            )
                 })
                 .catch(err => {
-                    notificationStore.setNotification(
-                        `Data Update`,
-                        `Message: ${err.response.statusText} (${err.response.status})`
-                    )
-                    console.log("Error pushing updates:", err);
+                    console.log("Error while pushing update data to db", err);
                 })
+            // console.log(dataToSend);
+            // return axios.put(baseDbUrl + `/damage_inspection/${inspectionId}`, dataToSend)
+            //     .then(response => {
+            //         notificationStore.setNotification(
+            //             `Data Update`,
+            //             `Message: ${response.statusText} (${response.status})`
+            //         )
+            //     })
+            //     .catch(err => {
+            //         notificationStore.setNotification(
+            //             `Data Update`,
+            //             `Message: ${err.response.statusText} (${err.response.status})`
+            //         )
+            //         console.log("Error pushing updates:", err);
+            //     })
         }
     },
     getters: {
