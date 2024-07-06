@@ -43,47 +43,56 @@ export default {
             :location="inspection.location"
             @update:location=
                 "updateInspectionData(
-                    'damageInspections', inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'location', $event.target.value)"
             :new-damage="inspection.newDamage"
             @update:new-damage=
                 "updateInspectionData(
-                    'damageInspections', inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'newDamage', $event.target.value)"
             :date="inspection.date"
             @update:date=
                 "updateInspectionData(
-                    'damageInspections',inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'date', $event.target.value)"
             :selected-damage-type-option="inspection.selectedDamageTypeOption"
             @update:selected-damage-type-option=
                 "updateInspectionData(
-                    'damageInspections', inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'selectedDamageTypeOption', $event.target.value)"
             :damage-type="inspection.damageType"
             @update:damage-type=
                 "updateInspectionData(
-                    'damageInspections',inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'damageType', $event.target.value)"
             :emergency="inspection.emergency"
             @update:emergency=
                 "updateInspectionData(
-                    'damageInspections',inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'emergency', $event.target.value)"
             :comments="inspection.comments"
             @update:comments=
                 "updateInspectionData(
-                    'damageInspections',inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'comments', $event.target.value)"
             :images="inspection.images"
             @update:images="updateInspectionData(
-                    'damageInspections',inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'images', $event.webviewPath)"
             @delete:image="updateInspectionData(
-                    'damageInspections',inspection.id,
+                    'damageInspections',
+                    inspection.id,
                     'delete:image', $event)"
             @cancel:updates="this.$emit('cancel:updates')"
-            @save:data="pushChangesToDb(inspection.id)"
+            @save:data-updates="pushChangesToDb(inspection.id)"
         />
       </ion-accordion-group>
     </base-accordion-layout>

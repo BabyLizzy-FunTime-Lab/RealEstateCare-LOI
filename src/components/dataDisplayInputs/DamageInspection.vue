@@ -30,7 +30,10 @@ export default {
       type: String,
       default: "Damage Inspection"
     },
-    inspectionId: String,
+    inspectionId: {
+      type: String,
+      default: ""
+    },
     location: String,
     newDamage: String,
     date: String,
@@ -53,7 +56,7 @@ export default {
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates" || eventName === "save:data") {
+      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
         this.readOnlyToggle();
         this.$emit(eventName);
       } else {
@@ -65,11 +68,11 @@ export default {
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-    }
-  },
-  watch: {
-    newPhoto() {
-      this.$emit('update:images', newPhoto.value);
+    },
+    takePhotoAction() {
+      takePhoto().then(newImage => {
+        this.$emit('update:images', newImage.value);
+      })
     }
   },
   mounted() {
@@ -91,7 +94,7 @@ export default {
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageTypeOption', 'update:damageType',
       'update:emergency', 'update:comments', 'update:images',
-      'delete:image', 'cancel:updates', 'save:data'
+      'delete:image', 'cancel:updates', 'save:data', 'save:dataUpdates'
   ]
 }
 </script>
@@ -176,7 +179,7 @@ export default {
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <PhotoViewer
@@ -192,9 +195,14 @@ export default {
       button-color="danger"
       @click="emitInputChange('cancel:updates')"
   />
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Save Updates"
+      @click="emitInputChange('save:dataUpdates')"
+  />
   <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="emitInputChange('save:data')"/>
-
+  <BaseButton v-if="!readOnlyProp && !readOnly" slot="content" name="Save" @click="emitInputChange('save:data')"/>
 </base-accordion-layout>
 </template>
 

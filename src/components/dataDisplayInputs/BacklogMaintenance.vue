@@ -53,7 +53,6 @@ export default {
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-      console.log("test")
     }
   },
   watch: {
