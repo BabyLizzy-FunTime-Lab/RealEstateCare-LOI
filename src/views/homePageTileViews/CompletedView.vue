@@ -1,41 +1,47 @@
 <script>
+import { IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import BaseListLayout from "@/components/base/BaseListLayout.vue";
 import DamageInspectionsViewer from "@/components/dataViewers/DamageInspectionsViewer.vue";
 import BacklogMaintenanceViewer from "@/components/dataViewers/BacklogMaintenanceViewer.vue";
 import ModificationsViewer from "@/components/dataViewers/ModificationsViewer.vue";
 import TechnicalInstallationsViewer from "@/components/dataViewers/TechnicalInstallationsViewer.vue";
-// import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js"
+import { sync } from 'ionicons/icons';
 
 export default {
   name: "CompletedView",
   components: {
     BaseListLayout, DamageInspectionsViewer, BacklogMaintenanceViewer, ModificationsViewer,
-    TechnicalInstallationsViewer
+    TechnicalInstallationsViewer, IonFab, IonFabButton, IonIcon
+  },
+  setup() {
+    return {sync};
   },
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),
-      inspectionsAll: Object,
+    }
+  },
+  methods: {
+    fetchAllInspections() {
+      this.completedActionStore.fetchCompletedTasks();
     }
   },
   mounted() {
-    this.completedActionStore.fetchCompletedTasks().then(inspections => {
-      this.inspectionsAll = inspections;
-    });
+    this.fetchAllInspections();
   },
   computed: {
     damageInspections() {
-      return this.inspectionsAll.damageInspections
+      return this.completedActionStore.getAllInspections.damageInspections
     },
     backlogMaintenance() {
-      return this.inspectionsAll.backlogMaintenance
+      return this.completedActionStore.getAllInspections.backlogMaintenance
     },
     modifications() {
-      return this.inspectionsAll.modifications
+      return this.completedActionStore.getAllInspections.modifications
     },
     technicalInstallations() {
-      return this.inspectionsAll.technicalInstallations
+      return this.completedActionStore.getAllInspections.technicalInstallations
     }
   }
 }
@@ -43,8 +49,16 @@ export default {
 
 <template>
   <base-layout>
+    <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+      <ion-fab-button color="primary">
+        <ion-icon @click="this.fetchAllInspections" :icon="sync"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
     <base-list-layout list-header-name="Completed Tasks">
-      <DamageInspectionsViewer :inspections="damageInspections"/>
+      <DamageInspectionsViewer
+          :inspections="damageInspections"
+          @cancel:updates="this.fetchAllInspections"
+      />
       <BacklogMaintenanceViewer :inspections="backlogMaintenance"/>
       <ModificationsViewer :inspections="modifications"/>
       <TechnicalInstallationsViewer :inspections="technicalInstallations"/>
@@ -53,5 +67,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-
+ion-fab {
+  margin-bottom: var(--ion-safe-area-bottom, 0);
+}
 </style>

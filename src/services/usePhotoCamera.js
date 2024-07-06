@@ -23,6 +23,7 @@ export const usePhotoCamera = () => {
 
         photos.value = [savedFileImage, ...photos.value];
         newPhoto.value = savedFileImage;
+        return newPhoto
     };
 
     return {
