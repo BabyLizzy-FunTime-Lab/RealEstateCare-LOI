@@ -22,7 +22,7 @@ export default {
     return {
       newPhoto,
       takePhoto,
-      readOnly: false
+      readOnly: false,
     }
   },
   props: {
@@ -30,7 +30,10 @@ export default {
       type: String,
       default: "Damage Inspection"
     },
-    inspectionId: String,
+    inspectionId: {
+      type: String,
+      default: ""
+    },
     location: String,
     newDamage: String,
     date: String,
@@ -52,20 +55,24 @@ export default {
     }
   },
   methods: {
-    emitInputChange(data, eventName) {
-      this.$emit(eventName, data);
+    emitInputChange(eventName, data = null) {
+      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
+        this.readOnlyToggle();
+        this.$emit(eventName);
+      } else {
+        this.$emit(eventName, data);
+      }
     },
     async dismissModal() {
       await modalController.dismiss();
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-      console.log("test")
-    }
-  },
-  watch: {
-    newPhoto() {
-      this.$emit('update:images', newPhoto.value);
+    },
+    takePhotoAction() {
+      takePhoto().then(newImage => {
+        this.$emit('update:images', newImage.value);
+      })
     }
   },
   mounted() {
@@ -78,12 +85,16 @@ export default {
       } else {
         return "inset"
       }
+    },
+    dateOnly() {
+      return  this.date.split('T')[0];
     }
   },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageTypeOption', 'update:damageType',
-      'update:emergency', 'update:comments', 'update:images', 'delete:image'
+      'update:emergency', 'update:comments', 'update:images',
+      'delete:image', 'cancel:updates', 'save:data', 'save:dataUpdates'
   ]
 }
 </script>
@@ -94,21 +105,23 @@ export default {
     <ion-input label="Location"
                :readonly="readOnly"
                :value="location"
-               @input="emitInputChange($event, 'update:location')"
+               @input="emitInputChange('update:location', $event)"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
   </ion-item>
   <ion-item slot="content" lines="inset">
-    <ion-label>Date</ion-label>
-    <ion-datetime-button aria-label="Date" presentation="date" datetime="date"></ion-datetime-button>
+    <ion-input label="Date" :value="dateOnly" v-if="readOnly" type="text" label-placement="floating"/>
+    <ion-label v-if="!readOnly">Date</ion-label>
+    <ion-datetime-button aria-label="Date" presentation="date" datetime="date" :disabled="readOnly" v-if="!readOnly"/>
     <ion-modal :keep-contents-mounted="true">
       <ion-datetime :value="date"
-                    :readonly="readOnly"
-                    @ionChange="emitInputChange($event, 'update:date')"
+                    @ionChange="emitInputChange('update:date', $event)"
                     displayFormat="MMM D, YYYY"
                     pickerFormat="MMM D YYYY"
-                    presentation="date" id="date"></ion-datetime>
+                    presentation="date"
+                    id="date"
+      />
       <ion-button @click="dismissModal" >OK</ion-button>
     </ion-modal>
   </ion-item>
@@ -117,7 +130,7 @@ export default {
                 :disabled="readOnly"
                 label="Damage Type"
                 placeholder="Select"
-                @ionChange="emitInputChange($event, 'update:selectedDamageTypeOption')">
+                @ionChange="emitInputChange('update:selectedDamageTypeOption', $event)">
       <ion-select-option value="deliberately">Deliberately</ion-select-option>
       <ion-select-option value="wear">Wear</ion-select-option>
       <ion-select-option value="violence">Violence</ion-select-option>
@@ -130,7 +143,7 @@ export default {
     <ion-input
         :value="damageType"
         :readonly="readOnly"
-        @input="emitInputChange($event, 'update:damageType')"
+        @input="emitInputChange('update:damageType', $event)"
         aria-label="Input damage type"
         class="custom-placeholder"
         placeholder="Input damage type"
@@ -140,7 +153,7 @@ export default {
   <ion-item slot="content" class="newDamage-border" lines="inset">
     <ion-label>New Damage?</ion-label>
     <ion-radio-group :value="newDamage"
-                     @ionChange="emitInputChange($event, 'update:newDamage')"
+                     @ionChange="emitInputChange('update:newDamage', $event)"
                      name="newDamage">
       <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
       <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
@@ -149,7 +162,7 @@ export default {
   <ion-item slot="content">
     <ion-label>Emergency Action needed?</ion-label>
     <ion-radio-group :value="emergency"
-                     @ionChange="emitInputChange($event, 'update:emergency')"
+                     @ionChange="emitInputChange('update:emergency', $event)"
                      name="emergency">
       <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
       <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
@@ -159,21 +172,37 @@ export default {
     <ion-textarea label="Comments"
                   :readonly="readOnly"
                   :value="comments"
-                  @ionChange="emitInputChange($event, 'update:comments')"
+                  @ionChange="emitInputChange('update:comments', $event)"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-    <PhotoViewer :read-only="readOnly" :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer
+        :read-only="readOnly"
+        :photos="images"
+        @delete-event="emitInputChange('delete:image', $event)"
+    />
   </ion-item>
-  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Cancel"
+      button-color="danger"
+      @click="emitInputChange('cancel:updates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Save Updates"
+      @click="emitInputChange('save:dataUpdates')"
+  />
   <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton v-if="!readOnlyProp && !readOnly" slot="content" name="Save" @click="emitInputChange('save:data')"/>
 </base-accordion-layout>
 </template>
 

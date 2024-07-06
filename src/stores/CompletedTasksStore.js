@@ -1,7 +1,13 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import axios from "axios";
+import {useNotificationStore} from "@/stores/NotificationStore.js";
+import {dataBase} from "@/services/dataBase.js";
+
 const loginStore = useLoginStore();
+const notificationStore = useNotificationStore();
+
+const {pushUpdatesToDataBase} = dataBase()
 
 // Default variables
 const baseDbUrl = loginStore.fetchBaseDbUrl();
@@ -9,7 +15,7 @@ const baseDbUrl = loginStore.fetchBaseDbUrl();
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
         return {
-            storeTestVar: 'Store works!'
+            allInspections: Object,
         }
     },
     actions: {
@@ -73,7 +79,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     };
                     console.log("Fetched completed tasks of userId:" + user_id);
                     loginStore.setLoadingStatus(false);
-                    return inspections;
+                    this.allInspections = inspections;
                 } catch (err) {
                     console.error("Error fetching completed tasks:", err);
                     loginStore.setLoadingStatus(false);
@@ -106,10 +112,67 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     return result.data
                 }).catch(err => console.log(err));
         },
+        updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
+            // This is needed to update the state.
+            let allInspectionsOfType = this.getAllInspections[inspectionType];
+            console.log(allInspectionsOfType);
+            allInspectionsOfType.forEach(inspection => {
+                // If propertyName is image we push the new image
+                if(inspection.id === inspectionId) {
+                    switch (propertyName) {
+                        case "images":
+                            inspection[propertyName].push(newValue);
+                            break;
+                        case "delete:image":
+                            // If the image is found it is deleted.
+                            if(inspection["images"].indexOf(newValue) !== -1) {
+                                inspection["images"].splice(inspection["images"].indexOf(newValue), 1);
+                            }
+                            break;
+                        default:
+                            inspection[propertyName] = newValue;
+                    }
+                }
+            })
+        },
+        pushUpdatedDamageInspection(inspectionId) {
+            // This should run to make the push to the database.
+            let dataToSend = null;
+            this.getAllInspections["damageInspections"].forEach(inspection => {
+                if(inspection.id === inspectionId) {
+                    dataToSend = inspection;
+                }
+            });
+            pushUpdatesToDataBase("damage_inspection", inspectionId, dataToSend)
+                .then(response => {
+                    notificationStore.setNotification(
+                                `Data Update`,
+                                `Message: ${response.statusText} (${response.status})`
+                            )
+                })
+                .catch(err => {
+                    console.log("Error while pushing update data to db", err);
+                })
+            // console.log(dataToSend);
+            // return axios.put(baseDbUrl + `/damage_inspection/${inspectionId}`, dataToSend)
+            //     .then(response => {
+            //         notificationStore.setNotification(
+            //             `Data Update`,
+            //             `Message: ${response.statusText} (${response.status})`
+            //         )
+            //     })
+            //     .catch(err => {
+            //         notificationStore.setNotification(
+            //             `Data Update`,
+            //             `Message: ${err.response.statusText} (${err.response.status})`
+            //         )
+            //         console.log("Error pushing updates:", err);
+            //     })
+        }
     },
     getters: {
-        getStoreTest(state) {
-            return state.storeTestVar;
+        getAllInspections(state) {
+            return state.allInspections;
         }
     }
 })
