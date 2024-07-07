@@ -104,7 +104,7 @@ export default {
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
-          :save-data-request="pushBacklogMaintenanceViewData"
+          @save:data="pushBacklogMaintenanceViewData"
         />
         <TechnicalInstallationInspection
           :location="this.technicalInstallationData.location"

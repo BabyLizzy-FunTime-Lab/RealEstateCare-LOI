@@ -90,7 +90,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         fetchDamageInspections(user_id) {
             return axios.get(baseDbUrl + "/damage_inspection?inspectorId=" + user_id)
                 .then(result => {
-                    console.log(result.data);
                     return result.data
                 }).catch(err => console.log(err));
         },
@@ -115,7 +114,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
             // This is needed to update the state.
             let allInspectionsOfType = this.getAllInspections[inspectionType];
-            console.log(allInspectionsOfType);
             allInspectionsOfType.forEach(inspection => {
                 // If propertyName is image we push the new image
                 if(inspection.id === inspectionId) {
@@ -129,11 +127,41 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                                 inspection["images"].splice(inspection["images"].indexOf(newValue), 1);
                             }
                             break;
+                        case "date":
+                            // Date must be accessed directly so it can be referenced properly.
+                            this.allInspections.damageInspections[inspectionId].date = newValue;
+                            break;
                         default:
                             inspection[propertyName] = newValue;
                     }
                 }
             })
+            console.log(allInspectionsOfType);
+        },
+        pushUpdatedData(inspectionId, inspectionType) {
+            const dbInspectionTypes = {
+                damageInspections: "damage_inspection",
+                backlogMaintenance: "backlog_maintenance",
+                modifications: "modifications",
+                technicalInstallations: "technical_installation_inspection"
+            }
+            // This should run to make the push to the database.
+            let dataToSend = null;
+            this.getAllInspections[inspectionType].forEach(inspection => {
+                if(inspection.id === inspectionId) {
+                    dataToSend = inspection;
+                }
+            });
+            pushUpdatesToDataBase(dbInspectionTypes[inspectionType], inspectionId, dataToSend)
+                .then(response => {
+                    notificationStore.setNotification(
+                        `Data Update`,
+                        `Message: ${response.statusText} (${response.status})`
+                    )
+                })
+                .catch(err => {
+                    console.log("Error while pushing update data to db", err);
+                })
         },
         pushUpdatedDamageInspection(inspectionId) {
             // This should run to make the push to the database.
@@ -153,21 +181,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 .catch(err => {
                     console.log("Error while pushing update data to db", err);
                 })
-            // console.log(dataToSend);
-            // return axios.put(baseDbUrl + `/damage_inspection/${inspectionId}`, dataToSend)
-            //     .then(response => {
-            //         notificationStore.setNotification(
-            //             `Data Update`,
-            //             `Message: ${response.statusText} (${response.status})`
-            //         )
-            //     })
-            //     .catch(err => {
-            //         notificationStore.setNotification(
-            //             `Data Update`,
-            //             `Message: ${err.response.statusText} (${err.response.status})`
-            //         )
-            //         console.log("Error pushing updates:", err);
-            //     })
         }
     },
     getters: {
