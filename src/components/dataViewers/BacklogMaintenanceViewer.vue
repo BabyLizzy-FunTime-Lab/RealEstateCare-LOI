@@ -2,13 +2,29 @@
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
+import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
 
 export default {
   name: "BacklogMaintenanceViewer",
   components: {IonAccordionGroup, BaseAccordionLayout, BacklogMaintenance},
+  data() {
+    return {
+      completedActionStore: useCompletedTasksStore(),
+    }
+  },
   props: {
     inspections: null
-  }
+  },
+  methods: {
+    updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
+      // This calls for a state update with the new value.
+      this.completedActionStore.updateInspectionData(inspectionType, inspectionId, propertyName, newValue)
+    },
+    pushChangesToDb(inspectionId) {
+      // This triggers a push of the data object with the inspection id.
+      // this.completedActionStore.pushUpdatedDamageInspection(inspectionId);
+    }
+  },
 }
 </script>
 
@@ -19,10 +35,15 @@ export default {
         <BacklogMaintenance
             v-for="inspection of inspections"
             :key="inspection.id"
-            :inspection-id="inspection.id"
             :read-only-prop="true"
+            :inspection-id="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
+            @update:location="updateInspectionData(
+                'backlogMaintenance',
+                inspection.id,
+                'location',
+                $event.target.value)"
             :emergency="inspection.emergency"
             :maintenance-type="inspection.maintenanceType"
             :cost-indication="inspection.costIndication"
