@@ -3,10 +3,11 @@ import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
+import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
 
 export default {
   name: "BacklogMaintenanceViewer",
-  components: {IonAccordionGroup, BaseAccordionLayout, BacklogMaintenance},
+  components: {DamageInspection, IonAccordionGroup, BaseAccordionLayout, BacklogMaintenance},
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),
@@ -22,9 +23,12 @@ export default {
     },
     pushChangesToDb(inspectionId) {
       // This triggers a push of the data object with the inspection id.
-      // this.completedActionStore.pushUpdatedDamageInspection(inspectionId);
+      this.completedActionStore.pushUpdatedData(inspectionId, "backlogMaintenance");
     }
   },
+  emits: [
+    'cancel:updates'
+  ]
 }
 </script>
 
@@ -39,15 +43,48 @@ export default {
             :inspection-id="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
-            @update:location="updateInspectionData(
-                'backlogMaintenance',
-                inspection.id,
-                'location',
-                $event.target.value)"
+            @update:location=
+                "updateInspectionData(
+                  'backlogMaintenance',
+                   inspection.id,
+                  'location',
+                   $event.target.value)"
             :emergency="inspection.emergency"
+            @update:emergency=
+                "updateInspectionData(
+                    'backlogMaintenance',
+                    inspection.id,
+                    'emergency',
+                    $event.target.value)"
             :maintenance-type="inspection.maintenanceType"
+            @update:maintenance-type=
+                "updateInspectionData(
+                    'backlogMaintenance',
+                    inspection.id,
+                    'maintenanceType',
+                    $event.target.value)"
             :cost-indication="inspection.costIndication"
+            @update:cost-indication=
+                "updateInspectionData(
+                    'backlogMaintenance',
+                    inspection.id,
+                    'maintenanceType',
+                    $event.target.value)"
             :images="inspection.images"
+            @update:images=
+                "updateInspectionData(
+                    'backlogMaintenance',
+                    inspection.id,
+                    'images',
+                    $event.webviewPath)"
+            @delete:image=
+                "updateInspectionData(
+                    'backlogMaintenance',
+                    inspection.id,
+                    'delete:image',
+                    $event)"
+            @cancel:updates="this.$emit('cancel:updates')"
+            @save:data-updates="pushChangesToDb(inspection.id)"
         />
       </ion-accordion-group>
     </base-accordion-layout>

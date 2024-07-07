@@ -70,7 +70,7 @@ export default {
   },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:emergency',
-    'update:maintenanceType', 'update:costIndication', 'cancel:updates',
+    'update:maintenanceType', 'update:costIndication', 'save:data', 'cancel:updates',
     'save:dataUpdates'
   ]
 }

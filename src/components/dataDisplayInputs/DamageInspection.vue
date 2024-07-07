@@ -111,7 +111,7 @@ export default {
                type="text"/>
   </ion-item>
   <ion-item slot="content" lines="inset">
-    <ion-input label="Date" :value="dateOnly" v-if="readOnly" type="text" label-placement="floating"/>
+    <ion-input label="Date" :readonly="readOnly" :value="dateOnly" v-if="readOnly" type="text" label-placement="floating"/>
     <ion-label v-if="!readOnly">Date</ion-label>
     <ion-datetime-button aria-label="Date" presentation="date" datetime="date" :disabled="readOnly" v-if="!readOnly"/>
     <ion-modal :keep-contents-mounted="true">

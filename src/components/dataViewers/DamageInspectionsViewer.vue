@@ -22,7 +22,8 @@ export default {
     },
     pushChangesToDb(inspectionId) {
       // This triggers a push of the data object with the inspection id.
-      this.completedActionStore.pushUpdatedDamageInspection(inspectionId);
+      // this.completedActionStore.pushUpdatedDamageInspection(inspectionId);
+      this.completedActionStore.pushUpdatedData(inspectionId, "damageInspections");
     }
   },
   emits: [
