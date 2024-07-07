@@ -72,7 +72,7 @@ export const useInspectionStore = defineStore('inspections', {
         stageNewPhoto(newPhoto) {
             this.generalLocalPhotoStaging = [newPhoto, ...this.generalLocalPhotoStaging];
         },
-        unstageNewPhoto(photoURI) {
+        unStageNewPhoto(photoURI) {
             this.generalLocalPhotoStaging =
                 this.generalLocalPhotoStaging.filter(photo => photo.webviewPath !== photoURI);
         },
@@ -113,7 +113,7 @@ export const useInspectionStore = defineStore('inspections', {
                         break;
                     case 'deletePhoto':
                         this.deletePhotoFromView(data, this.getDamageInspectionViewData);
-                        this.unstageNewPhoto(data);
+                        this.unStageNewPhoto(data);
                         break;
                     default:
                         console.log("Invalid Backlog input")
@@ -132,7 +132,7 @@ export const useInspectionStore = defineStore('inspections', {
                         break;
                     case 'deletePhoto':
                         this.deletePhotoFromView(data, this.getBacklogMaintenanceViewData);
-                        this.unstageNewPhoto(data);
+                        this.unStageNewPhoto(data);
                         break;
                     default:
                         console.log("Invalid Backlog input")
@@ -151,7 +151,7 @@ export const useInspectionStore = defineStore('inspections', {
                         break;
                     case 'deletePhoto':
                         this.deletePhotoFromView(data, this.getTechnicalInstallationViewData);
-                        this.unstageNewPhoto(data);
+                        this.unStageNewPhoto(data);
                         break;
                     default:
                         console.log("Invalid Backlog input")
@@ -178,7 +178,7 @@ export const useInspectionStore = defineStore('inspections', {
                         break;
                     case 'deletePhoto':
                         this.deletePhotoFromView(data, this.getModificationsViewData);
-                        this.unstageNewPhoto(data);
+                        this.unStageNewPhoto(data);
                         break;
                     default:
                         console.log("Invalid Backlog input")

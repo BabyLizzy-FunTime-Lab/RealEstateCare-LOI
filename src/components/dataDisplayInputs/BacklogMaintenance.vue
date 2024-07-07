@@ -48,24 +48,30 @@ export default {
     },
   },
   methods: {
-    emitInputChange(data, eventName) {
-      this.$emit(eventName, data);
+    emitInputChange(eventName, data = null) {
+      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
+        this.readOnlyToggle();
+        this.$emit(eventName);
+      } else {
+        this.$emit(eventName, data);
+      }
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-    }
-  },
-  watch: {
-    newPhoto() {
-      this.$emit('update:images', newPhoto.value);
+    },
+    takePhotoAction() {
+      takePhoto().then(newImage => {
+        this.$emit('update:images', newImage.value);
+      })
     }
   },
   mounted() {
     this.readOnly = this.readOnlyProp
   },
   emits: [
-      'update:images', 'delete:image', 'update:location', 'update:emergency',
-      'update:maintenanceType', 'update:costIndication',
+    'update:images', 'delete:image', 'update:location', 'update:emergency',
+    'update:maintenanceType', 'update:costIndication', 'save:data', 'cancel:updates',
+    'save:dataUpdates'
   ]
 }
 </script>
@@ -76,7 +82,7 @@ export default {
     <ion-input label="Location"
                :readonly="readOnly"
                :value="location"
-               @input="emitInputChange($event, 'update:location')"
+               @input="emitInputChange('update:location', $event)"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
@@ -84,7 +90,7 @@ export default {
   <ion-item slot="content">
     <ion-label>Emergency Action needed?</ion-label>
     <ion-radio-group :value="emergency"
-                     @ionChange="emitInputChange($event, 'update:emergency')"
+                     @ionChange="emitInputChange('update:emergency', $event)"
                      name="emergency">
       <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
       <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
@@ -93,7 +99,7 @@ export default {
   <ion-item slot="content">
     <ion-select :value="maintenanceType"
                 :disabled="readOnly"
-                @ionChange="emitInputChange($event, 'update:maintenanceType')"
+                @ionChange="emitInputChange('update:maintenanceType', $event)"
                 label="Maintenance Type"
                 placeholder="Select">
       <ion-select-option value="paint">Paint</ion-select-option>
@@ -106,7 +112,7 @@ export default {
   <ion-item slot="content">
     <ion-select :value="costIndication"
                 :disabled="readOnly"
-                @ionChange="emitInputChange($event, 'update:costIndication')"
+                @ionChange="emitInputChange('update:costIndication', $event)"
                 label="Cost Prediction"
                 placeholder="Select">
       <ion-select-option value="0-500">0-500</ion-select-option>
@@ -116,14 +122,40 @@ export default {
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-    <PhotoViewer :read-only="readOnly" :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer
+        :read-only="readOnly"
+        :photos="images"
+        @delete-event="emitInputChange('delete:image', $event)"
+    />
   </ion-item>
-  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
-  <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Cancel"
+      button-color="danger"
+      @click="emitInputChange('cancel:updates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Save Updates"
+      @click="emitInputChange('save:dataUpdates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && readOnly"
+      slot="content"
+      name="Update Information"
+      @click="readOnlyToggle"
+  />
+  <BaseButton
+      v-if="!readOnlyProp && !readOnly"
+      slot="content"
+      name="Save"
+      @click="emitInputChange('save:data')"
+  />
 </BaseAccordionLayout>
 </template>
 
