@@ -114,6 +114,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
             // This is needed to update the state.
             let allInspectionsOfType = this.getAllInspections[inspectionType];
+            let targetInspection = null;
             allInspectionsOfType.forEach(inspection => {
                 // If propertyName is image we push the new image
                 if(inspection.id === inspectionId) {
@@ -129,7 +130,13 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                             break;
                         case "date":
                             // Date must be accessed directly so it can be referenced properly.
-                            this.allInspections.damageInspections[inspectionId].date = newValue;
+                            // For some reason inspectionId keep on converting to 3.
+                            targetInspection = allInspectionsOfType.find((check) => check.id === inspectionId);
+                            console.log(inspectionId);
+                            if(targetInspection) {
+                                console.log(targetInspection);
+                                targetInspection.date = newValue
+                            }
                             break;
                         default:
                             inspection[propertyName] = newValue;
@@ -163,25 +170,25 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     console.log("Error while pushing update data to db", err);
                 })
         },
-        pushUpdatedDamageInspection(inspectionId) {
-            // This should run to make the push to the database.
-            let dataToSend = null;
-            this.getAllInspections["damageInspections"].forEach(inspection => {
-                if(inspection.id === inspectionId) {
-                    dataToSend = inspection;
-                }
-            });
-            pushUpdatesToDataBase("damage_inspection", inspectionId, dataToSend)
-                .then(response => {
-                    notificationStore.setNotification(
-                                `Data Update`,
-                                `Message: ${response.statusText} (${response.status})`
-                            )
-                })
-                .catch(err => {
-                    console.log("Error while pushing update data to db", err);
-                })
-        }
+        // pushUpdatedDamageInspection(inspectionId) {
+        //     // This should run to make the push to the database.
+        //     let dataToSend = null;
+        //     this.getAllInspections["damageInspections"].forEach(inspection => {
+        //         if(inspection.id === inspectionId) {
+        //             dataToSend = inspection;
+        //         }
+        //     });
+        //     pushUpdatesToDataBase("damage_inspection", inspectionId, dataToSend)
+        //         .then(response => {
+        //             notificationStore.setNotification(
+        //                         `Data Update`,
+        //                         `Message: ${response.statusText} (${response.status})`
+        //                     )
+        //         })
+        //         .catch(err => {
+        //             console.log("Error while pushing update data to db", err);
+        //         })
+        // }
     },
     getters: {
         getAllInspections(state) {

@@ -89,7 +89,7 @@ export const useInspectionStore = defineStore('inspections', {
         updateInputView(newData, viewData, propertyName) {
             // This is a good spot to implement input validation.
             // If it recieved an event object, it will seek the target.value
-            if(typeof newData === 'object' && newData !== null ) {
+            if(typeof newData === 'object' && newData !== null && propertyName != "date") {
                 viewData[propertyName] = newData.target.value
             } else {
                 viewData[propertyName] = newData

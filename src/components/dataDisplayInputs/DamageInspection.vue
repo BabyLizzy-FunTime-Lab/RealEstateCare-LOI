@@ -3,6 +3,7 @@ import {
   IonItem, IonLabel, IonInput, IonTextarea, IonDatetime, IonDatetimeButton, IonModal,
   IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
+import VueDatePicker from '@vuepic/vue-datepicker';
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
@@ -16,13 +17,14 @@ export default {
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
     IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton, PhotoViewer
+    IonSelectOption, BaseButton, PhotoViewer, VueDatePicker
   },
   data() {
     return {
       newPhoto,
       takePhoto,
       readOnly: false,
+      dateVue: null
     }
   },
   props: {
@@ -36,7 +38,7 @@ export default {
     },
     location: String,
     newDamage: String,
-    date: String,
+    date: null,
     selectedDamageTypeOption: String,
     damageType: String,
     emergency: String,
@@ -61,6 +63,7 @@ export default {
         this.$emit(eventName);
       } else {
         this.$emit(eventName, data);
+        console.log(this.inspectionId);
       }
     },
     async dismissModal() {
@@ -90,6 +93,9 @@ export default {
       return  this.date.split('T')[0];
     }
   },
+  watch: {
+
+  },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageTypeOption', 'update:damageType',
@@ -110,21 +116,29 @@ export default {
                label-placement="floating"
                type="text"/>
   </ion-item>
-  <ion-item slot="content" lines="inset">
-    <ion-input label="Date" :readonly="readOnly" :value="dateOnly" v-if="readOnly" type="text" label-placement="floating"/>
-    <ion-label v-if="!readOnly">Date</ion-label>
-    <ion-datetime-button aria-label="Date" presentation="date" datetime="date" :disabled="readOnly" v-if="!readOnly"/>
-    <ion-modal :keep-contents-mounted="true">
-      <ion-datetime :value="date"
-                    @ionChange="emitInputChange('update:date', $event)"
-                    displayFormat="MMM D, YYYY"
-                    pickerFormat="MMM D YYYY"
-                    presentation="date"
-                    id="date"
+  <ion-item slot="content">
+    <ion-input label="Date Vue" :readonly="readOnly" v-if="readOnly" :value="date" type="text" label-placement="floating"/>
+    <ion-input label="Date Vue" v-if="!readOnly" :readonly="readOnly" :value="dateVue" type="text" label-placement="floating"/>
+      <VueDatePicker
+          v-model="dateVue" v-if="!readOnly" :teleport="true" @update:model-value="emitInputChange('update:date', dateVue)"
       />
-      <ion-button @click="dismissModal" >OK</ion-button>
-    </ion-modal>
+<!--    <input type="date" v-model="dateVue"/>-->
   </ion-item>
+<!--  <ion-item slot="content" lines="inset">-->
+<!--    <ion-input label="Date" :readonly="readOnly" :value="dateOnly" v-if="readOnly" type="text" label-placement="floating"/>-->
+<!--    <ion-label v-if="!readOnly">Date</ion-label>-->
+<!--    <ion-datetime-button aria-label="Date" presentation="date" datetime="date" :disabled="readOnly" v-if="!readOnly"/>-->
+<!--    <ion-modal :keep-contents-mounted="true">-->
+<!--      <ion-datetime :value="date"-->
+<!--                    @ionChange="emitInputChange('update:date', $event)"-->
+<!--                    displayFormat="MMM D, YYYY"-->
+<!--                    pickerFormat="MMM D YYYY"-->
+<!--                    presentation="date"-->
+<!--                    id="date"-->
+<!--      />-->
+<!--      <ion-button @click="dismissModal" >OK</ion-button>-->
+<!--    </ion-modal>-->
+<!--  </ion-item>-->
   <ion-item slot="content" :lines="damageTypeBorder">
     <ion-select :value="selectedDamageTypeOption"
                 :disabled="readOnly"
