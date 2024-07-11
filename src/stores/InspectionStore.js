@@ -188,6 +188,8 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         pushDamageInspectionViewData() {
+            // Start loading bar.
+            loginStore.setLoadingStatus(true);
             console.log("Pushing DamageInspectionViewData");
             // Adding user id to the viewData.
             this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
@@ -196,11 +198,15 @@ export const useInspectionStore = defineStore('inspections', {
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Save successful");
                         notificationStore.setNotification("Data save", "Success!");
                         // clearViewData.methods.clearViewData(this.getDamageInspectionViewData);
                         // Once the push is complete, empty the inputs and notify success.
                     } else {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Upload to data base failed: " + result)
                         notificationStore.setNotification("Data save", "Error");
                         // Triggers alert, if no connection could be made to the db.
@@ -212,16 +218,22 @@ export const useInspectionStore = defineStore('inspections', {
                 })
         },
         pushBacklogMaintenanceViewData() {
+            // Start loading bar.
+            loginStore.setLoadingStatus(true);
             console.log("Pushing BacklogMaintenance");
             this.getBacklogMaintenanceViewData.inspectorId = this.fetchUserId();
             uploadToDataBase(this.getBacklogMaintenanceViewData, "backlog_maintenance")
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Save successful");
                         notificationStore.setNotification("Data save", "Success!");
                         // Once the push is complete, empty the inputs and notify success.
                     } else {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Upload to data base failed: " + result)
                         notificationStore.setNotification("Data save", "Error");
                         // Triggers alert, if no connection could be made to the db.
@@ -233,16 +245,22 @@ export const useInspectionStore = defineStore('inspections', {
                 })
         },
         pushTechnicalInstallationViewData() {
+            // Start loading bar.
+            loginStore.setLoadingStatus(true);
             console.log("Pushing TechnicalInstallation");
             this.getTechnicalInstallationViewData.inspectorId = this.fetchUserId();
             uploadToDataBase(this.getTechnicalInstallationViewData, "technical_installation_inspection")
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Save successful");
                         notificationStore.setNotification("Data save", "Success!");
                         // Once the push is complete, empty the inputs and notify success.
                     } else {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Upload to data base failed: " + result)
                         notificationStore.setNotification("Data save", "Error");
                         // Triggers alert, if no connection could be made to the db.
@@ -254,6 +272,8 @@ export const useInspectionStore = defineStore('inspections', {
                 })
         },
         pushModificationsViewData() {
+            // Start loading bar.
+            loginStore.setLoadingStatus(true);
             console.log("Pushing Modifications");
             this.getModificationsViewData.inspectorId = this.fetchUserId();
             // Remove documentedModsFile before push.
@@ -264,10 +284,14 @@ export const useInspectionStore = defineStore('inspections', {
                 .then(result => {
                     console.log(result);
                     if(result === 201) {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Save successful");
                         notificationStore.setNotification("Data save", "Success!");
                         // Once the push is complete, empty the inputs and notify success.
                     } else {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
                         // alert("Upload to data base failed: " + result)
                         notificationStore.setNotification("Data save", "Error");
                         // Triggers alert, if no connection could be made to the db.

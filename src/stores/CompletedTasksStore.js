@@ -146,6 +146,8 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             console.log(allInspectionsOfType);
         },
         pushUpdatedData(inspectionId, inspectionType) {
+            // Start loading bar.
+            loginStore.setLoadingStatus(true);
             const dbInspectionTypes = {
                 damageInspections: "damage_inspection",
                 backlogMaintenance: "backlog_maintenance",
@@ -161,34 +163,20 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             });
             pushUpdatesToDataBase(dbInspectionTypes[inspectionType], inspectionId, dataToSend)
                 .then(response => {
+                    // End loading bar.
+                    loginStore.setLoadingStatus(false);
+                    // Notify user.
                     notificationStore.setNotification(
                         `Data Update`,
                         `Message: ${response.statusText} (${response.status})`
                     )
                 })
                 .catch(err => {
+                    // End loading bar.
+                    loginStore.setLoadingStatus(false);
                     console.log("Error while pushing update data to db", err);
                 })
         },
-        // pushUpdatedDamageInspection(inspectionId) {
-        //     // This should run to make the push to the database.
-        //     let dataToSend = null;
-        //     this.getAllInspections["damageInspections"].forEach(inspection => {
-        //         if(inspection.id === inspectionId) {
-        //             dataToSend = inspection;
-        //         }
-        //     });
-        //     pushUpdatesToDataBase("damage_inspection", inspectionId, dataToSend)
-        //         .then(response => {
-        //             notificationStore.setNotification(
-        //                         `Data Update`,
-        //                         `Message: ${response.statusText} (${response.status})`
-        //                     )
-        //         })
-        //         .catch(err => {
-        //             console.log("Error while pushing update data to db", err);
-        //         })
-        // }
     },
     getters: {
         getAllInspections(state) {
