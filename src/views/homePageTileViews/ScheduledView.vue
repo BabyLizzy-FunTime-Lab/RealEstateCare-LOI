@@ -140,7 +140,7 @@ export default {
             :images="this.modificationsData.images"
             @update:images="this.updateModificationsViewData($event, 'takePhoto')"
             @delete:image="this.updateModificationsViewData($event, 'deletePhoto')"
-            :save-data-request="pushModificationsViewData"
+            @save:data="pushModificationsViewData"
         />
       </ion-accordion-group>
     </base-list-layout>
