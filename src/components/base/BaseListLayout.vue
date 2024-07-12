@@ -1,5 +1,11 @@
 <script>
-import {IonLabel, IonList, IonListHeader, IonButtons, IonButton, IonIcon, IonBackButton} from "@ionic/vue";
+import {
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonButtons,
+  IonBackButton
+} from "@ionic/vue";
 import {arrowBack} from "ionicons/icons";
 
 export default {
@@ -9,7 +15,11 @@ export default {
       return arrowBack
     },
   },
-  components: {IonListHeader, IonList, IonLabel, IonButtons, IonButton, IonIcon, IonBackButton},
+  components: {
+    IonListHeader, IonList,
+    IonLabel, IonButtons,
+    IonBackButton
+  },
   props: {
     listHeaderName: String,
     styleColor: {

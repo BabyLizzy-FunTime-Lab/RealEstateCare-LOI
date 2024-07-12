@@ -9,7 +9,7 @@ import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
-const { takePhoto, newPhoto } = usePhotoCamera();
+const { takePhoto } = usePhotoCamera();
 
 export default {
   name: "ModificationInspection",
@@ -20,7 +20,6 @@ export default {
   },
   data() {
     return {
-      newPhoto,
       takePhoto,
       readOnly: false,
       showChoosePDF: false,
