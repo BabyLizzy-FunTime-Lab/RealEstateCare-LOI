@@ -142,7 +142,8 @@ export default {
   emits: [
     'update:location', 'update:documentedMods', 'update:modDescription',
     'update:requiredAction', 'update:comments', 'update:modifiedBy',
-    'update:images', 'delete:image', 'save:data', 'cancel:updates', 'save:dataUpdates'
+    'update:images', 'delete:image', 'save:data', 'cancel:updates',
+    'save:dataUpdates'
   ]
 }
 </script>

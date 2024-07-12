@@ -51,7 +51,12 @@ export default {
                    $event.target.value)"
             :documented-mods-doc-name="inspection.documentedModsDocName"
             :documented-mods-url="inspection.documentedModsUrl"
-
+            @update:documented-mods=
+                "updateInspectionData(
+                    'modifications',
+                    inspection.id,
+                    'documentedModsFile',
+                    $event)"
             :modified-by="inspection.modifiedBy"
             @update:modified-by=
                 "updateInspectionData(

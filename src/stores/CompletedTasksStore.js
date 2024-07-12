@@ -128,15 +128,9 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                                 inspection["images"].splice(inspection["images"].indexOf(newValue), 1);
                             }
                             break;
-                        case "date":
-                            // Date must be accessed directly so it can be referenced properly.
-                            // For some reason inspectionId keep on converting to 3.
-                            targetInspection = allInspectionsOfType.find((check) => check.id === inspectionId);
-                            console.log(inspectionId);
-                            if(targetInspection) {
-                                console.log(targetInspection);
-                                targetInspection.date = newValue
-                            }
+                        case "documentedModsFile":
+                            inspection['documentedModsDocName'] = newValue.file.name;
+                            inspection['documentedModsUrl'] = newValue.url;
                             break;
                         default:
                             inspection[propertyName] = newValue;
