@@ -59,17 +59,22 @@ export default {
     },
   },
   methods: {
-    emitInputChange(data, eventName) {
-      this.$emit(eventName, data);
+    emitInputChange(eventName, data = null) {
+      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
+        this.readOnlyToggle();
+        this.$emit(eventName);
+      } else {
+        this.$emit(eventName, data);
+      }
     },
-    emitNewPDF(data, eventName) {
+    emitNewPDF(eventName, data) {
       this.convertToBase64(data.target.files[0]).then(result => {
         this.pdfUrl = result;
         const dataObject = {
           file: data.target.files[0],
           url: this.pdfUrl
         }
-        this.emitInputChange(dataObject, eventName);
+        this.emitInputChange(eventName, dataObject);
         this.showChoosePDF = false
       })
     },
@@ -105,12 +110,14 @@ export default {
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
       console.log("test")
+    },
+    takePhotoAction() {
+      takePhoto().then(newImage => {
+        this.$emit('update:images', newImage.value);
+      })
     }
   },
   watch: {
-    newPhoto() {
-      this.$emit('update:images', newPhoto.value);
-    },
     documentedModsUrl() {
       this.pdfUrl = this.documentedModsUrl;
     }
@@ -135,7 +142,8 @@ export default {
   emits: [
     'update:location', 'update:documentedMods', 'update:modDescription',
     'update:requiredAction', 'update:comments', 'update:modifiedBy',
-    'update:images', 'delete:image'
+    'update:images', 'delete:image', 'save:data', 'cancel:updates',
+    'save:dataUpdates'
   ]
 }
 </script>
@@ -157,7 +165,7 @@ export default {
     <ion-input  v-if="!documentedModsUrl || showChoosePDF"
         label="Upload PDF" label-placement="stacked"
         type="file" accept="application/pdf"
-        @change="emitNewPDF($event, 'update:documentedMods')"
+        @change="emitNewPDF('update:documentedMods', $event)"
     />
     <pdf-viewer-modal
         :pdf-url="pdfUrl" :pdf-file="documentedModsFile" :pdf-name="documentedModsDocName"
@@ -168,7 +176,7 @@ export default {
     <ion-input label="Location"
                :readonly="readOnly"
                :value="location"
-               @input="emitInputChange($event, 'update:location')"
+               @input="emitInputChange('update:location', $event)"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
@@ -176,7 +184,7 @@ export default {
   <ion-item slot="content">
     <ion-select :value="modifiedBy"
                 :disabled="readOnly"
-                @ionChange="emitInputChange($event, 'update:modifiedBy')"
+                @ionChange="emitInputChange('update:modifiedBy', $event)"
                 label="Modified by"
                 placeholder="Select">
       <ion-select-option value="tenant">Tenant</ion-select-option>
@@ -188,7 +196,7 @@ export default {
     <ion-textarea label="Mod description"
                   :readonly="readOnly"
                   :value="modDescription"
-                  @ionChange="emitInputChange($event, 'update:modDescription')"
+                  @ionChange="emitInputChange('update:modDescription', $event)"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter the mod description"></ion-textarea>
@@ -196,7 +204,7 @@ export default {
   <ion-item slot="content">
     <ion-select :value="requiredAction"
                 :disabled="readOnly"
-                @ionChange="emitInputChange($event, 'update:requiredAction')"
+                @ionChange="emitInputChange('update:requiredAction', $event)"
                 label="Required action"
                 placeholder="Select">
       <ion-select-option value="acceptance">Acceptance</ion-select-option>
@@ -210,21 +218,47 @@ export default {
     <ion-textarea label="Comments"
                   :value="comments"
                   :readonly="readOnly"
-                  @ionChange="emitInputChange($event, 'update:comments')"
+                  @ionChange="emitInputChange('update:comments', $event)"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item slot="content" v-if="images.length > 0">
-    <PhotoViewer :read-only="readOnly" :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer
+        :read-only="readOnly"
+        :photos="images"
+        @delete-event="emitInputChange('delete:image', $event)"
+    />
   </ion-item>
-  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
-  <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Cancel"
+      button-color="danger"
+      @click="emitInputChange('cancel:updates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Save Updates"
+      @click="emitInputChange('save:dataUpdates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && readOnly"
+      slot="content"
+      name="Update Information"
+      @click="readOnlyToggle"
+  />
+  <BaseButton
+      v-if="!readOnlyProp && !readOnly"
+      slot="content"
+      name="Save"
+      @click="emitInputChange('save:data')"
+  />
 </BaseAccordionLayout>
 </template>
 

@@ -1,12 +1,12 @@
 <script>
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
-import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {
   IonItem, IonInput, IonSelect, IonSelectOption, IonRadioGroup,
   IonLabel, IonRadio, IonButton,
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
+import {useInspectionStore} from "@/stores/InspectionStore.js";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
 const { takePhoto, newPhoto } = usePhotoCamera();
@@ -70,8 +70,8 @@ export default {
   },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:emergency',
-    'update:maintenanceType', 'update:costIndication', 'save:data', 'cancel:updates',
-    'save:dataUpdates'
+    'update:maintenanceType', 'update:costIndication', 'save:data',
+    'cancel:updates', 'save:dataUpdates'
   ]
 }
 </script>
