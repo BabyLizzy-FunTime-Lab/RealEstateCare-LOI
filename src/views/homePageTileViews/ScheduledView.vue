@@ -120,7 +120,7 @@ export default {
           :images="this.technicalInstallationData.images"
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
           @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
-          :save-data-request="pushTechnicalInstallationViewData"
+          @save:data="pushTechnicalInstallationViewData"
         />
         <ModificationInspection
             :location="this.modificationsData.location"
