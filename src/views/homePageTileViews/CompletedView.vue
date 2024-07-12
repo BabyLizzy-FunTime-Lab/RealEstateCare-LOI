@@ -63,8 +63,14 @@ export default {
           :inspections="backlogMaintenance"
           @cancel:updates="this.fetchAllInspections"
       />
-      <ModificationsViewer :inspections="modifications"/>
-      <TechnicalInstallationsViewer :inspections="technicalInstallations"/>
+      <ModificationsViewer
+          :inspections="modifications"
+          @cancel:updates="this.fetchAllInspections"
+      />
+      <TechnicalInstallationsViewer
+          :inspections="technicalInstallations"
+          @cancel:updates="this.fetchAllInspections"
+      />
     </base-list-layout>
   </base-layout>
 </template>

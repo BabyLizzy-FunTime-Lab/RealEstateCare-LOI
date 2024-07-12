@@ -137,23 +137,35 @@ export default {
     <ion-radio-group :value="approved"
                      @ionChange="emitInputChange('update:approved', $event)"
                      name="newDamage">
-      <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
-      <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+      <ion-radio
+          :disabled="readOnly"
+          aria-label="Yes"
+          label-placement="start"
+          justify="end"
+          value="yes">Yes</ion-radio>
+      <ion-radio
+          :disabled="readOnly"
+          aria-label="No"
+          label-placement="start"
+          justify="end"
+          value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
   <DocumentViewer slot="content" :document-info="procedure" />
   <ion-item slot="content">
-    <ion-textarea label="Comments"
-                  :value="comments"
-                  :readonly="readOnly"
-                  @ionChange="emitInputChange('update:comments', $event)"
-                  label-placement="floating"
-                  :auto-grow="true"
-                  placeholder="Enter your comments"></ion-textarea>
+    <ion-textarea
+        label="Comments"
+        :value="comments"
+        :readonly="readOnly"
+        @ionChange="emitInputChange('update:comments', $event)"
+        label-placement="floating"
+        :auto-grow="true"
+        placeholder="Enter your comments"
+    />
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
     <PhotoViewer
