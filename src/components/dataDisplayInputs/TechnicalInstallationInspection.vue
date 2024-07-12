@@ -11,7 +11,7 @@ import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
-const { takePhoto, newPhoto } = usePhotoCamera();
+const { takePhoto } = usePhotoCamera();
 
 export default {
   name: "TechnicalInstallationInspection",
@@ -30,7 +30,6 @@ export default {
           url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
         }
       },
-      newPhoto,
       takePhoto,
       readOnly: false,
     }
@@ -59,36 +58,42 @@ export default {
       type: Function
     },
   },
+  methods: {
+    emitInputChange(eventName, data = null) {
+      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
+        this.readOnlyToggle();
+        this.$emit(eventName);
+      } else {
+        this.$emit(eventName, data);
+      }
+    },
+    readOnlyToggle() {
+      this.readOnly = !this.readOnly;
+      console.log("test")
+    },
+    takePhotoAction() {
+      takePhoto().then(newImage => {
+        this.$emit('update:images', newImage.value);
+      })
+    }
+  },
   mounted() {
     this.readOnly = this.readOnlyProp;
     // Here we fetch the 'Test Procedure' pdf document.
     this.loginStore.fetchBaseDocument("Test Procedure")
         .then(document => {
-          this.procedure = document
-          }
+              this.procedure = document
+            }
         )
         .catch(error => {
-          console.log(error);
-          }
+              console.log(error);
+            }
         )
-  },
-  methods: {
-    emitInputChange(data, eventName) {
-      this.$emit(eventName, data);
-    },
-    readOnlyToggle() {
-      this.readOnly = !this.readOnly;
-      console.log("test")
-    }
-  },
-  watch: {
-    newPhoto() {
-      this.$emit('update:images', newPhoto.value);
-    }
   },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:installationType',
-    'update:clientStatement', 'update:approved', 'update:comments'
+    'update:clientStatement', 'update:approved', 'update:comments', 'save:data',
+    'cancel:updates', 'save:dataUpdates'
   ]
 }
 </script>
@@ -99,7 +104,7 @@ export default {
     <ion-input label="Location"
                :value="location"
                :readonly="readOnly"
-               @input="emitInputChange($event, 'update:location')"
+               @input="emitInputChange('update:location', $event)"
                placeholder="Input address"
                label-placement="floating"
                type="text"/>
@@ -108,7 +113,7 @@ export default {
     <ion-select label="Installation type"
                 :value="installationType"
                 :disabled="readOnly"
-                @ionChange="emitInputChange($event, 'update:installationType')"
+                @ionChange="emitInputChange('update:installationType', $event)"
                 placeholder="Select">
       <ion-select-option value="cooling">Cooling</ion-select-option>
       <ion-select-option value="heating">Heating</ion-select-option>
@@ -121,7 +126,7 @@ export default {
     <ion-textarea label="Client statement"
                   :value="clientStatement"
                   :readonly="readOnly"
-                  @ionChange="emitInputChange($event,'update:clientStatement')"
+                  @ionChange="emitInputChange('update:clientStatement', $event)"
                   label-placement="floating"
                   :auto-grow="true"
                   placeholder="Enter statement"/>
@@ -129,32 +134,70 @@ export default {
   <ion-item slot="content">
     <ion-label>Approved</ion-label>
     <ion-radio-group :value="approved"
-                     @ionChange="emitInputChange($event,'update:approved')"
+                     @ionChange="emitInputChange('update:approved', $event)"
                      name="newDamage">
-      <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
-      <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+      <ion-radio
+          :disabled="readOnly"
+          aria-label="Yes"
+          label-placement="start"
+          justify="end"
+          value="yes">Yes</ion-radio>
+      <ion-radio
+          :disabled="readOnly"
+          aria-label="No"
+          label-placement="start"
+          justify="end"
+          value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
   <DocumentViewer slot="content" :document-info="procedure" />
   <ion-item slot="content">
-    <ion-textarea label="Comments"
-                  :value="comments"
-                  :readonly="readOnly"
-                  @ionChange="emitInputChange($event,'update:comments')"
-                  label-placement="floating"
-                  :auto-grow="true"
-                  placeholder="Enter your comments"></ion-textarea>
+    <ion-textarea
+        label="Comments"
+        :value="comments"
+        :readonly="readOnly"
+        @ionChange="emitInputChange('update:comments', $event)"
+        label-placement="floating"
+        :auto-grow="true"
+        placeholder="Enter your comments"
+    />
   </ion-item>
   <ion-item slot="content" lines="none">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhoto" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
   </ion-item>
   <ion-item  slot="content" v-if="images.length > 0">
-    <PhotoViewer :read-only="readOnly" :photos="images" @delete-event="emitInputChange($event, 'delete:image')"/>
+    <PhotoViewer
+        :read-only="readOnly"
+        :photos="images"
+        @delete-event="emitInputChange('delete:image', $event)"
+    />
   </ion-item>
-  <BaseButton v-if="readOnlyProp && !readOnly" slot="content" name="Cancel" button-color="danger" @click="readOnlyToggle"/>
-  <BaseButton v-if="readOnlyProp && readOnly" slot="content" name="Update Information" @click="readOnlyToggle"/>
-  <BaseButton v-if="!readOnly" slot="content" name="Save" @click="saveDataRequest"/>
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Cancel"
+      button-color="danger"
+      @click="emitInputChange('cancel:updates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      slot="content"
+      name="Save Updates"
+      @click="emitInputChange('save:dataUpdates')"
+  />
+  <BaseButton
+      v-if="readOnlyProp && readOnly"
+      slot="content"
+      name="Update Information"
+      @click="readOnlyToggle"
+  />
+  <BaseButton
+      v-if="!readOnlyProp && !readOnly"
+      slot="content"
+      name="Save"
+      @click="emitInputChange('save:data')"
+  />
 </BaseAccordionLayout>
 </template>
 

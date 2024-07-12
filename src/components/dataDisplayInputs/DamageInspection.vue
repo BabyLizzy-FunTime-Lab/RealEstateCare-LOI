@@ -1,28 +1,29 @@
 <script>
 import {
-  IonItem, IonLabel, IonInput, IonTextarea, IonDatetime, IonDatetimeButton, IonModal,
-  IonRadioGroup, IonRadio, IonSelect, IonSelectOption, IonButton
+  IonItem, IonLabel, IonInput, IonTextarea, IonRadioGroup,
+  IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
+import VueDatePicker from '@vuepic/vue-datepicker';
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { modalController } from "@ionic/vue";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
-const { takePhoto, newPhoto } = usePhotoCamera();
+const { takePhoto } = usePhotoCamera();
 
 export default {
   name: "DamageInspection",
   components: {
-    IonButton, BaseAccordionLayout, IonLabel, IonInput, IonItem, IonTextarea,
-    IonDatetime, IonDatetimeButton, IonModal, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton, PhotoViewer
+    IonButton, BaseAccordionLayout, IonLabel, IonInput,
+    IonItem, IonTextarea, IonRadioGroup, IonRadio, IonSelect,
+    IonSelectOption, BaseButton, PhotoViewer, VueDatePicker
   },
   data() {
     return {
-      newPhoto,
       takePhoto,
       readOnly: false,
+      dateSelected: null
     }
   },
   props: {
@@ -36,7 +37,7 @@ export default {
     },
     location: String,
     newDamage: String,
-    date: String,
+    date: null,
     selectedDamageTypeOption: String,
     damageType: String,
     emergency: String,
@@ -73,6 +74,18 @@ export default {
       takePhoto().then(newImage => {
         this.$emit('update:images', newImage.value);
       })
+    },
+    saveAndResetDatePicker() {
+      this.dateSelected = null;
+      this.emitInputChange('save:data');
+    },
+    updateDataAndResetDatePicker() {
+      this.dateSelected = null;
+      this.emitInputChange('save:dataUpdates');
+    },
+    cancelUpdatesAndResetDatePicker() {
+      this.dateSelected = null;
+      this.emitInputChange('cancel:updates');
     }
   },
   mounted() {
@@ -86,9 +99,12 @@ export default {
         return "inset"
       }
     },
-    dateOnly() {
+    dateFilter() {
       return  this.date.split('T')[0];
     }
+  },
+  watch: {
+
   },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
@@ -110,20 +126,17 @@ export default {
                label-placement="floating"
                type="text"/>
   </ion-item>
-  <ion-item slot="content" lines="inset">
-    <ion-input label="Date" :readonly="readOnly" :value="dateOnly" v-if="readOnly" type="text" label-placement="floating"/>
-    <ion-label v-if="!readOnly">Date</ion-label>
-    <ion-datetime-button aria-label="Date" presentation="date" datetime="date" :disabled="readOnly" v-if="!readOnly"/>
-    <ion-modal :keep-contents-mounted="true">
-      <ion-datetime :value="date"
-                    @ionChange="emitInputChange('update:date', $event)"
-                    displayFormat="MMM D, YYYY"
-                    pickerFormat="MMM D YYYY"
-                    presentation="date"
-                    id="date"
-      />
-      <ion-button @click="dismissModal" >OK</ion-button>
-    </ion-modal>
+  <ion-item slot="content">
+    <ion-input label="Date" v-if="readOnly" :readonly="!readOnly" :value="dateFilter" type="text" label-placement="floating"/>
+    <ion-label v-if="!readOnly" label-placement="floating">Date</ion-label>
+    <VueDatePicker
+        placeholder="Click to pick a date."
+        v-model="dateSelected"
+        utc
+        v-if="!readOnly"
+        :teleport="true"
+        @update:model-value="emitInputChange('update:date', dateSelected)"
+    />
   </ion-item>
   <ion-item slot="content" :lines="damageTypeBorder">
     <ion-select :value="selectedDamageTypeOption"
@@ -193,13 +206,13 @@ export default {
       slot="content"
       name="Cancel"
       button-color="danger"
-      @click="emitInputChange('cancel:updates')"
+      @click="cancelUpdatesAndResetDatePicker"
   />
   <BaseButton
       v-if="readOnlyProp && !readOnly"
       slot="content"
       name="Save Updates"
-      @click="emitInputChange('save:dataUpdates')"
+      @click="updateDataAndResetDatePicker"
   />
   <BaseButton
       v-if="readOnlyProp && readOnly"
@@ -211,7 +224,7 @@ export default {
       v-if="!readOnlyProp && !readOnly"
       slot="content"
       name="Save"
-      @click="emitInputChange('save:data')"
+      @click="saveAndResetDatePicker"
   />
 </base-accordion-layout>
 </template>
@@ -223,4 +236,5 @@ export default {
 .custom-placeholder {
   text-align: right;
 }
+
 </style>

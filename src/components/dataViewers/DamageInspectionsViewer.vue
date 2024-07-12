@@ -18,6 +18,8 @@ export default {
   methods: {
     updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
       // This calls for a state update with the new value.
+      console.log(inspectionId);
+      console.log(newValue);
       this.completedActionStore.updateInspectionData(inspectionType, inspectionId, propertyName, newValue)
     },
     pushChangesToDb(inspectionId) {
@@ -43,12 +45,11 @@ export default {
             :inspection-id="inspection.id"
             :header-name="inspection.location"
             :location="inspection.location"
-            @update:location=
-                "updateInspectionData(
-                    'damageInspections',
-                    inspection.id,
-                    'location',
-                    $event.target.value)"
+            @update:location="updateInspectionData(
+                'damageInspections',
+                inspection.id,
+                'location',
+                $event.target.value)"
             :new-damage="inspection.newDamage"
             @update:new-damage=
                 "updateInspectionData(
@@ -56,13 +57,13 @@ export default {
                     inspection.id,
                     'newDamage',
                     $event.target.value)"
+
             :date="inspection.date"
             @update:date=
                 "updateInspectionData(
-                    'damageInspections',
-                    inspection.id,
+                    'damageInspections', inspection.id,
                     'date',
-                    $event.target.value)"
+                    $event)"
             :selected-damage-type-option="inspection.selectedDamageTypeOption"
             @update:selected-damage-type-option=
                 "updateInspectionData(

@@ -3,11 +3,10 @@ import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
-import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
 
 export default {
   name: "BacklogMaintenanceViewer",
-  components: {DamageInspection, IonAccordionGroup, BaseAccordionLayout, BacklogMaintenance},
+  components: {IonAccordionGroup, BaseAccordionLayout, BacklogMaintenance},
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),

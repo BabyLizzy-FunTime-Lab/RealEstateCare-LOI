@@ -49,8 +49,8 @@ export default {
 
 <template>
   <base-layout>
-    <ion-fab slot="fixed" vertical="bottom" horizontal="center">
-      <ion-fab-button color="primary">
+    <ion-fab slot="fixed" vertical="top" horizontal="center" edge>
+      <ion-fab-button color="secondary" size="small">
         <ion-icon @click="this.fetchAllInspections" :icon="sync"></ion-icon>
       </ion-fab-button>
     </ion-fab>
@@ -63,14 +63,20 @@ export default {
           :inspections="backlogMaintenance"
           @cancel:updates="this.fetchAllInspections"
       />
-      <ModificationsViewer :inspections="modifications"/>
-      <TechnicalInstallationsViewer :inspections="technicalInstallations"/>
+      <ModificationsViewer
+          :inspections="modifications"
+          @cancel:updates="this.fetchAllInspections"
+      />
+      <TechnicalInstallationsViewer
+          :inspections="technicalInstallations"
+          @cancel:updates="this.fetchAllInspections"
+      />
     </base-list-layout>
   </base-layout>
 </template>
 
 <style scoped lang="scss">
-ion-fab {
-  margin-bottom: var(--ion-safe-area-bottom, 0);
+ion-fab-button {
+  --border-radius: 15px;
 }
 </style>
