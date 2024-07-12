@@ -11,7 +11,7 @@ import {useInspectionStore} from "@/stores/InspectionStore.js";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
-const { takePhoto, newPhoto } = usePhotoCamera();
+const { takePhoto } = usePhotoCamera();
 
 export default {
   name: "TechnicalInstallationInspection",
@@ -30,7 +30,6 @@ export default {
           url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
         }
       },
-      newPhoto,
       takePhoto,
       readOnly: false,
     }

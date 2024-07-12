@@ -9,7 +9,7 @@ import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
-const { takePhoto, newPhoto } = usePhotoCamera();
+const { takePhoto } = usePhotoCamera();
 
 export default {
   name: "BacklogMaintenance",
@@ -20,7 +20,6 @@ export default {
   data() {
     return {
       inspectionStore: useInspectionStore(),
-      newPhoto,
       takePhoto,
       readOnly: false
     }

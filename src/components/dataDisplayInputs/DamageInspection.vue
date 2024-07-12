@@ -10,7 +10,7 @@ import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
 import { modalController } from "@ionic/vue";
 import { usePhotoCamera } from '@/services/usePhotoCamera.js';
 
-const { takePhoto, newPhoto } = usePhotoCamera();
+const { takePhoto } = usePhotoCamera();
 
 export default {
   name: "DamageInspection",
@@ -21,7 +21,6 @@ export default {
   },
   data() {
     return {
-      newPhoto,
       takePhoto,
       readOnly: false,
       dateSelected: null
