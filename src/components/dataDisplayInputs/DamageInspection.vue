@@ -29,7 +29,7 @@ export default {
   props: {
     headerName: {
       type: String,
-      default: "Damage Inspection"
+      default: "Damage Inspections"
     },
     inspectionId: {
       type: String,
@@ -102,9 +102,6 @@ export default {
     dateFilter() {
       return  this.date.split('T')[0];
     }
-  },
-  watch: {
-
   },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
