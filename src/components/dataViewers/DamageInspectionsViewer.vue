@@ -24,8 +24,13 @@ export default {
     },
     pushChangesToDb(inspectionId) {
       // This triggers a push of the data object with the inspection id.
-      // this.completedActionStore.pushUpdatedDamageInspection(inspectionId);
       this.completedActionStore.pushUpdatedData(inspectionId, "damageInspections");
+    }
+  },
+  watch: {
+    inspections(data) {
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      console.log(data);
     }
   },
   emits: [
@@ -43,7 +48,7 @@ export default {
             :key="inspection.id"
             :read-only-prop="true"
             :inspection-id="inspection.id"
-            :header-name="inspection.location"
+            :header-name="inspection.date"
             :location="inspection.location"
             @update:location="updateInspectionData(
                 'damageInspections',

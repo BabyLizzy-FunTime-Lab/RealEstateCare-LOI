@@ -28,8 +28,7 @@ export default {
   },
   props: {
     headerName: {
-      type: String,
-      default: "Damage Inspection"
+      default: "Damage Inspections"
     },
     inspectionId: {
       type: String,
@@ -100,11 +99,15 @@ export default {
       }
     },
     dateFilter() {
-      return  this.date.split('T')[0];
+      return this.date.split('T')[0];
+    },
+    headerNameFilter() {
+      if(this.headerName !== "Damage Inspections") {
+        return this.headerName.split('T')[0];
+      } else {
+        return this.headerName;
+      }
     }
-  },
-  watch: {
-
   },
   emits: [
       'update:location', 'update:newDamage', 'update:date',
@@ -116,7 +119,7 @@ export default {
 </script>
 
 <template>
-  <base-accordion-layout :header-name="headerName" :inspection-id="inspectionId">
+  <base-accordion-layout :header-name="headerNameFilter" :inspection-id="inspectionId">
   <ion-item slot="content">
     <ion-input label="Location"
                :readonly="readOnly"
