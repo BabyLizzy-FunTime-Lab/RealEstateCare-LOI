@@ -49,11 +49,13 @@ export default {
 
 <template>
   <base-layout>
-    <ion-fab slot="fixed" vertical="top" horizontal="center" edge>
-      <ion-fab-button color="secondary" size="small">
-        <ion-icon @click="this.fetchAllInspections" :icon="sync"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+    <div class="reload--container">
+      <ion-fab slot="fixed" vertical="top" horizontal="center">
+        <ion-fab-button color="secondary" size="small">
+          <ion-icon @click="this.fetchAllInspections" :icon="sync"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
     <base-list-layout list-header-name="Completed Tasks">
       <DamageInspectionsViewer
           :inspections="damageInspections"
@@ -76,6 +78,9 @@ export default {
 </template>
 
 <style scoped lang="scss">
+.reload--container {
+  height: 6em;
+}
 ion-fab-button {
   --border-radius: 15px;
 }
