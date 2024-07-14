@@ -1,16 +1,18 @@
 import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
-import axios from "axios";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {dataBase} from "@/services/dataBase.js";
 
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
-const {pushUpdatesToDataBase} = dataBase()
-
-// Default variables
-const baseDbUrl = loginStore.fetchBaseDbUrl();
+const {
+    pushUpdatesToDataBase,
+    fetchDamageInspections,
+    fetchBacklogMaintenance,
+    fetchModifications,
+    fetchTechnicalInstallations
+} = dataBase();
 
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
@@ -28,7 +30,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 loginStore.setLoadingStatus(true);
                 try {
                     let damageInspectionsPromise = new Promise((resolve, reject) => {
-                        let result = this.fetchDamageInspections(user_id);
+                        let result = fetchDamageInspections(user_id);
                         if (result) {
                             resolve(result);
                         } else {
@@ -36,7 +38,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                         }
                     });
                     let backlogMaintenancePromise = new Promise((resolve, reject) => {
-                        let result = this.fetchBacklogMaintenance(user_id);
+                        let result = fetchBacklogMaintenance(user_id);
                         if (result) {
                             resolve(result);
                         } else {
@@ -44,7 +46,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                         }
                     });
                     let modificationsPromise = new Promise((resolve, reject) => {
-                        let result = this.fetchModifications(user_id);
+                        let result = fetchModifications(user_id);
                         if (result) {
                             resolve(result);
                         } else {
@@ -52,7 +54,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                         }
                     });
                     let technicalInstallationsPromise = new Promise((resolve, reject) => {
-                        let result = this.fetchTechnicalInstallations(user_id);
+                        let result = fetchTechnicalInstallations(user_id);
                         if (result) {
                             resolve(result);
                         } else {
@@ -87,34 +89,9 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 }
             }
         },
-        fetchDamageInspections(user_id) {
-            return axios.get(baseDbUrl + "/damage_inspection?inspectorId=" + user_id)
-                .then(result => {
-                    return result.data
-                }).catch(err => console.log(err));
-        },
-        fetchBacklogMaintenance(user_id) {
-            return axios.get(baseDbUrl + "/backlog_maintenance?inspectorId=" + user_id)
-                .then(result => {
-                    return result.data
-                }).catch(err => console.log(err));
-        },
-        fetchModifications(user_id) {
-            return axios.get(baseDbUrl + "/modifications?inspectorId=" + user_id)
-                .then(result => {
-                    return result.data
-                }).catch(err => console.log(err));
-        },
-        fetchTechnicalInstallations(user_id) {
-            return axios.get(baseDbUrl + "/technical_installation_inspection?inspectorId=" + user_id)
-                .then(result => {
-                    return result.data
-                }).catch(err => console.log(err));
-        },
         updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
             // This is needed to update the state.
             let allInspectionsOfType = this.getAllInspections[inspectionType];
-            let targetInspection = null;
             allInspectionsOfType.forEach(inspection => {
                 // If propertyName is image we push the new image
                 if(inspection.id === inspectionId) {
