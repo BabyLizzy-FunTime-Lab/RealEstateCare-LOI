@@ -187,6 +187,8 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
+        // Now we need one push action that brings the data together and pushes it to the db.
+        // Here we bring the data together and pass it to the uploadToDataBase method.
         pushDamageInspectionViewData() {
             // Start loading bar.
             loginStore.setLoadingStatus(true);

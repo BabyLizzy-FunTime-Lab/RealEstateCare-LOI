@@ -71,6 +71,7 @@ export default {
 <template>
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
+<!--      Here we need a safe button that triggers the push-->
       <ion-accordion-group :multiple="true">
         <DamageInspection
             :location="this.damageInspectionData.location"

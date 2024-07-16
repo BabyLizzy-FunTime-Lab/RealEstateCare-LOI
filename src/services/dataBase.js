@@ -8,6 +8,17 @@ const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 export const dataBase = () => {
     /**
+     * Fetches all inspections for the current user.
+     * @param user_id
+     * @returns {Promise<axios.AxiosResponse<any> | void>}
+     */
+    const fetchAllInspections = async (user_id) => {
+        return axios.get( baseDbUrl + "/inspections?inspectorId=" + user_id)
+            .then(result => {
+                return result.data;
+            }).catch(err => console.log(err));
+    }
+    /**
      * Fetches all inspections of type damage inspections.
      * @param user_id
      * @returns {Promise<axios.AxiosResponse<any> | void>}
@@ -167,6 +178,7 @@ export const dataBase = () => {
     return {
         uploadToDataBase,
         pushUpdatesToDataBase,
+        fetchAllInspections,
         fetchDamageInspections,
         fetchBacklogMaintenance,
         fetchModifications,
