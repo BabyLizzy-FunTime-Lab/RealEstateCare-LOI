@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import axios from "axios";
 
 // Default variables.
-const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com/";
+const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
 // A fetch is needed to get general app information like basic URL and the knowledge base.
 

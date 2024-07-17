@@ -252,12 +252,12 @@ export default {
       name="Update Information"
       @click="readOnlyToggle"
   />
-  <BaseButton
-      v-if="!readOnlyProp && !readOnly"
-      slot="content"
-      name="Save"
-      @click="emitInputChange('save:data')"
-  />
+<!--  <BaseButton-->
+<!--      v-if="!readOnlyProp && !readOnly"-->
+<!--      slot="content"-->
+<!--      name="Save"-->
+<!--      @click="emitInputChange('save:data')"-->
+<!--  />-->
 </BaseAccordionLayout>
 </template>
 

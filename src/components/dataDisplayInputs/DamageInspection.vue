@@ -223,12 +223,12 @@ export default {
       name="Update Information"
       @click="readOnlyToggle"
   />
-  <BaseButton
-      v-if="!readOnlyProp && !readOnly"
-      slot="content"
-      name="Save"
-      @click="saveAndResetDatePicker"
-  />
+<!--  <BaseButton-->
+<!--      v-if="!readOnlyProp && !readOnly"-->
+<!--      slot="content"-->
+<!--      name="Save"-->
+<!--      @click="saveAndResetDatePicker"-->
+<!--  />-->
 </base-accordion-layout>
 </template>
 

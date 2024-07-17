@@ -1,6 +1,7 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import baseListLayout from "@/components/base/BaseListLayout.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
 import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
 import TechnicalInstallationInspection from "@/components/dataDisplayInputs/TechnicalInstallationInspection.vue";
@@ -9,8 +10,10 @@ import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
-  components: {baseListLayout, IonAccordionGroup, DamageInspection,
-    BacklogMaintenance, TechnicalInstallationInspection, ModificationInspection},
+  components: {
+    baseListLayout, IonAccordionGroup, DamageInspection, BacklogMaintenance,
+    TechnicalInstallationInspection, ModificationInspection, BaseButton
+  },
   data() {
     return {
       inspectionStore: useInspectionStore(),
@@ -31,17 +34,21 @@ export default {
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {
-    pushDamageInspectionViewData() {
-      this.inspectionStore.pushDamageInspectionViewData();
-    },
-    pushBacklogMaintenanceViewData() {
-      this.inspectionStore.pushBacklogMaintenanceViewData();
-    },
-    pushTechnicalInstallationViewData() {
-      this.inspectionStore.pushTechnicalInstallationViewData();
-    },
-    pushModificationsViewData() {
-      this.inspectionStore.pushModificationsViewData();
+    // pushDamageInspectionViewData() {
+    //   this.inspectionStore.pushDamageInspectionViewData();
+    // },
+    // pushBacklogMaintenanceViewData() {
+    //   this.inspectionStore.pushBacklogMaintenanceViewData();
+    // },
+    // pushTechnicalInstallationViewData() {
+    //   this.inspectionStore.pushTechnicalInstallationViewData();
+    // },
+    // pushModificationsViewData() {
+    //   this.inspectionStore.pushModificationsViewData();
+    // },
+    pushInspectionViewData() {
+      console.log("starting data push.");
+
     },
     updateDamageInspectionViewData($event, inputName) {
       // Am I being too redundant here?
@@ -71,7 +78,7 @@ export default {
 <template>
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
-<!--      Here we need a safe button that triggers the push-->
+      <BaseButton name="Save" @click="pushInspectionViewData"/>
       <ion-accordion-group :multiple="true">
         <DamageInspection
             :location="this.damageInspectionData.location"
@@ -91,7 +98,6 @@ export default {
             :images="this.damageInspectionData.images"
             @update:images="this.updateDamageInspectionViewData($event,'takePhoto')"
             @delete:image="this.updateDamageInspectionViewData($event,'deletePhoto')"
-            @save:data="pushDamageInspectionViewData"
         />
         <BacklogMaintenance
           :location="this.backlogMaintenanceData.location"
@@ -105,7 +111,6 @@ export default {
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
-          @save:data="pushBacklogMaintenanceViewData"
         />
         <TechnicalInstallationInspection
           :location="this.technicalInstallationData.location"
@@ -121,7 +126,6 @@ export default {
           :images="this.technicalInstallationData.images"
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
           @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
-          @save:data="pushTechnicalInstallationViewData"
         />
         <ModificationInspection
             :location="this.modificationsData.location"
@@ -141,7 +145,6 @@ export default {
             :images="this.modificationsData.images"
             @update:images="this.updateModificationsViewData($event, 'takePhoto')"
             @delete:image="this.updateModificationsViewData($event, 'deletePhoto')"
-            @save:data="pushModificationsViewData"
         />
       </ion-accordion-group>
     </base-list-layout>
