@@ -93,16 +93,10 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         updateDateViewData(newData) {
-            // let date = this.getDate;
-            console.log(newData)
             this.getBasicInspectionViewData.date = newData;
-            console.log(this.getBasicInspectionViewData.date)
         },
         updateAddressViewData(newData) {
-            // let address = this.getAddress;
-            console.log(newData.target.value)
             this.getBasicInspectionViewData.address = newData.target.value;
-            console.log(this.getBasicInspectionViewData.address)
         },
         updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
