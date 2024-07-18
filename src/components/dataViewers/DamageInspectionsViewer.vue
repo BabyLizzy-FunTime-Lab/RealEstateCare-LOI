@@ -1,7 +1,7 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
-import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
+import DamageInspection from "@/components/dataDisplayInputs/InspectionComponentDamage.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
 
 export default {

@@ -2,25 +2,30 @@ export default {
     methods: {
         /**
          * Used to clear the viewData after it's been pushed to the database.
-         * @param {object} viewData
+         * @param {string} date
+         * @param {array} viewDataAll
          * @return {void}
          */
-        clearViewData(viewData) {
+        clearViewData(viewDataAll) {
             const defaultValues = {
                 images: [],
-                date: new Date().toISOString(),
                 documentedModsFile: null,
+                date: null,
+                resetDate: true,
+                inspectionId: null,
                 documentedModsDocName: null,
                 documentedModsUrl: null,
             };
+            viewDataAll.forEach(viewData => {
+                Object.keys(viewData).forEach(key => {
+                    if (key in defaultValues) {
+                        viewData[key] = defaultValues[key];
+                    } else {
+                        viewData[key] = "";
+                    }
+                });
+            })
 
-            Object.keys(viewData).forEach(key => {
-                if (key in defaultValues) {
-                    viewData[key] = defaultValues[key];
-                } else {
-                    viewData[key] = "";
-                }
-            });
         }
     }
 }

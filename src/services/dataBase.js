@@ -105,34 +105,38 @@ export const dataBase = () => {
         return base64Array;
     }
     /**
-     * Upload parsed data to the JSON server.
-     * Inspection types are: damage_inspection, backlog_maintenance, technical_installation_inspection, modifications
-     * @param {object} sendData
-     * @param {object || string} viewData
-     * @param {string} inspectionType
-     * @returns status
+     * Check if data has images and starts the base64 conversion if images are found.
+     * @param sendData
+     * @param imageType
+     * @returns {Promise<void>}
      */
-    const uploadToDataBase = async (
-        sendData,
-        inspectionType,
-        viewData = "Needed if sendData != viewData"
-    ) => {
-        // If there are images in the data, they must be converted to base64.
-        let returnCode = "error";
-        if(sendData.images.length > 0) {
+    const processImages = async (sendData, imageType) => {
+        if(sendData[imageType].images.length > 0) {
             try {
-                await convertImageArray(sendData.images).then(base64Array => {
-                    sendData.images = base64Array;
+                await convertImageArray(sendData[imageType].images).then(base64Array => {
+                    sendData[imageType].images = base64Array;
                 })
             } catch (err) {
                 console.error('Error converting images: ', err);
-                // throw err;
-                returnCode = "error converting data";
-                return returnCode;
             }
         }
+    }
+    /**
+     * Pushes the new inspection data to the database.
+     * @param sendData
+     * @returns {Promise<number|string>}
+     */
+    const pushInspectionToDataBase = async (sendData) => {
+        let returnCode = "error";
+        // Process images.
+        await processImages(sendData, "damage_inspection");
+        await processImages(sendData, "backlog_maintenance");
+        await processImages(sendData, "technical_installation_inspection");
+        await processImages(sendData, "modifications");
+
+        // Push data.
         try {
-            const result = await axios.post(`${baseDbUrl}/${inspectionType}`, sendData);
+            const result = await axios.post(`${baseDbUrl}/inspections`, sendData);
             console.log('Data uploaded: ', result);
             console.log(result.status);
             returnCode = result.status;
@@ -142,11 +146,7 @@ export const dataBase = () => {
             returnCode = "error pushing data";
             return returnCode;
         }
-        if(returnCode === 201 && typeof viewData != "string" ) {
-            clearViewData.methods.clearViewData(viewData);
-        } else if(returnCode === 201) {
-            clearViewData.methods.clearViewData(sendData);
-        }
+
         return returnCode;
     }
     /**
@@ -176,8 +176,8 @@ export const dataBase = () => {
     }
 }
     return {
-        uploadToDataBase,
         pushUpdatesToDataBase,
+        pushInspectionToDataBase,
         fetchAllInspections,
         fetchDamageInspections,
         fetchBacklogMaintenance,

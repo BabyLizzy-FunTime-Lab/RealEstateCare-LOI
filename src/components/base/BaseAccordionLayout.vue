@@ -34,4 +34,5 @@ export default {
   border-left: 2px solid var(--ion-color-secondary);
   box-sizing: border-box;
 }
+
 </style>

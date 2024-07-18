@@ -1,22 +1,25 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import baseListLayout from "@/components/base/BaseListLayout.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
-import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
-import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
-import TechnicalInstallationInspection from "@/components/dataDisplayInputs/TechnicalInstallationInspection.vue";
-import ModificationInspection from "@/components/dataDisplayInputs/ModificationInspection.vue";
+import DamageInspection from "@/components/dataDisplayInputs/InspectionComponentDamage.vue";
+import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
+import TechnicalInstallationInspection from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
+import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
+import AddressDate from "@/components/dataDisplayInputs/InspectionComponentAddressDate.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
   components: {
     baseListLayout, IonAccordionGroup, DamageInspection, BacklogMaintenance,
-    TechnicalInstallationInspection, ModificationInspection, BaseButton
+    TechnicalInstallationInspection, ModificationInspection, AddressDate
   },
   data() {
     return {
       inspectionStore: useInspectionStore(),
+      date: null,
+      address: null,
+      basicInspectionData: Object,
       damageInspectionData: Object,
       backlogMaintenanceData: Object,
       technicalInstallationData: Object,
@@ -28,27 +31,16 @@ export default {
     }
   },
   mounted() {
+    this.basicInspectionData = this.inspectionStore.getBasicInspectionViewData;
     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
     this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
     this.technicalInstallationData = this.inspectionStore.getTechnicalInstallationViewData;
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {
-    // pushDamageInspectionViewData() {
-    //   this.inspectionStore.pushDamageInspectionViewData();
-    // },
-    // pushBacklogMaintenanceViewData() {
-    //   this.inspectionStore.pushBacklogMaintenanceViewData();
-    // },
-    // pushTechnicalInstallationViewData() {
-    //   this.inspectionStore.pushTechnicalInstallationViewData();
-    // },
-    // pushModificationsViewData() {
-    //   this.inspectionStore.pushModificationsViewData();
-    // },
     pushInspectionViewData() {
       console.log("starting data push.");
-
+      this.inspectionStore.pushInspectionViewData();
     },
     updateDamageInspectionViewData($event, inputName) {
       // Am I being too redundant here?
@@ -70,6 +62,13 @@ export default {
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateModificationsViewData($event, inputName);
       console.log("Requesting finished");
+    },
+    updateAddress($event) {
+      this.inspectionStore.updateAddressViewData($event);
+    },
+    updateDate($event) {
+      console.log($event);
+      this.inspectionStore.updateDateViewData($event);
     }
   }
 }
@@ -78,15 +77,20 @@ export default {
 <template>
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
-      <BaseButton name="Save" @click="pushInspectionViewData"/>
+      <AddressDate
+          :address="this.basicInspectionData.address"
+          @update:address="updateAddress($event)"
+          :date="this.basicInspectionData.date"
+          :reset-date="this.basicInspectionData.resetDate"
+          @update:date="updateDate($event)"
+          @save:data="pushInspectionViewData"
+      />
       <ion-accordion-group :multiple="true">
         <DamageInspection
             :location="this.damageInspectionData.location"
             @update:location="updateDamageInspectionViewData($event, 'location')"
             :new-damage="this.damageInspectionData.newDamage"
             @update:new-damage="updateDamageInspectionViewData($event, 'newDamage')"
-            :date="this.damageInspectionData.date"
-            @update:date="updateDamageInspectionViewData($event, 'date')"
             :selected-damage-type-option="this.damageInspectionData.selectedDamageTypeOption"
             @update:selected-damage-type-option="updateDamageInspectionViewData($event, 'selectedDamageTypeOption')"
             :damage-type="this.damageInspectionData.damageType"

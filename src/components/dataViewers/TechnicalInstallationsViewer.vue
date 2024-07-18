@@ -1,9 +1,9 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
-import TechnicalInstallationInspection from "@/components/dataDisplayInputs/TechnicalInstallationInspection.vue";
+import TechnicalInstallationInspection from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
-import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
+import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
 
 export default {
   name: "TechnicalInstallationsViewer",

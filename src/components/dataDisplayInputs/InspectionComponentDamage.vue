@@ -3,7 +3,6 @@ import {
   IonItem, IonLabel, IonInput, IonTextarea, IonRadioGroup,
   IonRadio, IonSelect, IonSelectOption, IonButton
 } from "@ionic/vue";
-import VueDatePicker from '@vuepic/vue-datepicker';
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import PhotoViewer from "@/components/mediaViewers/PhotoViewer.vue";
@@ -17,7 +16,7 @@ export default {
   components: {
     IonButton, BaseAccordionLayout, IonLabel, IonInput,
     IonItem, IonTextarea, IonRadioGroup, IonRadio, IonSelect,
-    IonSelectOption, BaseButton, PhotoViewer, VueDatePicker
+    IonSelectOption, BaseButton, PhotoViewer
   },
   data() {
     return {
@@ -28,7 +27,7 @@ export default {
   },
   props: {
     headerName: {
-      default: "Damage Inspections"
+      default: "Damage Inspection"
     },
     inspectionId: {
       type: String,
@@ -74,10 +73,6 @@ export default {
         this.$emit('update:images', newImage.value);
       })
     },
-    saveAndResetDatePicker() {
-      this.dateSelected = null;
-      this.emitInputChange('save:data');
-    },
     updateDataAndResetDatePicker() {
       this.dateSelected = null;
       this.emitInputChange('save:dataUpdates');
@@ -97,9 +92,6 @@ export default {
       } else {
         return "inset"
       }
-    },
-    dateFilter() {
-      return this.date.split('T')[0];
     },
     headerNameFilter() {
       if(this.headerName !== "Damage Inspections") {
@@ -121,24 +113,14 @@ export default {
 <template>
   <base-accordion-layout :header-name="headerNameFilter" :inspection-id="inspectionId">
   <ion-item slot="content">
-    <ion-input label="Location"
-               :readonly="readOnly"
-               :value="location"
-               @input="emitInputChange('update:location', $event)"
-               placeholder="Input address"
-               label-placement="floating"
-               type="text"/>
-  </ion-item>
-  <ion-item slot="content">
-    <ion-input label="Date" v-if="readOnly" :readonly="!readOnly" :value="dateFilter" type="text" label-placement="floating"/>
-    <ion-label v-if="!readOnly" label-placement="floating">Date</ion-label>
-    <VueDatePicker
-        placeholder="Click to pick a date."
-        v-model="dateSelected"
-        utc
-        v-if="!readOnly"
-        :teleport="true"
-        @update:model-value="emitInputChange('update:date', dateSelected)"
+    <ion-input
+        label="Location"
+        :readonly="readOnly"
+        :value="location"
+        @input="emitInputChange('update:location', $event)"
+        placeholder="Input address"
+        label-placement="floating"
+        type="text"
     />
   </ion-item>
   <ion-item slot="content" :lines="damageTypeBorder">
