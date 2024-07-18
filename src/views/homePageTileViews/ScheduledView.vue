@@ -5,14 +5,14 @@ import DamageInspection from "@/components/dataDisplayInputs/InspectionComponent
 import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
 import TechnicalInstallationInspection from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
 import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
-import AddressDate from "@/components/dataDisplayInputs/InspectionComponentAddressDate.vue";
+import BasicInfomation from "@/components/dataDisplayInputs/InspectionComponentBasicInformation.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
   components: {
     baseListLayout, IonAccordionGroup, DamageInspection, BacklogMaintenance,
-    TechnicalInstallationInspection, ModificationInspection, AddressDate
+    TechnicalInstallationInspection, ModificationInspection, BasicInfomation
   },
   data() {
     return {
@@ -77,15 +77,15 @@ export default {
 <template>
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
-      <AddressDate
-          :address="this.basicInspectionData.address"
-          @update:address="updateAddress($event)"
-          :date="this.basicInspectionData.date"
-          :reset-date="this.basicInspectionData.resetDate"
-          @update:date="updateDate($event)"
-          @save:data="pushInspectionViewData"
-      />
       <ion-accordion-group :multiple="true">
+        <BasicInfomation
+            :address="this.basicInspectionData.address"
+            @update:address="updateAddress($event)"
+            :date="this.basicInspectionData.date"
+            :reset-date="this.basicInspectionData.resetDate"
+            @update:date="updateDate($event)"
+            @save:data="pushInspectionViewData"
+        />
         <DamageInspection
             :location="this.damageInspectionData.location"
             @update:location="updateDamageInspectionViewData($event, 'location')"

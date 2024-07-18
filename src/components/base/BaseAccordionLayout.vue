@@ -5,6 +5,7 @@ export default {
   name: "BaseAccordionLayout",
   components: {IonInput, IonItem, IonLabel, IonAccordion},
   props: {
+    valueGiven: null,
     headerName: String,
     inspectionId: String,
     colorStyle: {
@@ -16,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <ion-accordion>
+  <ion-accordion :value="valueGiven">
     <ion-item class="custom-list-header" slot="header" :color="colorStyle">
       <ion-label slot="start">{{ headerName }}</ion-label>
     </ion-item>
@@ -34,5 +35,4 @@ export default {
   border-left: 2px solid var(--ion-color-secondary);
   box-sizing: border-box;
 }
-
 </style>

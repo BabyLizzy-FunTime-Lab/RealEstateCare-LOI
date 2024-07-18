@@ -175,17 +175,23 @@ export default {
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
-  <ion-item slot="content" lines="none">
+  <ion-item slot="content" lines="none" class="last--item">
     <ion-label>Photos</ion-label>
     <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
-  </ion-item>
-  <ion-item  slot="content" v-if="images.length > 0">
     <PhotoViewer
+        v-if="images.length > 0"
         :read-only="readOnly"
         :photos="images"
         @delete-event="emitInputChange('delete:image', $event)"
     />
   </ion-item>
+<!--  <ion-item  slot="content" v-if="images.length > 0" >-->
+<!--    <PhotoViewer-->
+<!--        :read-only="readOnly"-->
+<!--        :photos="images"-->
+<!--        @delete-event="emitInputChange('delete:image', $event)"-->
+<!--    />-->
+<!--  </ion-item>-->
   <BaseButton
       v-if="readOnlyProp && !readOnly"
       slot="content"
@@ -221,5 +227,7 @@ export default {
 .custom-placeholder {
   text-align: right;
 }
-
+.last--item {
+  padding-bottom: 1em;
+}
 </style>
