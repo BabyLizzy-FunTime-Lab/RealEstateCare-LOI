@@ -23,7 +23,7 @@ export const useInspectionStore = defineStore('inspections', {
                 inspectionId: null,
                 date: null,
                 resetDate: false,
-                address: "",
+                address: null,
             },
             damageInspectionViewData: {
                 location: "",
@@ -209,35 +209,43 @@ export const useInspectionStore = defineStore('inspections', {
                 "technical_installation_inspection": this.getTechnicalInstallationViewData,
                 "modifications": readyToSendModificationsData
             }
-            pushInspectionToDataBase(sendData).then(result => {
-                console.log(result);
-                if(result === 201) {
-                    // End loading bar.
-                    loginStore.setLoadingStatus(false);
-                    // Once the push is complete, empty the inputs and notify success.
-                    notificationStore.setNotification("Data save", "Success!");
-                    clearViewData.methods.clearViewData(
-                        [
-                            this.getBasicInspectionViewData,
-                            this.getDamageInspectionViewData,
-                            this.getBacklogMaintenanceViewData,
-                            this.getTechnicalInstallationViewData,
-                            this.getModificationsViewData
-                        ]
-                    );
-                } else {
-                    // End loading bar.
-                    loginStore.setLoadingStatus(false);
-                    // alert("Upload to data base failed: " + result)
-                    notificationStore.setNotification("Data save", "Error");
-                    // Triggers alert, if no connection could be made to the db.
-                    // In that case the data needs to be saved locally.
-                }
-            })
-            .catch(err => {
+            // Push can't continue without address and date information.
+            if(sendData.date && sendData.address) {
+                pushInspectionToDataBase(sendData).then(result => {
+                    console.log(result);
+                    if(result === 201) {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
+                        // Once the push is complete, empty the inputs and notify success.
+                        notificationStore.setNotification("Data save", "Success!");
+                        clearViewData.methods.clearViewData(
+                            [
+                                this.getBasicInspectionViewData,
+                                this.getDamageInspectionViewData,
+                                this.getBacklogMaintenanceViewData,
+                                this.getTechnicalInstallationViewData,
+                                this.getModificationsViewData
+                            ]
+                        );
+                    } else {
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
+                        // alert("Upload to data base failed: " + result)
+                        notificationStore.setNotification("Data save", "Error");
+                        // Triggers alert, if no connection could be made to the db.
+                        // In that case the data needs to be saved locally.
+                    }
+                })
+                    .catch(err => {
+                        loginStore.setLoadingStatus(false);
+                        console.log("Error while pushing data to db", err);
+                    })
+            } else {
+                // End loading bar.
                 loginStore.setLoadingStatus(false);
-                console.log("Error while pushing data to db", err);
-            })
+                // Push can't continue without address and date information.
+                notificationStore.setNotification("Missing data", "Please input the address and date");
+            }
         }
     },
     getters: {

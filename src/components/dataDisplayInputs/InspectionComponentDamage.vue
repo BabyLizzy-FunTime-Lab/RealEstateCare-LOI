@@ -185,13 +185,6 @@ export default {
         @delete-event="emitInputChange('delete:image', $event)"
     />
   </ion-item>
-<!--  <ion-item  slot="content" v-if="images.length > 0" >-->
-<!--    <PhotoViewer-->
-<!--        :read-only="readOnly"-->
-<!--        :photos="images"-->
-<!--        @delete-event="emitInputChange('delete:image', $event)"-->
-<!--    />-->
-<!--  </ion-item>-->
   <BaseButton
       v-if="readOnlyProp && !readOnly"
       slot="content"

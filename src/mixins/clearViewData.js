@@ -11,6 +11,7 @@ export default {
                 images: [],
                 documentedModsFile: null,
                 date: null,
+                address: null,
                 resetDate: true,
                 inspectionId: null,
                 documentedModsDocName: null,
