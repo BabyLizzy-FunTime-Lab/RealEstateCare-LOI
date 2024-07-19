@@ -24,7 +24,8 @@ export default {
   },
   methods: {
     fetchAllInspections() {
-      this.completedActionStore.fetchCompletedTasks();
+      // this.completedActionStore.fetchCompletedTasks();
+      this.completedActionStore.fetchAllCompletedTasks();
     }
   },
   mounted() {

@@ -1,6 +1,5 @@
 import axios from "axios";
 import {useLoginStore} from "@/stores/LoginStore.js";
-import clearViewData from "@/mixins/clearViewData.js";
 
 const loginStore = useLoginStore();
 
@@ -17,51 +16,6 @@ export const dataBase = () => {
             .then(result => {
                 return result.data;
             }).catch(err => console.log(err));
-    }
-    /**
-     * Fetches all inspections of type damage inspections.
-     * @param user_id
-     * @returns {Promise<axios.AxiosResponse<any> | void>}
-     */
-    const fetchDamageInspections = async (user_id) => {
-        return axios.get(baseDbUrl + "/damage_inspection?inspectorId=" + user_id)
-            .then(result => {
-                return result.data
-            }).catch(err => console.log(err));
-    }
-    /**
-     * Fetches all inspections of type backlog maintenance.
-     * @param user_id
-     * @returns {Promise<axios.AxiosResponse<any> | void>}
-     */
-    const fetchBacklogMaintenance = async (user_id) => {
-        return axios.get(baseDbUrl + "/backlog_maintenance?inspectorId=" + user_id)
-            .then(result => {
-                return result.data
-            }).catch(err => console.log(err));
-    }
-    /**
-     * Fetches all inspections of type modifications.
-     * @param user_id
-     * @returns {Promise<axios.AxiosResponse<any> | void>}
-     */
-    const fetchModifications = async (user_id) => {
-        return axios.get(baseDbUrl + "/modifications?inspectorId=" + user_id)
-            .then(result => {
-                return result.data
-            }).catch(err => console.log(err));
-    }
-    /**
-     * Fetches all inspections of type technical installations.
-     * @param user_id
-     * @returns {Promise<axios.AxiosResponse<any> | void>}
-     */
-    const fetchTechnicalInstallations = async (user_id) => {
-        return axios.get(baseDbUrl + "/technical_installation_inspection?inspectorId=" + user_id)
-            .then(result => {
-                return result.data
-            })
-            .catch(err => console.log(err));
     }
     /**
      * Fetch blob from blob:URL obtained from useCamera.
@@ -179,9 +133,5 @@ export const dataBase = () => {
         pushUpdatesToDataBase,
         pushInspectionToDataBase,
         fetchAllInspections,
-        fetchDamageInspections,
-        fetchBacklogMaintenance,
-        fetchModifications,
-        fetchTechnicalInstallations
     }
 }

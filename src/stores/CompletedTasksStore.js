@@ -8,10 +8,7 @@ const notificationStore = useNotificationStore();
 
 const {
     pushUpdatesToDataBase,
-    fetchDamageInspections,
-    fetchBacklogMaintenance,
-    fetchModifications,
-    fetchTechnicalInstallations
+    fetchAllInspections,
 } = dataBase();
 
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
@@ -24,69 +21,20 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         fetchUserId() {
             return loginStore.getUserInfo.id;
         },
-        async fetchCompletedTasks() {
+        async fetchAllCompletedTasks() {
             let user_id = this.fetchUserId();
-            if (user_id) {
-                loginStore.setLoadingStatus(true);
-                try {
-                    let damageInspectionsPromise = new Promise((resolve, reject) => {
-                        let result = fetchDamageInspections(user_id);
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(new Error("Failed to fetch damage inspections data."));
-                        }
-                    });
-                    let backlogMaintenancePromise = new Promise((resolve, reject) => {
-                        let result = fetchBacklogMaintenance(user_id);
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(new Error("Failed to fetch backlog maintenance data."));
-                        }
-                    });
-                    let modificationsPromise = new Promise((resolve, reject) => {
-                        let result = fetchModifications(user_id);
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(new Error("Failed to fetch backlog maintenance data."));
-                        }
-                    });
-                    let technicalInstallationsPromise = new Promise((resolve, reject) => {
-                        let result = fetchTechnicalInstallations(user_id);
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(new Error("Failed to fetch backlog maintenance data."));
-                        }
-                    });
-                    let [
-                        damageInspections,
-                        backlogMaintenance,
-                        modifications,
-                        technicalInstallations
-                    ] = await Promise.all([
-                        damageInspectionsPromise,
-                        backlogMaintenancePromise,
-                        modificationsPromise,
-                        technicalInstallationsPromise
-                    ]);
-
-                    let inspections = {
-                        damageInspections,
-                        backlogMaintenance,
-                        modifications,
-                        technicalInstallations
-                    };
-                    console.log("Fetched completed tasks of userId:" + user_id);
-                    loginStore.setLoadingStatus(false);
-                    this.allInspections = inspections;
-                } catch (err) {
-                    console.error("Error fetching completed tasks:", err);
-                    loginStore.setLoadingStatus(false);
-                    throw err; // Propagate the error
-                }
+            loginStore.setLoadingStatus(true);
+            try {
+              let result = await fetchAllInspections(user_id);
+              if(result) {
+                  loginStore.setLoadingStatus(false);
+                  console.log(result);
+                  return result;
+              }
+            } catch (err) {
+                console.error("Error fetching completed tasks:", err);
+                loginStore.setLoadingStatus(false);
+                throw err; // Propagate the error
             }
         },
         updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
