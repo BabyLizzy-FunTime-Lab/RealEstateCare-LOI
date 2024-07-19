@@ -244,7 +244,10 @@ export const useInspectionStore = defineStore('inspections', {
                 // End loading bar.
                 loginStore.setLoadingStatus(false);
                 // Push can't continue without address and date information.
-                notificationStore.setNotification("Missing data", "Please input the address and date");
+                notificationStore.setNotification(
+                    "Missing data",
+                    "Please enter Basic Information before saving."
+                );
             }
         }
     },
