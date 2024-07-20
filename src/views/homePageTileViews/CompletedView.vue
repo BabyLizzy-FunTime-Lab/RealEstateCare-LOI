@@ -1,48 +1,34 @@
 <script>
 import { IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import BaseListLayout from "@/components/base/BaseListLayout.vue";
-import DamageInspectionsViewer from "@/components/dataViewers/DamageInspectionsViewer.vue";
-import BacklogMaintenanceViewer from "@/components/dataViewers/BacklogMaintenanceViewer.vue";
-import ModificationsViewer from "@/components/dataViewers/ModificationsViewer.vue";
-import TechnicalInstallationsViewer from "@/components/dataViewers/TechnicalInstallationsViewer.vue";
+import InspectionViewer from "@/components/dataViewers/InspectionViewer.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js"
 import { sync } from 'ionicons/icons';
 
 export default {
   name: "CompletedView",
   components: {
-    BaseListLayout, DamageInspectionsViewer, BacklogMaintenanceViewer, ModificationsViewer,
-    TechnicalInstallationsViewer, IonFab, IonFabButton, IonIcon
+    BaseListLayout, IonFab, IonFabButton, IonIcon, InspectionViewer
   },
   setup() {
     return {sync};
   },
   data() {
     return {
-      completedActionStore: useCompletedTasksStore(),
+      completedActionStore: useCompletedTasksStore()
     }
   },
   methods: {
     fetchAllInspections() {
-      // this.completedActionStore.fetchCompletedTasks();
       this.completedActionStore.fetchAllCompletedTasks();
-    }
+    },
   },
   mounted() {
     this.fetchAllInspections();
   },
   computed: {
-    damageInspections() {
-      return this.completedActionStore.getAllInspections.damageInspections
-    },
-    backlogMaintenance() {
-      return this.completedActionStore.getAllInspections.backlogMaintenance
-    },
-    modifications() {
-      return this.completedActionStore.getAllInspections.modifications
-    },
-    technicalInstallations() {
-      return this.completedActionStore.getAllInspections.technicalInstallations
+    inspections() {
+      return this.completedActionStore.getAllInspections;
     }
   }
 }
@@ -57,22 +43,15 @@ export default {
     </ion-fab>
     <div class="reload--container"></div>
     <base-list-layout list-header-name="Completed Tasks">
-      <DamageInspectionsViewer
-          :inspections="damageInspections"
-          @cancel:updates="this.fetchAllInspections"
+      <InspectionViewer
+          v-for="inspection of inspections"
+          :key="inspection.id"
+          :inspection="inspection"
       />
-      <BacklogMaintenanceViewer
-          :inspections="backlogMaintenance"
-          @cancel:updates="this.fetchAllInspections"
-      />
-      <ModificationsViewer
-          :inspections="modifications"
-          @cancel:updates="this.fetchAllInspections"
-      />
-      <TechnicalInstallationsViewer
-          :inspections="technicalInstallations"
-          @cancel:updates="this.fetchAllInspections"
-      />
+<!--      <DamageInspectionsViewer-->
+<!--          :inspections="damageInspections"-->
+<!--          @cancel:updates="this.fetchAllInspections"-->
+<!--      />-->
     </base-list-layout>
   </base-layout>
 </template>

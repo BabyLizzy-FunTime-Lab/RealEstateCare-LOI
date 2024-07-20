@@ -14,7 +14,7 @@ const {
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
         return {
-            allInspections: Object,
+            allInspections: Array,
         }
     },
     actions: {
@@ -26,10 +26,15 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             loginStore.setLoadingStatus(true);
             try {
               let result = await fetchAllInspections(user_id);
-              if(result) {
+              if(user_id && result) {
                   loginStore.setLoadingStatus(false);
-                  console.log(result);
+                  // Sorts all data in descending date order.
+                  result.sort((a, b) => new Date(b.date) - new Date(a.date));
+                  this.allInspections = result;
+                  console.log(this.allInspections);
                   return result;
+              } else {
+                  loginStore.setLoadingStatus(false);
               }
             } catch (err) {
                 console.error("Error fetching completed tasks:", err);
