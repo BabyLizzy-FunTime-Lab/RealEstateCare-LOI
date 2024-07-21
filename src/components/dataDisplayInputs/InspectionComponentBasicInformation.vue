@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
+      if(eventName === "cancel:allUpdates" || eventName === "save:allUpdates") {
         this.readOnlyToggle();
         this.$emit(eventName);
       } else {
@@ -45,6 +45,14 @@ export default {
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
+    },
+    cancelAllUpdates() {
+      this.resetDatePicker();
+      this.emitInputChange('cancel:allUpdates');
+    },
+    pushAllUpdates() {
+      this.resetDatePicker();
+      this.emitInputChange('save:allUpdates');
     },
   },
   watch: {
@@ -64,24 +72,48 @@ export default {
     },
   },
   emits: [
-    'update:date', 'update:address', 'save:data', 'save:allDataUpdates'
+    'update:date', 'update:address', 'save:data',
+    'save:allUpdates', 'cancel:updates', 'cancel:allUpdates'
   ]
 }
 </script>
 
 <template>
   <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      name="Cancel"
+      button-color="danger"
+      @click="cancelAllUpdates"
+  />
+  <BaseButton
+      v-if="readOnlyProp && !readOnly"
+      name="Save Updates"
+      @click="pushAllUpdates"
+  />
+  <BaseButton
+      v-if="readOnlyProp && readOnly"
+      name="Update Information"
+      @click="readOnlyToggle"
+  />
+  <BaseButton
       name="Save Inspection"
+      v-if="!readOnlyProp && !readOnly"
       @click="emitInputChange('save:data')"
   />
   <base-accordion-layout header-name="Basic Information" value-given="first">
     <ion-item slot="content" v-if="readOnly">
-      <ion-input label="inspection ID" :value="inspectionId" readonly type="text" label-placement="floating"/>
+      <ion-input
+          label="inspection ID"
+          :value="inspectionId"
+          readonly
+          type="text"
+          label-placement="floating"
+      />
     </ion-item>
     <ion-item slot="content">
       <ion-input
           label="Address"
-          :readonly="readOnlyProp"
+          :readonly="readOnly"
           :value="address"
           @input="emitInputChange('update:address', $event)"
           type="text"
@@ -92,7 +124,7 @@ export default {
       <ion-input
           label="Date"
           v-if="readOnly"
-          :readonly="readOnlyProp"
+          :readonly="readOnly"
           :value="dateFilter"
           type="text"
           label-placement="floating"
