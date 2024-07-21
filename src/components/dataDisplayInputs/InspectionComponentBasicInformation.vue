@@ -19,7 +19,7 @@ export default {
     }
   },
   props: {
-    id: String,
+    inspectionId: String,
     address: String,
     date: null,
     resetDate: {
@@ -74,14 +74,13 @@ export default {
       name="Save Inspection"
       @click="emitInputChange('save:data')"
   />
-  <base-accordion-layout header-name="Basic Information" :inspection-id="id" value-given="first">
+  <base-accordion-layout header-name="Basic Information" value-given="first">
     <ion-item slot="content" v-if="readOnly">
-      <ion-input label="inspection ID" :value="id" readonly type="text" label-placement="floating"/>
+      <ion-input label="inspection ID" :value="inspectionId" readonly type="text" label-placement="floating"/>
     </ion-item>
     <ion-item slot="content">
       <ion-input
           label="Address"
-          v-if="!readOnly"
           :readonly="readOnlyProp"
           :value="address"
           @input="emitInputChange('update:address', $event)"

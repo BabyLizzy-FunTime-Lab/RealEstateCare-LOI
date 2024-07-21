@@ -31,17 +31,56 @@ export default {
 </script>
 
 <template>
-  <base-accordion-layout :header-name="dateFilter(inspection.date)" color-style="secondary">
-    <ion-accordion-group slot="content">
-      <BasicInformation
-          :id="inspection.id"
-          :address="inspection.address"
-          :date="dateFilter(inspection.date)"
-      />
-
-    </ion-accordion-group>
-  </base-accordion-layout>
-
+  <ion-accordion-group>
+    <base-accordion-layout :header-name="dateFilter(inspection.date)" color-style="secondary">
+      <ion-accordion-group slot="content">
+        <BasicInformation
+            :read-only-prop="true"
+            :inspection-id="inspection.id"
+            :address="inspection.address"
+            :date="dateFilter(inspection.date)"
+        />
+        <DamageInspection
+            :read-only-prop="true"
+            :location="inspection.damage_inspection.location"
+            :new-damage="inspection.damage_inspection.newDamage"
+            :selected-damage-type-option="inspection.damage_inspection.selectedDamageTypeOption"
+            :damage-type="inspection.damage_inspection.damageType"
+            :emergency="inspection.damage_inspection.emergency"
+            :comments="inspection.damage_inspection.comments"
+            :images="inspection.damage_inspection.images"
+        />
+        <BacklogMaintenance
+            :read-only-prop="true"
+            :location="inspection.backlog_maintenance.location"
+            :emergency="inspection.backlog_maintenance.emergency"
+            :maintenance-type="inspection.backlog_maintenance.maintenanceType"
+            :cost-indication="inspection.backlog_maintenance.costIndication"
+            :images="inspection.backlog_maintenance.images"
+        />
+        <TechnicalInstallation
+            :read-only-prop="true"
+            :location="inspection.technical_installation_inspection.location"
+            :installation-type="inspection.technical_installation_inspection.installationType"
+            :client-statement="inspection.technical_installation_inspection.clientStatement"
+            :approved="inspection.technical_installation_inspection.approved"
+            :comments="inspection.technical_installation_inspection.comments"
+            :images="inspection.technical_installation_inspection.images"
+        />
+        <Modification
+            :read-only-prop="true"
+            :location="inspection.modifications.location"
+            :documented-mods-doc-name="inspection.modifications.documentedModsDocName"
+            :documented-mods-url="inspection.modifications.documentedModsUrl"
+            :modified-by="inspection.modifications.modifiedBy"
+            :mod-description="inspection.modifications.modDescription"
+            :required-action="inspection.modifications.requiredAction"
+            :comments="inspection.modifications.comments"
+            :images="inspection.modifications.images"
+        />
+      </ion-accordion-group>
+    </base-accordion-layout>
+  </ion-accordion-group>
 </template>
 
 <style scoped lang="scss">
