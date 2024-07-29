@@ -48,10 +48,6 @@ export default {
           :key="inspection.id"
           :inspection="inspection"
       />
-<!--      <DamageInspectionsViewer-->
-<!--          :inspections="damageInspections"-->
-<!--          @cancel:updates="this.fetchAllInspections"-->
-<!--      />-->
     </base-list-layout>
   </base-layout>
 </template>

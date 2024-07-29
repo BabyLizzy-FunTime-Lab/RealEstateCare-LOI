@@ -9,6 +9,7 @@ import TechnicalInstallation
   from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
+import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js"
 
 export default {
   name: "InspectionViewer",
@@ -19,13 +20,19 @@ export default {
   props: {
     inspection: Object
   },
-  computed: {
-
+  data() {
+    return {
+      completedActionStore: useCompletedTasksStore()
+    }
   },
   methods: {
     dateFilter(date) {
       return date.split('T')[0];
     },
+    updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
+      console.log(newValue);
+      this.completedActionStore.updateInspectionDatainspectionId(inspectionId, propertyName, newValue, inspectionType);
+    }
   }
 }
 </script>
@@ -37,6 +44,7 @@ export default {
         <BasicInformation
             :read-only-prop="true"
             :inspection-id="inspection.id"
+            @update:date="updateInspectionData(inspection.id, 'date', $event)"
             :address="inspection.address"
             :date="dateFilter(inspection.date)"
         />

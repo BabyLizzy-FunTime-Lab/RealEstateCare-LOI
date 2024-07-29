@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ref } from 'vue';
 import {useLoginStore} from "@/stores/LoginStore.js";
 
 const loginStore = useLoginStore();
@@ -6,6 +7,8 @@ const loginStore = useLoginStore();
 const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 export const dataBase = () => {
+    // allInspectionsBackup is a copy of the latest all inspections fetch results.
+    const allInspectionsBackup = ref();
     /**
      * Fetches all inspections for the current user.
      * @param user_id
@@ -14,6 +17,7 @@ export const dataBase = () => {
     const fetchAllInspections = async (user_id) => {
         return axios.get( baseDbUrl + "/inspections?inspectorId=" + user_id)
             .then(result => {
+                allInspectionsBackup.value = result.data;
                 return result.data;
             }).catch(err => console.log(err));
     }
@@ -130,6 +134,7 @@ export const dataBase = () => {
     }
 }
     return {
+        allInspectionsBackup,
         pushUpdatesToDataBase,
         pushInspectionToDataBase,
         fetchAllInspections,

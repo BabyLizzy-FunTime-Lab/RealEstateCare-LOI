@@ -7,6 +7,7 @@ const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
 const {
+    allInspectionsBackup,
     pushUpdatesToDataBase,
     fetchAllInspections,
 } = dataBase();
@@ -15,6 +16,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
         return {
             allInspections: Array,
+            allInspectionsBackup: Array
         }
     },
     actions: {
@@ -28,6 +30,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
               let result = await fetchAllInspections(user_id);
               if(user_id && result) {
                   loginStore.setLoadingStatus(false);
+                  this.allInspectionsBackup = allInspectionsBackup
                   // Sorts all data in descending date order.
                   result.sort((a, b) => new Date(b.date) - new Date(a.date));
                   this.allInspections = result;
@@ -42,29 +45,36 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 throw err; // Propagate the error
             }
         },
-        updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
+        updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
             // This is needed to update the state.
-            let allInspectionsOfType = this.getAllInspections[inspectionType];
+            let allInspectionsOfType = this.getAllInspections;
             allInspectionsOfType.forEach(inspection => {
                 // If propertyName is image we push the new image
                 if(inspection.id === inspectionId) {
-                    switch (propertyName) {
-                        case "images":
-                            inspection[propertyName].push(newValue);
-                            break;
-                        case "delete:image":
-                            // If the image is found it is deleted.
-                            if(inspection["images"].indexOf(newValue) !== -1) {
-                                inspection["images"].splice(inspection["images"].indexOf(newValue), 1);
-                            }
-                            break;
-                        case "documentedModsFile":
-                            inspection['documentedModsDocName'] = newValue.file.name;
-                            inspection['documentedModsUrl'] = newValue.url;
-                            break;
-                        default:
-                            inspection[propertyName] = newValue;
+                    if(inspectionType) {
+                        switch (propertyName) {
+                            case "images":
+                                inspection[inspectionType][propertyName].push(newValue);
+                                break;
+                            case "delete:image":
+                                // If the image is found it is deleted.
+                                if(inspection[inspectionType]["images"].indexOf(newValue) !== -1) {
+                                    inspection[inspectionType]["images"]
+                                        .splice(inspection[inspectionType]["images"].indexOf(newValue), 1);
+                                }
+                                break;
+                            case "documentedModsFile":
+                                inspection[inspectionType]['documentedModsDocName'] = newValue.file.name;
+                                inspection[inspectionType]['documentedModsUrl'] = newValue.url;
+                                break;
+                            default:
+                                inspection[propertyName] = newValue;
+                        }
+                    } else {
+                        inspection[propertyName] = newValue;
                     }
+                } else {
+                    console.error("No inspection found with id: " + inspectionId)
                 }
             })
             console.log(allInspectionsOfType);
