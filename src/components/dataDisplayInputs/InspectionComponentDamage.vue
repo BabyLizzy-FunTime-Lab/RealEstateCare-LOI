@@ -48,7 +48,7 @@ export default {
     saveDataRequest: {
       type: Function,
     },
-    readOnlyProp: {
+    useAsDataViewer: {
       type: Boolean,
       default: false
     }
@@ -83,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    this.readOnly = this.readOnlyProp
+    this.readOnly = this.useAsDataViewer
   },
   computed: {
     damageTypeBorder() {
@@ -186,22 +186,9 @@ export default {
     />
   </ion-item>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Cancel"
-      button-color="danger"
-      @click="cancelUpdatesAndResetDatePicker"
-  />
-  <BaseButton
-      v-if="readOnlyProp && !readOnly"
-      slot="content"
-      name="Save Updates"
-      @click="updateDataAndResetDatePicker"
-  />
-  <BaseButton
-      v-if="readOnlyProp && readOnly"
-      slot="content"
-      name="Update Information"
+      name="Reset this Information"
       @click="readOnlyToggle"
   />
 <!--  <BaseButton-->

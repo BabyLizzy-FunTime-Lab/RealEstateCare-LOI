@@ -46,11 +46,19 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             }
         },
         updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
+            // This is a good spot to implement input validation.
+            // If it got an event object, it will seek the target.value
+            if(typeof newValue === 'object' && propertyName != "date") {
+                newValue = newValue.target.value
+            }
             // This is needed to update the state.
-            let allInspectionsOfType = this.getAllInspections;
-            allInspectionsOfType.forEach(inspection => {
+            console.log(newValue);
+            let inspectionFound = false;
+            let allInspectionsArray = this.getAllInspections;
+            allInspectionsArray.forEach(inspection => {
                 // If propertyName is image we push the new image
                 if(inspection.id === inspectionId) {
+                    inspectionFound = true;
                     if(inspectionType) {
                         switch (propertyName) {
                             case "images":
@@ -73,11 +81,24 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     } else {
                         inspection[propertyName] = newValue;
                     }
-                } else {
-                    console.error("No inspection found with id: " + inspectionId)
                 }
             })
-            console.log(allInspectionsOfType);
+            if(!inspectionFound) {
+                console.error("No inspection was found with id: " + inspectionId);
+            }
+            console.log(allInspectionsArray);
+        },
+        resetViewData(inspectionId, inspectionType) {
+            if(inspectionType === 'basic_information') {
+                this.getAllInspections.forEach(inspection => {
+                    if(inspection.id === inspectionId) {
+                        const backupData = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
+                        console.log(backupData);
+                        inspection.date = backupData.date;
+                        inspection.address = backupData.address;
+                    }
+                })
+            }
         },
         pushUpdatedData(inspectionId, inspectionType) {
             // Start loading bar.

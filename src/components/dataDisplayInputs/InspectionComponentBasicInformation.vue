@@ -26,14 +26,16 @@ export default {
       type: Boolean,
       default: false
     },
-    readOnlyProp: {
+    useAsDataViewer: {
       type: Boolean,
       default: false
     }
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:allUpdates" || eventName === "save:allUpdates") {
+      if(eventName === "cancel:allUpdates" ||
+          eventName === "save:allUpdates" ||
+          eventName === "reset:basicInformation") {
         this.readOnlyToggle();
         this.$emit(eventName);
       } else {
@@ -54,6 +56,10 @@ export default {
       this.resetDatePicker();
       this.emitInputChange('save:allUpdates');
     },
+    reset() {
+      this.resetDatePicker();
+      this.emitInputChange('reset:basicInformation');
+    }
   },
   watch: {
     resetDate(newValue, oldValue) {
@@ -64,7 +70,7 @@ export default {
     }
   },
   mounted() {
-    this.readOnly = this.readOnlyProp
+    this.readOnly = this.useAsDataViewer
   },
   computed: {
     dateFilter() {
@@ -73,31 +79,31 @@ export default {
   },
   emits: [
     'update:date', 'update:address', 'save:data',
-    'save:allUpdates', 'cancel:updates', 'cancel:allUpdates'
+    'save:allUpdates', 'cancel:updates', 'cancel:allUpdates', 'reset:basicInformation'
   ]
 }
 </script>
 
 <template>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       name="Cancel"
       button-color="danger"
       @click="cancelAllUpdates"
   />
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       name="Save Updates"
       @click="pushAllUpdates"
   />
   <BaseButton
-      v-if="readOnlyProp && readOnly"
+      v-if="useAsDataViewer && readOnly"
       name="Update Information"
       @click="readOnlyToggle"
   />
   <BaseButton
       name="Save Inspection"
-      v-if="!readOnlyProp && !readOnly"
+      v-if="!useAsDataViewer && !readOnly"
       @click="emitInputChange('save:data')"
   />
   <base-accordion-layout header-name="Basic Information" value-given="first">
@@ -139,6 +145,12 @@ export default {
           @update:model-value="emitInputChange('update:date', dateSelected)"
       />
     </ion-item>
+    <BaseButton
+        v-if="useAsDataViewer && !readOnly"
+        slot="content"
+        name="Reset this Information"
+        @click="reset"
+    />
   </base-accordion-layout>
 </template>
 

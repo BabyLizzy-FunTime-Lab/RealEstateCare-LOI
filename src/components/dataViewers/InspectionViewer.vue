@@ -22,7 +22,8 @@ export default {
   },
   data() {
     return {
-      completedActionStore: useCompletedTasksStore()
+      completedActionStore: useCompletedTasksStore(),
+      readOnly: true
     }
   },
   methods: {
@@ -30,8 +31,10 @@ export default {
       return date.split('T')[0];
     },
     updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
-      console.log(newValue);
-      this.completedActionStore.updateInspectionDatainspectionId(inspectionId, propertyName, newValue, inspectionType);
+      this.completedActionStore.updateInspectionData(inspectionId, propertyName, newValue, inspectionType);
+    },
+    reset(infoType) {
+      this.completedActionStore.resetViewData(this.inspection.id, infoType);
     }
   }
 }
@@ -42,21 +45,37 @@ export default {
     <base-accordion-layout :header-name="dateFilter(inspection.date)" color-style="secondary">
       <ion-accordion-group slot="content">
         <BasicInformation
-            :read-only-prop="true"
+            :use-as-data-viewer="true"
             :inspection-id="inspection.id"
-            @update:date="updateInspectionData(inspection.id, 'date', $event)"
             :address="inspection.address"
+            @update:address="this.updateInspectionData(inspection.id, 'address', $event)"
             :date="dateFilter(inspection.date)"
+            @update:date="this.updateInspectionData(inspection.id, 'date', $event)"
+            @reset:basic-information="reset('basic_information')"
         />
         <DamageInspection
-            :read-only-prop="true"
+            :use-as-data-viewer="true"
             :location="inspection.damage_inspection.location"
+            @update:location="this.updateInspectionData(
+                inspection.id, 'location', $event, 'damage_inspection')"
             :new-damage="inspection.damage_inspection.newDamage"
+            @update:new-damage="this.updateInspectionData(
+                inspection.id, 'newDamage', $event, 'damage_inspection')"
             :selected-damage-type-option="inspection.damage_inspection.selectedDamageTypeOption"
+            @update:selected-damage-type-option="this.updateInspectionData(
+                inspection.id, 'selectedDamageTypeOption', $event, 'damage_inspection')"
             :damage-type="inspection.damage_inspection.damageType"
+            @update:damage-type="this.updateInspectionData(
+                inspection.id, 'damageType', $event, 'damage_inspection')"
             :emergency="inspection.damage_inspection.emergency"
+            @update:emergency="this.updateInspectionData(
+                inspection.id, 'emergency', $event, 'damage_inspection')"
             :comments="inspection.damage_inspection.comments"
+            @update:comments="this.updateInspectionData(
+                inspection.id, 'comments', $event, 'damage_inspection')"
             :images="inspection.damage_inspection.images"
+            @update:images="this.updateInspectionData(
+                inspection.id, 'images', $event, 'damage_inspection')"
         />
         <BacklogMaintenance
             :read-only-prop="true"
