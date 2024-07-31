@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {dataBase} from "@/services/dataBase.js";
+import cloneDeep from 'lodash/cloneDeep';
 
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
@@ -30,7 +31,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
               let result = await fetchAllInspections(user_id);
               if(user_id && result) {
                   loginStore.setLoadingStatus(false);
-                  this.allInspectionsBackup = allInspectionsBackup
+                  this.allInspectionsBackup = cloneDeep(allInspectionsBackup);
                   // Sorts all data in descending date order.
                   result.sort((a, b) => new Date(b.date) - new Date(a.date));
                   this.allInspections = result;
@@ -89,16 +90,20 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             console.log(allInspectionsArray);
         },
         resetViewData(inspectionId, inspectionType) {
-            if(inspectionType === 'basic_information') {
-                this.getAllInspections.forEach(inspection => {
-                    if(inspection.id === inspectionId) {
-                        const backupData = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
-                        console.log(backupData);
-                        inspection.date = backupData.date;
-                        inspection.address = backupData.address;
+            const backupDataObject = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
+            this.getAllInspections.forEach(inspection => {
+                if(inspection.id === inspectionId) {
+                    switch (inspectionType) {
+                        case 'basic_information':
+                            console.log(backupDataObject);
+                            inspection.date = backupDataObject.date;
+                            inspection.address = backupDataObject.address;
+                            break;
+                        default:
+                            inspection[inspectionType] = backupDataObject[inspectionType];
                     }
-                })
-            }
+                }
+            })
         },
         pushUpdatedData(inspectionId, inspectionType) {
             // Start loading bar.

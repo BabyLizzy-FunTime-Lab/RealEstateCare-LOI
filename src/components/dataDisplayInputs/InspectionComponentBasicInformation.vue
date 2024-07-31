@@ -148,7 +148,7 @@ export default {
     <BaseButton
         v-if="useAsDataViewer && !readOnly"
         slot="content"
-        name="Reset this Information"
+        name="Reset Basic Information"
         @click="reset"
     />
   </base-accordion-layout>
