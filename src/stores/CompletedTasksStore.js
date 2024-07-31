@@ -100,7 +100,9 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                             inspection.address = backupDataObject.address;
                             break;
                         default:
-                            inspection[inspectionType] = backupDataObject[inspectionType];
+                            inspection[inspectionType] = cloneDeep(backupDataObject[inspectionType]) ;
+                            // Object.assign(inspection[inspectionType], backupDataObject[inspectionType])
+                            console.log(inspection);
                     }
                 }
             })

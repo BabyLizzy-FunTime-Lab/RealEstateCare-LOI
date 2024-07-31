@@ -51,15 +51,20 @@ export default {
     useAsDataViewer: {
       type: Boolean,
       default: false
+    },
+    readOnlyTrigger: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
-        this.readOnlyToggle();
-        this.$emit(eventName);
-      } else {
-        this.$emit(eventName, data);
+      switch(eventName) {
+        case "reset:damageInspection":
+          this.$emit(eventName);
+          break;
+        default:
+          this.$emit(eventName, data);
       }
     },
     async dismissModal() {
@@ -85,6 +90,11 @@ export default {
   mounted() {
     this.readOnly = this.useAsDataViewer
   },
+  watch: {
+    readOnlyTrigger(newValue) {
+      this.readOnly = newValue;
+    }
+  },
   computed: {
     damageTypeBorder() {
       if (this.selectedDamageTypeOption === 'other') {
@@ -105,7 +115,8 @@ export default {
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageTypeOption', 'update:damageType',
       'update:emergency', 'update:comments', 'update:images',
-      'delete:image', 'cancel:updates', 'save:data', 'save:dataUpdates'
+      'delete:image', 'cancel:updates', 'save:data', 'save:dataUpdates',
+      'reset:damageInspection'
   ]
 }
 </script>
@@ -153,8 +164,16 @@ export default {
     <ion-radio-group :value="newDamage"
                      @ionChange="emitInputChange('update:newDamage', $event)"
                      name="newDamage">
-      <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
-      <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+      <ion-radio :disabled="readOnly"
+                 aria-label="Yes"
+                 label-placement="start"
+                 justify="end"
+                 value="yes">Yes</ion-radio>
+      <ion-radio :disabled="readOnly"
+                 aria-label="No"
+                 label-placement="start"
+                 justify="end"
+                 value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
@@ -162,8 +181,16 @@ export default {
     <ion-radio-group :value="emergency"
                      @ionChange="emitInputChange('update:emergency', $event)"
                      name="emergency">
-      <ion-radio :disabled="readOnly" aria-label="Yes" label-placement="start" justify="end" value="yes">Yes</ion-radio>
-      <ion-radio :disabled="readOnly" aria-label="No" label-placement="start" justify="end" value="no">No</ion-radio>
+      <ion-radio :disabled="readOnly"
+                 aria-label="Yes"
+                 label-placement="start"
+                 justify="end"
+                 value="yes">Yes</ion-radio>
+      <ion-radio :disabled="readOnly"
+                 aria-label="No"
+                 label-placement="start"
+                 justify="end"
+                 value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
@@ -177,7 +204,10 @@ export default {
   </ion-item>
   <ion-item slot="content" lines="none" class="last--item">
     <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
+    <ion-button v-if="!readOnly"
+                name="takePhoto"
+                @click="takePhotoAction"
+                color="primary">Take Photo</ion-button>
     <PhotoViewer
         v-if="images.length > 0"
         :read-only="readOnly"
@@ -188,15 +218,9 @@ export default {
   <BaseButton
       v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Reset this Information"
-      @click="readOnlyToggle"
+      name="Reset Damage Inspection"
+      @click="emitInputChange('reset:damageInspection')"
   />
-<!--  <BaseButton-->
-<!--      v-if="!readOnlyProp && !readOnly"-->
-<!--      slot="content"-->
-<!--      name="Save"-->
-<!--      @click="saveAndResetDatePicker"-->
-<!--  />-->
 </base-accordion-layout>
 </template>
 

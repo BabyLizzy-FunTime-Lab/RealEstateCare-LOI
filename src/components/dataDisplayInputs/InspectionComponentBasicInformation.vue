@@ -33,13 +33,18 @@ export default {
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:allUpdates" ||
-          eventName === "save:allUpdates" ||
-          eventName === "reset:basicInformation") {
-        this.readOnlyToggle();
-        this.$emit(eventName);
-      } else {
-        this.$emit(eventName, data);
+      switch(eventName) {
+        case "cancel:allUpdates":
+          case "save:allUpdates":
+            case "update:readOnlyToggle":
+          this.readOnlyToggle();
+          this.$emit(eventName);
+          break;
+        case "reset:basicInformation":
+          this.$emit(eventName);
+          break;
+        default:
+          this.$emit(eventName, data);
       }
     },
     resetDatePicker() {
@@ -78,7 +83,7 @@ export default {
     },
   },
   emits: [
-    'update:date', 'update:address', 'save:data',
+    'update:date', 'update:address', 'save:data', 'update:readOnlyToggle',
     'save:allUpdates', 'cancel:updates', 'cancel:allUpdates', 'reset:basicInformation'
   ]
 }
@@ -99,7 +104,7 @@ export default {
   <BaseButton
       v-if="useAsDataViewer && readOnly"
       name="Update Information"
-      @click="readOnlyToggle"
+      @click="emitInputChange('update:readOnlyToggle')"
   />
   <BaseButton
       name="Save Inspection"

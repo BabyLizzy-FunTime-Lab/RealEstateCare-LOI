@@ -35,7 +35,10 @@ export default {
     },
     reset(infoType) {
       this.completedActionStore.resetViewData(this.inspection.id, infoType);
-    }
+    },
+    readOnlyToggle() {
+      this.readOnly = !this.readOnly;
+    },
   }
 }
 </script>
@@ -51,10 +54,13 @@ export default {
             @update:address="this.updateInspectionData(inspection.id, 'address', $event)"
             :date="dateFilter(inspection.date)"
             @update:date="this.updateInspectionData(inspection.id, 'date', $event)"
+            @update:read-only-toggle="readOnlyToggle"
+            @cancel:all-updates="readOnlyToggle"
             @reset:basic-information="reset('basic_information')"
         />
         <DamageInspection
             :use-as-data-viewer="true"
+            :read-only-trigger="readOnly"
             :location="inspection.damage_inspection.location"
             @update:location="this.updateInspectionData(
                 inspection.id, 'location', $event, 'damage_inspection')"
@@ -76,6 +82,7 @@ export default {
             :images="inspection.damage_inspection.images"
             @update:images="this.updateInspectionData(
                 inspection.id, 'images', $event, 'damage_inspection')"
+            @reset:damage-inspection="reset('damage_inspection')"
         />
         <BacklogMaintenance
             :read-only-prop="true"
