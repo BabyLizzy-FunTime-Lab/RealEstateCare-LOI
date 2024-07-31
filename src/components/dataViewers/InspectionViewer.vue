@@ -82,6 +82,8 @@ export default {
             :images="inspection.damage_inspection.images"
             @update:images="this.updateInspectionData(
                 inspection.id, 'images', $event, 'damage_inspection')"
+            @delete:image="this.updateInspectionData(
+                inspection.id, 'delete:image', $event, 'damage_inspection')"
             @reset:damage-inspection="reset('damage_inspection')"
         />
         <BacklogMaintenance

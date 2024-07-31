@@ -49,7 +49,8 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
             // This is a good spot to implement input validation.
             // If it got an event object, it will seek the target.value
-            if(typeof newValue === 'object' && propertyName != "date") {
+            if(typeof newValue === 'object' && propertyName != "date" && propertyName != "images") {
+                console.log(newValue);
                 newValue = newValue.target.value
             }
             // This is needed to update the state.
@@ -63,7 +64,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                     if(inspectionType) {
                         switch (propertyName) {
                             case "images":
-                                inspection[inspectionType][propertyName].push(newValue);
+                                inspection[inspectionType][propertyName].push(newValue.webviewPath);
                                 break;
                             case "delete:image":
                                 // If the image is found it is deleted.
@@ -77,7 +78,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                                 inspection[inspectionType]['documentedModsUrl'] = newValue.url;
                                 break;
                             default:
-                                inspection[propertyName] = newValue;
+                                inspection[inspectionType][propertyName] = newValue;
                         }
                     } else {
                         inspection[propertyName] = newValue;
