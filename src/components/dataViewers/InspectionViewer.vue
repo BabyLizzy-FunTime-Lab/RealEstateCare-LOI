@@ -34,7 +34,14 @@ export default {
       this.completedActionStore.updateInspectionData(inspectionId, propertyName, newValue, inspectionType);
     },
     reset(infoType) {
-      this.completedActionStore.resetViewData(this.inspection.id, infoType);
+      switch(infoType) {
+        case 'all_data':
+          this.readOnlyToggle();
+          this.completedActionStore.resetViewData(this.inspection.id, infoType);
+          break;
+        default:
+          this.completedActionStore.resetViewData(this.inspection.id, infoType);
+      }
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
@@ -55,7 +62,7 @@ export default {
             :date="dateFilter(inspection.date)"
             @update:date="this.updateInspectionData(inspection.id, 'date', $event)"
             @update:read-only-toggle="readOnlyToggle"
-            @cancel:all-updates="readOnlyToggle"
+            @cancel:all-updates="reset('all_data')"
             @reset:basic-information="reset('basic_information')"
         />
         <DamageInspection

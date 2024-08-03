@@ -92,9 +92,14 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         },
         resetViewData(inspectionId, inspectionType) {
             const backupDataObject = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
-            this.getAllInspections.forEach(inspection => {
+            this.getAllInspections.forEach((inspection, index) => {
                 if(inspection.id === inspectionId) {
                     switch (inspectionType) {
+                        case 'all_data':
+                            this.getAllInspections[index] = cloneDeep(backupDataObject);
+                            // inspection = backupDataObject;
+                            console.log(this.getAllInspections[index]);
+                            break;
                         case 'basic_information':
                             console.log(backupDataObject);
                             inspection.date = backupDataObject.date;
