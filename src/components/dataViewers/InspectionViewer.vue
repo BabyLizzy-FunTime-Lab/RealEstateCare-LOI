@@ -153,9 +153,10 @@ export default {
                 inspection.id, 'location',
                 $event, 'modifications')"
             :documented-mods-doc-name="inspection.modifications.documentedModsDocName"
-
             :documented-mods-url="inspection.modifications.documentedModsUrl"
-
+            @update:documented-mods="this.updateInspectionData(
+                inspection.id, 'documentedModsFile',
+                $event, 'modifications')"
             :modified-by="inspection.modifications.modifiedBy"
             @update:modified-by="this.updateInspectionData(
                 inspection.id, 'modifiedBy',

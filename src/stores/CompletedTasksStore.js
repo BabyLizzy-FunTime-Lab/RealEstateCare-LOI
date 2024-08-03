@@ -49,7 +49,10 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
         updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
             // This is a good spot to implement input validation.
             // If it got an event object, it will seek the target.value
-            if(typeof newValue === 'object' && propertyName != "date" && propertyName != "images") {
+            if(typeof newValue === 'object'
+                && propertyName != 'date'
+                && propertyName != 'images'
+                && propertyName != 'documentedModsFile') {
                 console.log(newValue);
                 newValue = newValue.target.value
             }
