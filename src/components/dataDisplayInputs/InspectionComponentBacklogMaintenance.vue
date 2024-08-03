@@ -36,15 +36,17 @@ export default {
     costIndication: String,
     images: {
       value: Array,
-      default: []
+      default: [],
+      required: false
     },
-    readOnlyProp: {
+    useAsDataViewer: {
       type: Boolean,
       default: false
     },
-    saveDataRequest: {
-      type: Function
-    },
+    readOnlyTrigger: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(eventName, data = null) {
@@ -65,12 +67,16 @@ export default {
     }
   },
   mounted() {
-    this.readOnly = this.readOnlyProp
+    this.readOnly = this.useAsDataViewer
+  },
+  watch: {
+    readOnlyTrigger(newValue) {
+      this.readOnly = newValue;
+    }
   },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:emergency',
-    'update:maintenanceType', 'update:costIndication', 'save:data',
-    'cancel:updates', 'save:dataUpdates'
+    'update:maintenanceType', 'update:costIndication', 'reset:backlogMaintenance'
   ]
 }
 </script>
@@ -130,30 +136,11 @@ export default {
     />
   </ion-item>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Cancel"
-      button-color="danger"
-      @click="emitInputChange('cancel:updates')"
+      name="Reset Backlog Maintenance"
+      @click="emitInputChange('reset:backlogMaintenance')"
   />
-  <BaseButton
-      v-if="readOnlyProp && !readOnly"
-      slot="content"
-      name="Save Updates"
-      @click="emitInputChange('save:dataUpdates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && readOnly"
-      slot="content"
-      name="Update Information"
-      @click="readOnlyToggle"
-  />
-<!--  <BaseButton-->
-<!--      v-if="!readOnlyProp && !readOnly"-->
-<!--      slot="content"-->
-<!--      name="Save"-->
-<!--      @click="emitInputChange('save:data')"-->
-<!--  />-->
 </BaseAccordionLayout>
 </template>
 

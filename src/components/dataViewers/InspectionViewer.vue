@@ -94,32 +94,92 @@ export default {
             @reset:damage-inspection="reset('damage_inspection')"
         />
         <BacklogMaintenance
-            :read-only-prop="true"
+            :use-as-data-viewer="true"
+            :read-only-trigger="readOnly"
             :location="inspection.backlog_maintenance.location"
+            @update:location="this.updateInspectionData(
+                inspection.id, 'location', $event, 'backlog_maintenance')"
             :emergency="inspection.backlog_maintenance.emergency"
+            @update:emergency="this.updateInspectionData(
+                inspection.id, 'emergency', $event, 'backlog_maintenance')"
             :maintenance-type="inspection.backlog_maintenance.maintenanceType"
+            @update:maintenance-type="this.updateInspectionData(
+                inspection.id, 'maintenanceType', $event, 'backlog_maintenance')"
             :cost-indication="inspection.backlog_maintenance.costIndication"
+            @update:cost-indication="this.updateInspectionData(
+                inspection.id, 'costIndication', $event, 'backlog_maintenance')"
             :images="inspection.backlog_maintenance.images"
+            @update:images="this.updateInspectionData(
+                inspection.id, 'images', $event, 'backlog_maintenance')"
+            @delete:image="this.updateInspectionData(
+                inspection.id, 'delete:image', $event, 'backlog_maintenance')"
+            @reset:backlog-maintenance="reset('backlog_maintenance')"
         />
         <TechnicalInstallation
-            :read-only-prop="true"
+            :use-as-data-viewer="true"
+            :read-only-trigger="readOnly"
             :location="inspection.technical_installation_inspection.location"
+            @update:location="this.updateInspectionData(
+                inspection.id, 'location',
+                $event, 'technical_installation_inspection')"
             :installation-type="inspection.technical_installation_inspection.installationType"
+            @update:installation-type="this.updateInspectionData(
+                inspection.id, 'installationType',
+                $event, 'technical_installation_inspection')"
             :client-statement="inspection.technical_installation_inspection.clientStatement"
+            @update:client-statement="this.updateInspectionData(
+                inspection.id, 'clientStatement',
+                $event, 'technical_installation_inspection')"
             :approved="inspection.technical_installation_inspection.approved"
+            @update:approved="this.updateInspectionData(
+                inspection.id, 'approved',
+                $event, 'technical_installation_inspection')"
             :comments="inspection.technical_installation_inspection.comments"
+            @update:comments="this.updateInspectionData(
+                inspection.id, 'comments',
+                $event, 'technical_installation_inspection')"
             :images="inspection.technical_installation_inspection.images"
+            @update:images="this.updateInspectionData(
+                inspection.id, 'images', $event, 'technical_installation_inspection')"
+            @delete:image="this.updateInspectionData(
+                inspection.id, 'delete:image', $event, 'technical_installation_inspection')"
+            @reset:technical-installation-inspection="reset('technical_installation_inspection')"
         />
         <Modification
-            :read-only-prop="true"
+            :use-as-data-viewer="true"
+            :read-only-trigger="readOnly"
             :location="inspection.modifications.location"
+            @update:location="this.updateInspectionData(
+                inspection.id, 'location',
+                $event, 'modifications')"
             :documented-mods-doc-name="inspection.modifications.documentedModsDocName"
+
             :documented-mods-url="inspection.modifications.documentedModsUrl"
+
             :modified-by="inspection.modifications.modifiedBy"
+            @update:modified-by="this.updateInspectionData(
+                inspection.id, 'modifiedBy',
+                $event, 'modifications')"
             :mod-description="inspection.modifications.modDescription"
+            @update:mod-description="this.updateInspectionData(
+                inspection.id, 'modDescription',
+                $event, 'modifications')"
             :required-action="inspection.modifications.requiredAction"
+            @update:required-action="this.updateInspectionData(
+                inspection.id, 'requiredAction',
+                $event, 'modifications')"
             :comments="inspection.modifications.comments"
+            @update:comments="this.updateInspectionData(
+                inspection.id, 'comments',
+                $event, 'modifications')"
             :images="inspection.modifications.images"
+            @update:images="this.updateInspectionData(
+                inspection.id, 'images',
+                $event, 'modifications')"
+            @delete:image="this.updateInspectionData(
+                inspection.id, 'delete:image',
+                $event, 'modifications')"
+            @reset:modifications="reset('modifications')"
         />
       </ion-accordion-group>
     </base-accordion-layout>

@@ -45,9 +45,6 @@ export default {
       default: [],
       required: false
     },
-    saveDataRequest: {
-      type: Function,
-    },
     useAsDataViewer: {
       type: Boolean,
       default: false
@@ -77,18 +74,10 @@ export default {
       takePhoto().then(newImage => {
         this.$emit('update:images', newImage.value);
       })
-    },
-    updateDataAndResetDatePicker() {
-      this.dateSelected = null;
-      this.emitInputChange('save:dataUpdates');
-    },
-    cancelUpdatesAndResetDatePicker() {
-      this.dateSelected = null;
-      this.emitInputChange('cancel:updates');
     }
   },
   mounted() {
-    this.readOnly = this.useAsDataViewer
+    this.readOnly = this.useAsDataViewer;
   },
   watch: {
     readOnlyTrigger(newValue) {
@@ -115,8 +104,7 @@ export default {
       'update:location', 'update:newDamage', 'update:date',
       'update:selectedDamageTypeOption', 'update:damageType',
       'update:emergency', 'update:comments', 'update:images',
-      'delete:image', 'cancel:updates', 'save:data', 'save:dataUpdates',
-      'reset:damageInspection'
+      'delete:image', 'reset:damageInspection'
   ]
 }
 </script>

@@ -39,10 +39,6 @@ export default {
       type: String,
       default: "Technical Installation Inspection"
     },
-    readOnlyProp: {
-      type: Boolean,
-      default: false
-    },
     inspectionId: String,
     location: String,
     installationType: String,
@@ -54,22 +50,33 @@ export default {
       default: [],
       required: false
     },
-    saveDataRequest: {
-      type: Function
+    useAsDataViewer: {
+      type: Boolean,
+      default: false
     },
+    readOnlyTrigger: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
-        this.readOnlyToggle();
-        this.$emit(eventName);
-      } else {
-        this.$emit(eventName, data);
+      switch(eventName) {
+        case "reset:technicalInstallationInspection":
+          this.$emit(eventName);
+          break;
+        default:
+          this.$emit(eventName, data);
       }
+      // if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
+      //   this.readOnlyToggle();
+      //   this.$emit(eventName);
+      // } else {
+      //   this.$emit(eventName, data);
+      // }
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-      console.log("test")
     },
     takePhotoAction() {
       takePhoto().then(newImage => {
@@ -78,7 +85,7 @@ export default {
     }
   },
   mounted() {
-    this.readOnly = this.readOnlyProp;
+    this.readOnly = this.useAsDataViewer;
     // Here we fetch the 'Test Procedure' pdf document.
     this.loginStore.fetchBaseDocument("Test Procedure")
         .then(document => {
@@ -90,10 +97,15 @@ export default {
             }
         )
   },
+  watch: {
+    readOnlyTrigger(newValue) {
+      this.readOnly = newValue;
+    }
+  },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:installationType',
-    'update:clientStatement', 'update:approved', 'update:comments', 'save:data',
-    'cancel:updates', 'save:dataUpdates'
+    'update:clientStatement', 'update:approved', 'update:comments',
+    'reset:technicalInstallationInspection'
   ]
 }
 </script>
@@ -173,30 +185,11 @@ export default {
     />
   </ion-item>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Cancel"
-      button-color="danger"
-      @click="emitInputChange('cancel:updates')"
+      name="Reset Damage Inspection"
+      @click="emitInputChange('reset:technicalInstallationInspection')"
   />
-  <BaseButton
-      v-if="readOnlyProp && !readOnly"
-      slot="content"
-      name="Save Updates"
-      @click="emitInputChange('save:dataUpdates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && readOnly"
-      slot="content"
-      name="Update Information"
-      @click="readOnlyToggle"
-  />
-<!--  <BaseButton-->
-<!--      v-if="!readOnlyProp && !readOnly"-->
-<!--      slot="content"-->
-<!--      name="Save"-->
-<!--      @click="emitInputChange('save:data')"-->
-<!--  />-->
 </BaseAccordionLayout>
 </template>
 
