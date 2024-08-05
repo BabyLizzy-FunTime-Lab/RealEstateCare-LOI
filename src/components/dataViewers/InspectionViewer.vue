@@ -64,6 +64,7 @@ export default {
             @update:read-only-toggle="readOnlyToggle"
             @cancel:all-updates="reset('all_data')"
             @reset:basic-information="reset('basic_information')"
+            @push:all-updates="console.log('pushing')"
         />
         <DamageInspection
             :use-as-data-viewer="true"

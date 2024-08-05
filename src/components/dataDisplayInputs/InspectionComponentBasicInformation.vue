@@ -59,7 +59,7 @@ export default {
     },
     pushAllUpdates() {
       this.resetDatePicker();
-      this.emitInputChange('save:allUpdates');
+      this.emitInputChange('push:allUpdates');
     },
     reset() {
       this.resetDatePicker();
@@ -84,7 +84,7 @@ export default {
   },
   emits: [
     'update:date', 'update:address', 'save:data', 'update:readOnlyToggle',
-    'save:allUpdates', 'cancel:updates', 'cancel:allUpdates', 'reset:basicInformation'
+    'push:allUpdates', 'cancel:updates', 'cancel:allUpdates', 'reset:basicInformation'
   ]
 }
 </script>
