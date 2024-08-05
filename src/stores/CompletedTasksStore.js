@@ -116,36 +116,35 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 }
             })
         },
-        pushUpdatedData(inspectionId, inspectionType) {
+        pushUpdatedData(inspectionId) {
             // Start loading bar.
             loginStore.setLoadingStatus(true);
-            const dbInspectionTypes = {
-                damageInspections: "damage_inspection",
-                backlogMaintenance: "backlog_maintenance",
-                modifications: "modifications",
-                technicalInstallations: "technical_installation_inspection"
-            }
-            // This should run to make the push to the database.
-            let dataToSend = null;
-            this.getAllInspections[inspectionType].forEach(inspection => {
-                if(inspection.id === inspectionId) {
-                    dataToSend = inspection;
-                }
-            });
-            pushUpdatesToDataBase(dbInspectionTypes[inspectionType], inspectionId, dataToSend)
+            // Getting the inspection that was updated.
+            const dataToSend = this.getAllInspections.find(( {id} ) => id === inspectionId);
+            // Starting push.
+            pushUpdatesToDataBase(inspectionId, dataToSend)
                 .then(response => {
+                    console.log(response);
                     // End loading bar.
                     loginStore.setLoadingStatus(false);
                     // Notify user.
                     notificationStore.setNotification(
-                        `Data Update`,
+                        `Inspection Updated`,
                         `Message: ${response.statusText} (${response.status})`
                     )
+                    // Reset frontend.
+                    if(response.statusText === 'OK') return true;
                 })
                 .catch(err => {
                     // End loading bar.
                     loginStore.setLoadingStatus(false);
-                    console.log("Error while pushing update data to db", err);
+                    notificationStore.setNotification(
+                        `Inspection Update Failed`,
+                        'Problems connecting with database.'
+                    )
+                    console.error("Error while pushing update data to db", err);
+                    // Frontend does not reset.
+                    return false;
                 })
         },
     },

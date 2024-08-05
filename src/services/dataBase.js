@@ -109,30 +109,26 @@ export const dataBase = () => {
     }
     /**
      * Pushes updates to a specific inspection entry.
-     * @param {string} inspectionType
      * @param {string} inspectionId
      * @param {object} dataToSend
      * @return {object}
      */
-    const pushUpdatesToDataBase = async (inspectionType, inspectionId, dataToSend) => {
-    if(dataToSend.images.length > 0) {
+    const pushUpdatesToDataBase = async (inspectionId, dataToSend) => {
+        // Processing images.
+        await processImages(dataToSend, "damage_inspection");
+        await processImages(dataToSend, "backlog_maintenance");
+        await processImages(dataToSend, "technical_installation_inspection");
+        await processImages(dataToSend, "modifications");
+        // Sending data.
         try {
-            await convertImageArray(dataToSend.images).then(base64Array => {
-                dataToSend.images = base64Array;
-            })
+            const result = await axios.put(baseDbUrl + `/inspections/${inspectionId}`, dataToSend);
+            console.log(result);
+            return result;
         } catch (err) {
-            console.error('Error converting images: ', err);
+            console.error(err);
+            return err;
         }
     }
-    try {
-        const result = await axios.put(baseDbUrl + `/${inspectionType}/${inspectionId}`, dataToSend);
-        console.log(result);
-        return result;
-    } catch (err) {
-        console.error(err);
-        return err;
-    }
-}
     return {
         allInspectionsBackup,
         pushUpdatesToDataBase,

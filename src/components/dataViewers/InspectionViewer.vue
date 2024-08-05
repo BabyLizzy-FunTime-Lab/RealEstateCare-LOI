@@ -23,12 +23,16 @@ export default {
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),
-      readOnly: true
+      readOnly: true,
+      pushSuccess: false,
     }
   },
   methods: {
     dateFilter(date) {
       return date.split('T')[0];
+    },
+    readOnlyToggle() {
+      this.readOnly = !this.readOnly;
     },
     updateInspectionData(inspectionId, propertyName, newValue, inspectionType = null ) {
       this.completedActionStore.updateInspectionData(inspectionId, propertyName, newValue, inspectionType);
@@ -43,9 +47,17 @@ export default {
           this.completedActionStore.resetViewData(this.inspection.id, infoType);
       }
     },
-    readOnlyToggle() {
-      this.readOnly = !this.readOnly;
+    pushUpdatedData() {
+      console.log('pushing');
+      if(this.completedActionStore.pushUpdatedData(this.inspection.id) === true) {
+        console.log("derp");
+        this.readOnlyToggle();
+        this.completedActionStore.fetchAllCompletedTasks();
+      }
     },
+    resetPushSuccess() {
+      this.pushSuccess = false;
+    }
   }
 }
 </script>
@@ -64,7 +76,9 @@ export default {
             @update:read-only-toggle="readOnlyToggle"
             @cancel:all-updates="reset('all_data')"
             @reset:basic-information="reset('basic_information')"
-            @push:all-updates="console.log('pushing')"
+            :push-success="pushSuccess"
+            @reset:push-success="resetPushSuccess"
+            @push:all-updates="pushUpdatedData"
         />
         <DamageInspection
             :use-as-data-viewer="true"

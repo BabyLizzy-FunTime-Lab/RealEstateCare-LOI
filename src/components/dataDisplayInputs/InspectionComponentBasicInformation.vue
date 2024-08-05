@@ -29,18 +29,22 @@ export default {
     useAsDataViewer: {
       type: Boolean,
       default: false
+    },
+    pushSuccess: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     emitInputChange(eventName, data = null) {
       switch(eventName) {
         case "cancel:allUpdates":
-          case "save:allUpdates":
             case "update:readOnlyToggle":
           this.readOnlyToggle();
           this.$emit(eventName);
           break;
-        case "reset:basicInformation":
+        case "push:allUpdates":
+            case "reset:basicInformation":
           this.$emit(eventName);
           break;
         default:
@@ -72,6 +76,13 @@ export default {
         this.resetDatePicker()
         newValue = oldValue;
       }
+    },
+    pushSuccess(newValue, oldValue) {
+      if(newValue === true) {
+        this.readOnlyToggle();
+        this.$emit('reset:pushSuccess');
+        newValue = oldValue;
+      }
     }
   },
   mounted() {
@@ -84,7 +95,8 @@ export default {
   },
   emits: [
     'update:date', 'update:address', 'save:data', 'update:readOnlyToggle',
-    'push:allUpdates', 'cancel:updates', 'cancel:allUpdates', 'reset:basicInformation'
+    'push:allUpdates', 'cancel:updates', 'cancel:allUpdates', 'reset:basicInformation',
+    'reset:pushSuccess'
   ]
 }
 </script>
