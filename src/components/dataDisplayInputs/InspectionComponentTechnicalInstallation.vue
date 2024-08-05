@@ -68,12 +68,6 @@ export default {
         default:
           this.$emit(eventName, data);
       }
-      // if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
-      //   this.readOnlyToggle();
-      //   this.$emit(eventName);
-      // } else {
-      //   this.$emit(eventName, data);
-      // }
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
@@ -187,7 +181,7 @@ export default {
   <BaseButton
       v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Reset Damage Inspection"
+      name="Reset Technical Inspection"
       @click="emitInputChange('reset:technicalInstallationInspection')"
   />
 </BaseAccordionLayout>

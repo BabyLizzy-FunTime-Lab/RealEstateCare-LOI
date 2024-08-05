@@ -239,7 +239,7 @@ export default {
   <BaseButton
       v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Reset Damage Inspection"
+      name="Reset Modification Inspection"
       @click="emitInputChange('reset:modifications')"
   />
 </BaseAccordionLayout>
