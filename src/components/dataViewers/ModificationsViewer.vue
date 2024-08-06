@@ -1,9 +1,9 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
-import ModificationInspection from "@/components/dataDisplayInputs/ModificationInspection.vue";
+import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
-import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
+import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
 
 export default {
   name: "ModificationsViewer",

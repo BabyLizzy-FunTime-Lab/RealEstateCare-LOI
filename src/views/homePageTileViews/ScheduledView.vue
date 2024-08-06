@@ -1,19 +1,25 @@
 <script>
 import {IonAccordionGroup} from "@ionic/vue";
 import baseListLayout from "@/components/base/BaseListLayout.vue";
-import DamageInspection from "@/components/dataDisplayInputs/DamageInspection.vue";
-import BacklogMaintenance from "@/components/dataDisplayInputs/BacklogMaintenance.vue";
-import TechnicalInstallationInspection from "@/components/dataDisplayInputs/TechnicalInstallationInspection.vue";
-import ModificationInspection from "@/components/dataDisplayInputs/ModificationInspection.vue";
+import DamageInspection from "@/components/dataDisplayInputs/InspectionComponentDamage.vue";
+import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
+import TechnicalInstallationInspection from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
+import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
+import BasicInfomation from "@/components/dataDisplayInputs/InspectionComponentBasicInformation.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
-  components: {baseListLayout, IonAccordionGroup, DamageInspection,
-    BacklogMaintenance, TechnicalInstallationInspection, ModificationInspection},
+  components: {
+    baseListLayout, IonAccordionGroup, DamageInspection, BacklogMaintenance,
+    TechnicalInstallationInspection, ModificationInspection, BasicInfomation
+  },
   data() {
     return {
       inspectionStore: useInspectionStore(),
+      date: null,
+      address: null,
+      basicInspectionData: Object,
       damageInspectionData: Object,
       backlogMaintenanceData: Object,
       technicalInstallationData: Object,
@@ -25,23 +31,16 @@ export default {
     }
   },
   mounted() {
+    this.basicInspectionData = this.inspectionStore.getBasicInspectionViewData;
     this.damageInspectionData = this.inspectionStore.getDamageInspectionViewData;
     this.backlogMaintenanceData = this.inspectionStore.getBacklogMaintenanceViewData;
     this.technicalInstallationData = this.inspectionStore.getTechnicalInstallationViewData;
     this.modificationsData = this.inspectionStore.getModificationsViewData;
   },
   methods: {
-    pushDamageInspectionViewData() {
-      this.inspectionStore.pushDamageInspectionViewData();
-    },
-    pushBacklogMaintenanceViewData() {
-      this.inspectionStore.pushBacklogMaintenanceViewData();
-    },
-    pushTechnicalInstallationViewData() {
-      this.inspectionStore.pushTechnicalInstallationViewData();
-    },
-    pushModificationsViewData() {
-      this.inspectionStore.pushModificationsViewData();
+    pushInspectionViewData() {
+      console.log("starting data push.");
+      this.inspectionStore.pushInspectionViewData();
     },
     updateDamageInspectionViewData($event, inputName) {
       // Am I being too redundant here?
@@ -63,6 +62,13 @@ export default {
       console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateModificationsViewData($event, inputName);
       console.log("Requesting finished");
+    },
+    updateAddress($event) {
+      this.inspectionStore.updateAddressViewData($event);
+    },
+    updateDate($event) {
+      console.log($event);
+      this.inspectionStore.updateDateViewData($event);
     }
   }
 }
@@ -72,13 +78,19 @@ export default {
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
+        <BasicInfomation
+            :address="this.basicInspectionData.address"
+            @update:address="updateAddress($event)"
+            :date="this.basicInspectionData.date"
+            :reset-date="this.basicInspectionData.resetDate"
+            @update:date="updateDate($event)"
+            @save:data="pushInspectionViewData"
+        />
         <DamageInspection
             :location="this.damageInspectionData.location"
             @update:location="updateDamageInspectionViewData($event, 'location')"
             :new-damage="this.damageInspectionData.newDamage"
             @update:new-damage="updateDamageInspectionViewData($event, 'newDamage')"
-            :date="this.damageInspectionData.date"
-            @update:date="updateDamageInspectionViewData($event, 'date')"
             :selected-damage-type-option="this.damageInspectionData.selectedDamageTypeOption"
             @update:selected-damage-type-option="updateDamageInspectionViewData($event, 'selectedDamageTypeOption')"
             :damage-type="this.damageInspectionData.damageType"
@@ -90,7 +102,6 @@ export default {
             :images="this.damageInspectionData.images"
             @update:images="this.updateDamageInspectionViewData($event,'takePhoto')"
             @delete:image="this.updateDamageInspectionViewData($event,'deletePhoto')"
-            @save:data="pushDamageInspectionViewData"
         />
         <BacklogMaintenance
           :location="this.backlogMaintenanceData.location"
@@ -104,7 +115,6 @@ export default {
           :images="this.backlogMaintenanceData.images"
           @update:images="this.updateBacklogMaintenanceViewData($event, 'takePhoto')"
           @delete:image="this.updateBacklogMaintenanceViewData($event, 'deletePhoto')"
-          @save:data="pushBacklogMaintenanceViewData"
         />
         <TechnicalInstallationInspection
           :location="this.technicalInstallationData.location"
@@ -120,7 +130,6 @@ export default {
           :images="this.technicalInstallationData.images"
           @update:images="this.updateTechnicalInstallationViewData($event, 'takePhoto')"
           @delete:image="this.updateTechnicalInstallationViewData($event, 'deletePhoto')"
-          @save:data="pushTechnicalInstallationViewData"
         />
         <ModificationInspection
             :location="this.modificationsData.location"
@@ -140,7 +149,6 @@ export default {
             :images="this.modificationsData.images"
             @update:images="this.updateModificationsViewData($event, 'takePhoto')"
             @delete:image="this.updateModificationsViewData($event, 'deletePhoto')"
-            @save:data="pushModificationsViewData"
         />
       </ion-accordion-group>
     </base-list-layout>

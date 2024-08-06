@@ -49,21 +49,23 @@ export default {
       default: [],
       required: false
     },
-    readOnlyProp: {
+    useAsDataViewer: {
       type: Boolean,
       default: false
     },
-    saveDataRequest: {
-      type: Function,
-    },
+    readOnlyTrigger: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
-        this.readOnlyToggle();
-        this.$emit(eventName);
-      } else {
-        this.$emit(eventName, data);
+      switch(eventName) {
+        case "reset:modifications":
+          this.$emit(eventName);
+          break;
+        default:
+          this.$emit(eventName, data);
       }
     },
     emitNewPDF(eventName, data) {
@@ -119,6 +121,9 @@ export default {
   watch: {
     documentedModsUrl() {
       this.pdfUrl = this.documentedModsUrl;
+    },
+    readOnlyTrigger(newValue) {
+      this.readOnly = newValue;
     }
   },
   computed: {
@@ -136,13 +141,12 @@ export default {
   },
   mounted() {
     this.pdfUrl = this.documentedModsUrl;
-    this.readOnly = this.readOnlyProp;
+    this.readOnly = this.useAsDataViewer;
   },
   emits: [
     'update:location', 'update:documentedMods', 'update:modDescription',
     'update:requiredAction', 'update:comments', 'update:modifiedBy',
-    'update:images', 'delete:image', 'save:data', 'cancel:updates',
-    'save:dataUpdates'
+    'update:images', 'delete:image', 'reset:modifications'
   ]
 }
 </script>
@@ -222,41 +226,21 @@ export default {
                   :auto-grow="true"
                   placeholder="Enter your comments"></ion-textarea>
   </ion-item>
-  <ion-item slot="content" lines="none">
+  <ion-item slot="content" lines="none" class="last--item">
     <ion-label>Photos</ion-label>
     <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
-  </ion-item>
-  <ion-item slot="content" v-if="images.length > 0">
     <PhotoViewer
+        v-if="images.length > 0"
         :read-only="readOnly"
         :photos="images"
         @delete-event="emitInputChange('delete:image', $event)"
     />
   </ion-item>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Cancel"
-      button-color="danger"
-      @click="emitInputChange('cancel:updates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && !readOnly"
-      slot="content"
-      name="Save Updates"
-      @click="emitInputChange('save:dataUpdates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && readOnly"
-      slot="content"
-      name="Update Information"
-      @click="readOnlyToggle"
-  />
-  <BaseButton
-      v-if="!readOnlyProp && !readOnly"
-      slot="content"
-      name="Save"
-      @click="emitInputChange('save:data')"
+      name="Reset Modification Inspection"
+      @click="emitInputChange('reset:modifications')"
   />
 </BaseAccordionLayout>
 </template>
@@ -280,5 +264,8 @@ export default {
 }
 .select-disabled, .item-select-disabled ion-label {
   opacity: 1;
+}
+.last--item {
+  padding-bottom: 1em;
 }
 </style>

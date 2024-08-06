@@ -36,15 +36,17 @@ export default {
     costIndication: String,
     images: {
       value: Array,
-      default: []
+      default: [],
+      required: false
     },
-    readOnlyProp: {
+    useAsDataViewer: {
       type: Boolean,
       default: false
     },
-    saveDataRequest: {
-      type: Function
-    },
+    readOnlyTrigger: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(eventName, data = null) {
@@ -65,12 +67,16 @@ export default {
     }
   },
   mounted() {
-    this.readOnly = this.readOnlyProp
+    this.readOnly = this.useAsDataViewer
+  },
+  watch: {
+    readOnlyTrigger(newValue) {
+      this.readOnly = newValue;
+    }
   },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:emergency',
-    'update:maintenanceType', 'update:costIndication', 'save:data',
-    'cancel:updates', 'save:dataUpdates'
+    'update:maintenanceType', 'update:costIndication', 'reset:backlogMaintenance'
   ]
 }
 </script>
@@ -119,41 +125,21 @@ export default {
       <ion-select-option value="1500+">1500+</ion-select-option>
     </ion-select>
   </ion-item>
-  <ion-item slot="content" lines="none">
+  <ion-item slot="content" lines="none" class="last--item">
     <ion-label>Photos</ion-label>
     <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
-  </ion-item>
-  <ion-item  slot="content" v-if="images.length > 0">
     <PhotoViewer
+        v-if="images.length > 0"
         :read-only="readOnly"
         :photos="images"
         @delete-event="emitInputChange('delete:image', $event)"
     />
   </ion-item>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Cancel"
-      button-color="danger"
-      @click="emitInputChange('cancel:updates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && !readOnly"
-      slot="content"
-      name="Save Updates"
-      @click="emitInputChange('save:dataUpdates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && readOnly"
-      slot="content"
-      name="Update Information"
-      @click="readOnlyToggle"
-  />
-  <BaseButton
-      v-if="!readOnlyProp && !readOnly"
-      slot="content"
-      name="Save"
-      @click="emitInputChange('save:data')"
+      name="Reset Backlog Maintenance"
+      @click="emitInputChange('reset:backlogMaintenance')"
   />
 </BaseAccordionLayout>
 </template>
@@ -161,5 +147,8 @@ export default {
 <style scoped lang="scss">
 .select-disabled, .item-select-disabled ion-label {
   opacity: 1;
+}
+.last--item {
+  padding-bottom: 1em;
 }
 </style>

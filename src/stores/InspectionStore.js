@@ -8,7 +8,7 @@ import clearViewData from "@/mixins/clearViewData.js";
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
-const {uploadToDataBase} = dataBase();
+const {pushInspectionToDataBase} = dataBase();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -19,12 +19,15 @@ export const useInspectionStore = defineStore('inspections', {
             technical_installation_inspections_result: [],
             inventory_of_changes_result: [],
             generalLocalPhotoStaging: [],
+            basicInspectionViewdata: {
+                inspectionId: null,
+                date: null,
+                resetDate: false,
+                address: null,
+            },
             damageInspectionViewData: {
-                id: "",
-                inspectorId: "",
                 location: "",
                 newDamage: "",
-                date: new Date().toISOString(),
                 selectedDamageTypeOption: "",
                 damageType: "",
                 emergency: "",
@@ -32,8 +35,6 @@ export const useInspectionStore = defineStore('inspections', {
                 images: []
             },
             backlogMaintenanceViewData: {
-                id: "",
-                inspectorId: "",
                 location: "",
                 emergency: "",
                 maintenanceType: "",
@@ -41,8 +42,6 @@ export const useInspectionStore = defineStore('inspections', {
                 images: []
             },
             technicalInstallationViewData: {
-                id: "",
-                inspectorId: "",
                 location: "",
                 installationType: "",
                 clientStatement: "",
@@ -51,8 +50,6 @@ export const useInspectionStore = defineStore('inspections', {
                 images: []
             },
             modificationsViewData: {
-                id: "",
-                inspectorId: "",
                 documentedModsFile: null,
                 documentedModsDocName: null,
                 documentedModsUrl: null,
@@ -94,6 +91,12 @@ export const useInspectionStore = defineStore('inspections', {
             } else {
                 viewData[propertyName] = newData
             }
+        },
+        updateDateViewData(newData) {
+            this.getBasicInspectionViewData.date = newData;
+        },
+        updateAddressViewData(newData) {
+            this.getBasicInspectionViewData.address = newData.target.value;
         },
         updateDamageInspectionViewData(data, inputName) {
             console.log("Processing request: " + inputName);
@@ -187,123 +190,70 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-        pushDamageInspectionViewData() {
-            // Start loading bar.
+        // Now we need one push action that brings the data together and pushes it to the db.
+        // Here we bring the data together and pass it to the uploadToDataBase method.
+        pushInspectionViewData() {
             loginStore.setLoadingStatus(true);
-            console.log("Pushing DamageInspectionViewData");
-            // Adding user id to the viewData.
-            this.getDamageInspectionViewData.inspectorId = this.fetchUserId();
-            // Calling the cloudinary uploader service to upload images to cloudinary and get URL response.
-            uploadToDataBase(this.getDamageInspectionViewData, "damage_inspection")
-                .then(result => {
-                    console.log(result);
-                    if(result === 201) {
-                        // End loading bar.
-                        loginStore.setLoadingStatus(false);
-                        // alert("Save successful");
-                        notificationStore.setNotification("Data save", "Success!");
-                        // clearViewData.methods.clearViewData(this.getDamageInspectionViewData);
-                        // Once the push is complete, empty the inputs and notify success.
-                    } else {
-                        // End loading bar.
-                        loginStore.setLoadingStatus(false);
-                        // alert("Upload to data base failed: " + result)
-                        notificationStore.setNotification("Data save", "Error");
-                        // Triggers alert, if no connection could be made to the db.
-                        // In that case the data needs to be saved locally.
-                    }
-                })
-                .catch(err => {
-                    console.log("Error while pushing data to db", err);
-                })
-        },
-        pushBacklogMaintenanceViewData() {
-            // Start loading bar.
-            loginStore.setLoadingStatus(true);
-            console.log("Pushing BacklogMaintenance");
-            this.getBacklogMaintenanceViewData.inspectorId = this.fetchUserId();
-            uploadToDataBase(this.getBacklogMaintenanceViewData, "backlog_maintenance")
-                .then(result => {
-                    console.log(result);
-                    if(result === 201) {
-                        // End loading bar.
-                        loginStore.setLoadingStatus(false);
-                        // alert("Save successful");
-                        notificationStore.setNotification("Data save", "Success!");
-                        // Once the push is complete, empty the inputs and notify success.
-                    } else {
-                        // End loading bar.
-                        loginStore.setLoadingStatus(false);
-                        // alert("Upload to data base failed: " + result)
-                        notificationStore.setNotification("Data save", "Error");
-                        // Triggers alert, if no connection could be made to the db.
-                        // In that case the data needs to be saved locally.
-                    }
-                })
-                .catch(err => {
-                    console.log("Error while pushing data to db", err);
-                })
-        },
-        pushTechnicalInstallationViewData() {
-            // Start loading bar.
-            loginStore.setLoadingStatus(true);
-            console.log("Pushing TechnicalInstallation");
-            this.getTechnicalInstallationViewData.inspectorId = this.fetchUserId();
-            uploadToDataBase(this.getTechnicalInstallationViewData, "technical_installation_inspection")
-                .then(result => {
-                    console.log(result);
-                    if(result === 201) {
-                        // End loading bar.
-                        loginStore.setLoadingStatus(false);
-                        // alert("Save successful");
-                        notificationStore.setNotification("Data save", "Success!");
-                        // Once the push is complete, empty the inputs and notify success.
-                    } else {
-                        // End loading bar.
-                        loginStore.setLoadingStatus(false);
-                        // alert("Upload to data base failed: " + result)
-                        notificationStore.setNotification("Data save", "Error");
-                        // Triggers alert, if no connection could be made to the db.
-                        // In that case the data needs to be saved locally.
-                    }
-                })
-                .catch(err => {
-                    console.log("Error while pushing data to db", err);
-                })
-        },
-        pushModificationsViewData() {
-            // Start loading bar.
-            loginStore.setLoadingStatus(true);
-            console.log("Pushing Modifications");
-            this.getModificationsViewData.inspectorId = this.fetchUserId();
-            // Remove documentedModsFile before push.
+            console.log("Pushing Inspection ViewData");
+            // Remove documentedModsFile from modifications before push.
             const dataCopy = cloneDeep(this.getModificationsViewData);
-            const {documentedModsFile, ...readyToSendData} = dataCopy;
-
-            uploadToDataBase(readyToSendData, "modifications", this.getModificationsViewData)
-                .then(result => {
+            const {documentedModsFile, ...readyToSendModificationsData} = dataCopy;
+            // The id is provided by the database when the data is recieved.
+            const sendData = {
+                "id": "",
+                "inspectorId": this.fetchUserId(),
+                "date": this.getBasicInspectionViewData.date,
+                "address": this.getBasicInspectionViewData.address,
+                "damage_inspection": this.getDamageInspectionViewData,
+                "backlog_maintenance": this.getBacklogMaintenanceViewData,
+                "technical_installation_inspection": this.getTechnicalInstallationViewData,
+                "modifications": readyToSendModificationsData
+            }
+            // Push can't continue without address and date information.
+            if(sendData.date && sendData.address) {
+                pushInspectionToDataBase(sendData).then(result => {
                     console.log(result);
                     if(result === 201) {
                         // End loading bar.
                         loginStore.setLoadingStatus(false);
-                        // alert("Save successful");
-                        notificationStore.setNotification("Data save", "Success!");
                         // Once the push is complete, empty the inputs and notify success.
+                        notificationStore.setNotification("Data save", "Success!");
+                        clearViewData.methods.clearViewData(
+                            [
+                                this.getBasicInspectionViewData,
+                                this.getDamageInspectionViewData,
+                                this.getBacklogMaintenanceViewData,
+                                this.getTechnicalInstallationViewData,
+                                this.getModificationsViewData
+                            ]
+                        );
                     } else {
                         // End loading bar.
                         loginStore.setLoadingStatus(false);
-                        // alert("Upload to data base failed: " + result)
-                        notificationStore.setNotification("Data save", "Error");
+                        notificationStore.setNotification("Save failed", result);
                         // Triggers alert, if no connection could be made to the db.
                         // In that case the data needs to be saved locally.
                     }
                 })
-                .catch(err => {
-                    console.log("Error while pushing data to db", err);
-                })
+                    .catch(err => {
+                        loginStore.setLoadingStatus(false);
+                        console.log("Error while pushing data to db", err);
+                    })
+            } else {
+                // End loading bar.
+                loginStore.setLoadingStatus(false);
+                // Push can't continue without address and date information.
+                notificationStore.setNotification(
+                    "Missing data",
+                    "Please enter Basic Information before saving."
+                );
+            }
         }
     },
     getters: {
+        getBasicInspectionViewData(state) {
+          return state.basicInspectionViewdata;
+        },
         getDamageInspectionViewData(state) {
             return state.damageInspectionViewData;
         },

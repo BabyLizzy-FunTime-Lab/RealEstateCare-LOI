@@ -39,10 +39,6 @@ export default {
       type: String,
       default: "Technical Installation Inspection"
     },
-    readOnlyProp: {
-      type: Boolean,
-      default: false
-    },
     inspectionId: String,
     location: String,
     installationType: String,
@@ -54,22 +50,27 @@ export default {
       default: [],
       required: false
     },
-    saveDataRequest: {
-      type: Function
+    useAsDataViewer: {
+      type: Boolean,
+      default: false
     },
+    readOnlyTrigger: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     emitInputChange(eventName, data = null) {
-      if(eventName === "cancel:updates" || eventName === "save:dataUpdates") {
-        this.readOnlyToggle();
-        this.$emit(eventName);
-      } else {
-        this.$emit(eventName, data);
+      switch(eventName) {
+        case "reset:technicalInstallationInspection":
+          this.$emit(eventName);
+          break;
+        default:
+          this.$emit(eventName, data);
       }
     },
     readOnlyToggle() {
       this.readOnly = !this.readOnly;
-      console.log("test")
     },
     takePhotoAction() {
       takePhoto().then(newImage => {
@@ -78,7 +79,7 @@ export default {
     }
   },
   mounted() {
-    this.readOnly = this.readOnlyProp;
+    this.readOnly = this.useAsDataViewer;
     // Here we fetch the 'Test Procedure' pdf document.
     this.loginStore.fetchBaseDocument("Test Procedure")
         .then(document => {
@@ -90,10 +91,15 @@ export default {
             }
         )
   },
+  watch: {
+    readOnlyTrigger(newValue) {
+      this.readOnly = newValue;
+    }
+  },
   emits: [
     'update:images', 'delete:image', 'update:location', 'update:installationType',
-    'update:clientStatement', 'update:approved', 'update:comments', 'save:data',
-    'cancel:updates', 'save:dataUpdates'
+    'update:clientStatement', 'update:approved', 'update:comments',
+    'reset:technicalInstallationInspection'
   ]
 }
 </script>
@@ -162,41 +168,21 @@ export default {
         placeholder="Enter your comments"
     />
   </ion-item>
-  <ion-item slot="content" lines="none">
+  <ion-item slot="content" lines="none" class="last--item">
     <ion-label>Photos</ion-label>
     <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
-  </ion-item>
-  <ion-item  slot="content" v-if="images.length > 0">
     <PhotoViewer
+        v-if="images.length > 0"
         :read-only="readOnly"
         :photos="images"
         @delete-event="emitInputChange('delete:image', $event)"
     />
   </ion-item>
   <BaseButton
-      v-if="readOnlyProp && !readOnly"
+      v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Cancel"
-      button-color="danger"
-      @click="emitInputChange('cancel:updates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && !readOnly"
-      slot="content"
-      name="Save Updates"
-      @click="emitInputChange('save:dataUpdates')"
-  />
-  <BaseButton
-      v-if="readOnlyProp && readOnly"
-      slot="content"
-      name="Update Information"
-      @click="readOnlyToggle"
-  />
-  <BaseButton
-      v-if="!readOnlyProp && !readOnly"
-      slot="content"
-      name="Save"
-      @click="emitInputChange('save:data')"
+      name="Reset Technical Inspection"
+      @click="emitInputChange('reset:technicalInstallationInspection')"
   />
 </BaseAccordionLayout>
 </template>
@@ -204,5 +190,8 @@ export default {
 <style scoped lang="scss">
 .select-disabled, .item-select-disabled ion-label {
   opacity: 1;
+}
+.last--item {
+  padding-bottom: 1em;
 }
 </style>
