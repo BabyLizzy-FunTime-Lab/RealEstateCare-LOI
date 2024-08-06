@@ -85,7 +85,7 @@ export const dataBase = () => {
      * @returns {Promise<number|string>}
      */
     const pushInspectionToDataBase = async (sendData) => {
-        let returnCode = "error";
+        // let returnCode = "error";
         // Process images.
         await processImages(sendData, "damage_inspection");
         await processImages(sendData, "backlog_maintenance");
@@ -97,12 +97,15 @@ export const dataBase = () => {
             const result = await axios.post(`${baseDbUrl}/inspections`, sendData);
             console.log('Data uploaded: ', result);
             console.log(result.status);
-            returnCode = result.status;
+            return result.status;
         } catch (err) {
-            console.error('Error uploading: ', err);
-            // throw err;
-            returnCode = "error pushing data";
-            return returnCode;
+            console.error(`Error uploading, ${err.message}`, err);
+            if(err.message === 'Request failed with status code 500') {
+                return 'Too much data, please use smaller pictures.'
+            } else {
+                return err.message;
+            }
+            // return returnCode;
         }
 
         return returnCode;

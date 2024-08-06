@@ -8,7 +8,7 @@ import clearViewData from "@/mixins/clearViewData.js";
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
-const {uploadToDataBase, pushInspectionToDataBase} = dataBase();
+const {pushInspectionToDataBase} = dataBase();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -230,8 +230,7 @@ export const useInspectionStore = defineStore('inspections', {
                     } else {
                         // End loading bar.
                         loginStore.setLoadingStatus(false);
-                        // alert("Upload to data base failed: " + result)
-                        notificationStore.setNotification("Data save", "Error");
+                        notificationStore.setNotification("Save failed", result);
                         // Triggers alert, if no connection could be made to the db.
                         // In that case the data needs to be saved locally.
                     }
