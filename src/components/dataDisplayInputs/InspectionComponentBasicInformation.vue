@@ -62,7 +62,7 @@ export default {
       this.emitInputChange('cancel:allUpdates');
     },
     pushAllUpdates() {
-      this.resetDatePicker();
+      // this.resetDatePicker();
       this.emitInputChange('push:allUpdates');
     },
     reset() {

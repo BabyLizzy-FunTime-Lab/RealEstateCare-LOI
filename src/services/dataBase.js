@@ -121,11 +121,9 @@ export const dataBase = () => {
         await processImages(dataToSend, "modifications");
         // Sending data.
         try {
-            const result = await axios.put(baseDbUrl + `/inspections/${inspectionId}`, dataToSend);
-            console.log(result);
-            return result;
+            return await axios.put(baseDbUrl + `/inspections/${inspectionId}`, dataToSend);
         } catch (err) {
-            console.error(err);
+            console.error(`There was a problem while pushing to db, ${err.message}`,err);
             return err;
         }
     }

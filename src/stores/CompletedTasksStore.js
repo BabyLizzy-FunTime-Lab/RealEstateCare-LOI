@@ -116,36 +116,51 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 }
             })
         },
-        pushUpdatedData(inspectionId) {
+        async pushUpdatedData(inspectionId) {
             // Start loading bar.
             loginStore.setLoadingStatus(true);
             // Getting the inspection that was updated.
             const dataToSend = this.getAllInspections.find(( {id} ) => id === inspectionId);
+            let returnMessage = "";
             // Starting push.
-            pushUpdatesToDataBase(inspectionId, dataToSend)
+            await pushUpdatesToDataBase(inspectionId, dataToSend)
                 .then(response => {
                     console.log(response);
-                    // End loading bar.
-                    loginStore.setLoadingStatus(false);
-                    // Notify user.
-                    notificationStore.setNotification(
-                        `Inspection Updated`,
-                        `Message: ${response.statusText} (${response.status})`
-                    )
-                    // Reset frontend.
-                    if(response.statusText === 'OK') return true;
+                    // Axios returns a different object when errors happen.
+                    if(response.name === "AxiosError") {
+                        // console.log(response);
+                        returnMessage = "error";
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
+                        // Notify user.
+                        notificationStore.setNotification(
+                            `Inspection Update Failed`,
+                            `Message: Images are too large`
+                        )
+                    }
+                    if(response.status === 200) {
+                        // console.log(response);
+                        returnMessage = "success";
+                        // End loading bar.
+                        loginStore.setLoadingStatus(false);
+                        // Notify user.
+                        notificationStore.setNotification(
+                            `Inspection Updated`,
+                            `Message: ${response.statusText} (${response.status})`
+                        )
+                    }
                 })
                 .catch(err => {
+                    returnMessage = "error";
                     // End loading bar.
                     loginStore.setLoadingStatus(false);
+                    console.error("Error while pushing update data to db", err);
                     notificationStore.setNotification(
                         `Inspection Update Failed`,
                         'Problems connecting with database.'
                     )
-                    console.error("Error while pushing update data to db", err);
-                    // Frontend does not reset.
-                    return false;
                 })
+            return returnMessage;
         },
     },
     getters: {

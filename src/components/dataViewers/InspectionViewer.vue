@@ -48,12 +48,14 @@ export default {
       }
     },
     pushUpdatedData() {
-      console.log('pushing');
-      if(this.completedActionStore.pushUpdatedData(this.inspection.id) === true) {
-        console.log("derp");
-        this.readOnlyToggle();
-        this.completedActionStore.fetchAllCompletedTasks();
-      }
+      this.completedActionStore.pushUpdatedData(this.inspection.id).then(result => {
+        if(result === "success") {
+          console.log("derp");
+          this.readOnlyToggle();
+          this.pushSuccess = true;
+          this.completedActionStore.fetchAllCompletedTasks();
+        }
+      })
     },
     resetPushSuccess() {
       this.pushSuccess = false;
