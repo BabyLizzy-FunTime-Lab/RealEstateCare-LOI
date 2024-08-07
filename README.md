@@ -21,6 +21,9 @@ npm install
 ```sh
 npm install -g @ionic/cli@latest
 ```
+## Demo user account
+- Username: user
+- Password: 123
 
 ## Start server
 ```sh
@@ -46,8 +49,10 @@ npm install -d vue-pdf-embed
 ```
 
 ## Dummy data
-- Data db: Uses [RealEstateCareJSON](https://github.com/BabyLizzy-FunTime-Lab/RealEstateCareJSON) for dummy data. It's my private heroku JSON server.
-- Media db: Images and PDF's are fetched from my private [Cloudinary](https://cloudinary.com/) account. This is also where they will be saved. 
+- Data db: Uses [RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/) for dummy data. 
+It's my private heroku JSON server. [GitHub](https://github.com/BabyLizzy-FunTime-Lab/JsonRealEstateCare)
+- Media: Images and PDF's are stored and fetched as Base64 encoded strings, on and from 
+[RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/).
 
 
 
