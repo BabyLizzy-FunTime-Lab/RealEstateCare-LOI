@@ -9,17 +9,120 @@ const baseDbUrl = loginStore.fetchBaseDbUrl();
 export const dataBase = () => {
     // allInspectionsBackup is a copy of the latest all inspections fetch results.
     const allInspectionsBackup = ref();
+    const allInspections = ref([]);
+
+    /**
+     * Creates an array of inspection objects.
+     * @param {array} db_data
+     * @return {Promise|array}
+     */
+    const allInspectionsConstructor = async (db_data) => {
+        class Inspection {
+            constructor(
+                id, inspectorId, date, address,
+                damageInspection, backlogMaintenance, technicalInstallationInspection, modifications
+            ) {
+                this.id = id;
+                this.inspectorId = inspectorId;
+                this.date = date;
+                this.address = address;
+                this.damage_inspection = new DamageInspection(
+                    damageInspection.location, damageInspection.newDamage, damageInspection.selectedDamageTypeOption,
+                    damageInspection.damageType, damageInspection.emergency, damageInspection.comments,
+                    damageInspection.images
+                );
+                this.backlog_maintenance = new BacklogMaintenance(
+                    backlogMaintenance.location, backlogMaintenance.maintenanceType, backlogMaintenance.emergency,
+                    backlogMaintenance.costIndication, backlogMaintenance.images
+                );
+                this.technical_installation_inspection = new TechnicalInstallationInspection(
+                    technicalInstallationInspection.location, technicalInstallationInspection.installationType,
+                    technicalInstallationInspection.clientStatement, technicalInstallationInspection.approved,
+                    technicalInstallationInspection.comments, technicalInstallationInspection.images
+                );
+                this.modifications = new Modifications(
+                    modifications.location, modifications.documentedModsDocName, modifications.documentedModsUrl,
+                    modifications.modifiedBy, modifications.modDescription, modifications.requiredAction,
+                    modifications.comments, modifications.images
+                );
+            }
+
+        }
+
+        class DamageInspection {
+            constructor(location, newDamage, selectedDamageTypeOption, damageType, emergency, comments, images) {
+                this.location = location;
+                this.newDamage = newDamage;
+                this.selectedDamageTypeOption = selectedDamageTypeOption;
+                this.damageType = damageType;
+                this.emergency = emergency;
+                this.comments = comments;
+                this.images = images;
+            }
+        }
+
+        class BacklogMaintenance {
+            constructor(location, maintenanceType, emergency, costIndication, images) {
+                this.location = location;
+                this.maintenanceType = maintenanceType;
+                this.emergency = emergency;
+                this.costIndication = costIndication;
+                this.images = images;
+            }
+        }
+
+        class TechnicalInstallationInspection {
+            constructor(location, installationType, clientStatement, approved, comments, images) {
+                this.location = location;
+                this.installationType = installationType;
+                this.clientStatement = clientStatement;
+                this.approved = approved;
+                this.comments = comments;
+                this.images = images;
+            }
+        }
+
+        class Modifications {
+            constructor(location, documentedModsDocName, documentedModsUrl, modifiedBy, modDescription, requiredAction, comments, images) {
+                this.location = location;
+                this.documentedModsDocName = documentedModsDocName;
+                this.documentedModsUrl = documentedModsUrl;
+                this.modifiedBy = modifiedBy;
+                this.modDescription = modDescription;
+                this.requiredAction = requiredAction;
+                this.comments = comments;
+                this.images = images;
+            }
+        }
+        db_data.forEach(dataObject => {
+            let inspection = new Inspection (
+                dataObject.id, dataObject.inspectorId, dataObject.date, dataObject.address,
+                dataObject.damage_inspection, dataObject.backlog_maintenance,
+                dataObject.technical_installation_inspection, dataObject.modifications
+            )
+            allInspections.value.push(inspection);
+        })
+        return allInspections.value;
+    }
     /**
      * Fetches all inspections for the current user.
-     * @param user_id
+     * @param {string} user_id
      * @returns {Promise<axios.AxiosResponse<any> | void>}
      */
     const fetchAllInspections = async (user_id) => {
-        return axios.get( baseDbUrl + "/inspections?inspectorId=" + user_id)
+        let inspectionsFromDB = await axios.get( baseDbUrl + "/inspections?inspectorId=" + user_id)
             .then(result => {
+                // Here we reset the variables that will carry the information and return the fetched inspections
+                // so they can be processed by the allInspectionsConstructor.
                 allInspectionsBackup.value = result.data;
+                allInspections.value = [];
                 return result.data;
-            }).catch(err => console.log(err));
+            }).catch(err => console.error("Inspection fetch failed", err));
+
+        // Domain class constructor function.
+        return await allInspectionsConstructor(inspectionsFromDB).then(inspections => {
+            return inspections
+        });
     }
     /**
      * Fetch blob from blob:URL obtained from useCamera.
@@ -85,7 +188,6 @@ export const dataBase = () => {
      * @returns {Promise<number|string>}
      */
     const pushInspectionToDataBase = async (sendData) => {
-        // let returnCode = "error";
         // Process images.
         await processImages(sendData, "damage_inspection");
         await processImages(sendData, "backlog_maintenance");
@@ -105,10 +207,7 @@ export const dataBase = () => {
             } else {
                 return err.message;
             }
-            // return returnCode;
         }
-
-        return returnCode;
     }
     /**
      * Pushes updates to a specific inspection entry.
