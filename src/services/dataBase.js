@@ -13,7 +13,7 @@ export const dataBase = () => {
 
     /**
      * Creates an array of inspection objects.
-     * @param {array} db_data
+     * @param {axios.AxiosResponse<any> | void} db_data
      * @return {Promise|array}
      */
     const allInspectionsConstructor = async (db_data) => {

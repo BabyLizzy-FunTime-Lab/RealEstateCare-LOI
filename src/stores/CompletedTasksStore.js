@@ -28,6 +28,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             let user_id = this.fetchUserId();
             loginStore.setLoadingStatus(true);
             try {
+                console.log("Fetching all inspections.");
               let result = await fetchAllInspections(user_id);
               if(user_id && result) {
                   loginStore.setLoadingStatus(false);
@@ -35,7 +36,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                   // Sorts all data in descending date order.
                   result.sort((a, b) => new Date(b.date) - new Date(a.date));
                   this.allInspections = result;
-                  console.log(this.allInspections);
                   return result;
               } else {
                   loginStore.setLoadingStatus(false);
@@ -53,11 +53,11 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 && propertyName != 'date'
                 && propertyName != 'images'
                 && propertyName != 'documentedModsFile') {
-                console.log(newValue);
+                // console.log(newValue);
                 newValue = newValue.target.value
             }
             // This is needed to update the state.
-            console.log(newValue);
+            // console.log(newValue);
             let inspectionFound = false;
             let allInspectionsArray = this.getAllInspections;
             allInspectionsArray.forEach(inspection => {
@@ -91,7 +91,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             if(!inspectionFound) {
                 console.error("No inspection was found with id: " + inspectionId);
             }
-            console.log(allInspectionsArray);
+            // console.log(allInspectionsArray);
         },
         resetViewData(inspectionId, inspectionType) {
             const backupDataObject = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
@@ -125,7 +125,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             // Starting push.
             await pushUpdatesToDataBase(inspectionId, dataToSend)
                 .then(response => {
-                    console.log(response);
                     // Axios returns a different object when errors happen.
                     if(response.name === "AxiosError") {
                         // console.log(response);
