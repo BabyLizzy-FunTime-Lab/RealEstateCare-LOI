@@ -97,14 +97,12 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             const backupDataObject = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
             this.getAllInspections.forEach((inspection, index) => {
                 if(inspection.id === inspectionId) {
+                    console.log("Resetting Information");
                     switch (inspectionType) {
                         case 'all_data':
                             this.getAllInspections[index] = cloneDeep(backupDataObject);
-                            // inspection = backupDataObject;
-                            console.log(this.getAllInspections[index]);
                             break;
                         case 'basic_information':
-                            console.log(backupDataObject);
                             inspection.date = backupDataObject.date;
                             inspection.address = backupDataObject.address;
                             break;
@@ -122,6 +120,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             // Getting the inspection that was updated.
             const dataToSend = this.getAllInspections.find(( {id} ) => id === inspectionId);
             let returnMessage = "";
+            console.log("Pushing Inspection Updates.");
             // Starting push.
             await pushUpdatesToDataBase(inspectionId, dataToSend)
                 .then(response => {

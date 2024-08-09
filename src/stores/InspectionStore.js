@@ -19,7 +19,7 @@ export const useInspectionStore = defineStore('inspections', {
             technical_installation_inspections_result: [],
             inventory_of_changes_result: [],
             generalLocalPhotoStaging: [],
-            basicInspectionViewdata: {
+            basicInspectionViewData: {
                 inspectionId: null,
                 date: null,
                 resetDate: false,
@@ -85,7 +85,7 @@ export const useInspectionStore = defineStore('inspections', {
         },
         updateInputView(newData, viewData, propertyName) {
             // This is a good spot to implement input validation.
-            // If it recieved an event object, it will seek the target.value
+            // If it received an event object, it will seek the target.value
             if(typeof newData === 'object' && newData !== null && propertyName != "date") {
                 viewData[propertyName] = newData.target.value
             } else {
@@ -99,7 +99,6 @@ export const useInspectionStore = defineStore('inspections', {
             this.getBasicInspectionViewData.address = newData.target.value;
         },
         updateDamageInspectionViewData(data, inputName) {
-            console.log("Processing request: " + inputName);
             if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'selectedDamageTypeOption') {
                 switch(inputName) {
                     case 'selectedDamageTypeOption':
@@ -126,7 +125,6 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         updateBacklogMaintenanceViewData(data, inputName) {
-            console.log('Processing request: ' + inputName);
             if(inputName === 'takePhoto' || inputName === 'deletePhoto') {
                 switch(inputName) {
                     case 'takePhoto':
@@ -145,7 +143,6 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         updateTechnicalInstallationViewData(data, inputName) {
-            console.log('Processing request: ' + inputName);
             if(inputName === 'takePhoto' || inputName === 'deletePhoto') {
                 switch(inputName) {
                     case 'takePhoto':
@@ -164,9 +161,6 @@ export const useInspectionStore = defineStore('inspections', {
             }
         },
         updateModificationsViewData(data, inputName) {
-            // I made the input names match the state names so I could experiment with
-            // calling updateInputView in the ScheduledView parent component.
-            console.log('Processing request: ' + inputName);
             if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'documentedModsFile') {
                 switch (inputName) {
                     case 'documentedModsFile':
@@ -190,11 +184,10 @@ export const useInspectionStore = defineStore('inspections', {
                 this.updateInputView(data, this.getModificationsViewData, inputName);
             }
         },
-        // Now we need one push action that brings the data together and pushes it to the db.
         // Here we bring the data together and pass it to the uploadToDataBase method.
         pushInspectionViewData() {
             loginStore.setLoadingStatus(true);
-            console.log("Pushing Inspection ViewData");
+            console.log("Pushing New Inspection.");
             // Remove documentedModsFile from modifications before push.
             const dataCopy = cloneDeep(this.getModificationsViewData);
             const {documentedModsFile, ...readyToSendModificationsData} = dataCopy;
@@ -212,7 +205,6 @@ export const useInspectionStore = defineStore('inspections', {
             // Push can't continue without address and date information.
             if(sendData.date && sendData.address) {
                 pushInspectionToDataBase(sendData).then(result => {
-                    console.log(result);
                     if(result === 201) {
                         // End loading bar.
                         loginStore.setLoadingStatus(false);
@@ -252,7 +244,7 @@ export const useInspectionStore = defineStore('inspections', {
     },
     getters: {
         getBasicInspectionViewData(state) {
-          return state.basicInspectionViewdata;
+          return state.basicInspectionViewData;
         },
         getDamageInspectionViewData(state) {
             return state.damageInspectionViewData;

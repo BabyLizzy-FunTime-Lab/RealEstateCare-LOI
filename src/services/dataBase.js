@@ -198,7 +198,6 @@ export const dataBase = () => {
         try {
             const result = await axios.post(`${baseDbUrl}/inspections`, sendData);
             console.log('Data uploaded: ', result);
-            console.log(result.status);
             return result.status;
         } catch (err) {
             console.error(`Error uploading, ${err.message}`, err);

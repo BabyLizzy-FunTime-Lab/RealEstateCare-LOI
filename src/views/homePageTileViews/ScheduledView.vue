@@ -39,35 +39,25 @@ export default {
   },
   methods: {
     pushInspectionViewData() {
-      console.log("starting data push.");
+      console.log("Starting data push.");
       this.inspectionStore.pushInspectionViewData();
     },
     updateDamageInspectionViewData($event, inputName) {
-      // Am I being too redundant here?
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateDamageInspectionViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateBacklogMaintenanceViewData($event, inputName) {
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateBacklogMaintenanceViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateTechnicalInstallationViewData($event, inputName) {
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateTechnicalInstallationViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateModificationsViewData($event, inputName) {
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateModificationsViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateAddress($event) {
       this.inspectionStore.updateAddressViewData($event);
     },
     updateDate($event) {
-      console.log($event);
       this.inspectionStore.updateDateViewData($event);
     }
   }
