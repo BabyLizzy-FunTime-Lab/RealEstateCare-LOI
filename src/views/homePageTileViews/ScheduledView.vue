@@ -5,14 +5,14 @@ import DamageInspection from "@/components/dataDisplayInputs/InspectionComponent
 import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
 import TechnicalInstallationInspection from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
 import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
-import BasicInfomation from "@/components/dataDisplayInputs/InspectionComponentBasicInformation.vue";
+import BasicInformation from "@/components/dataDisplayInputs/InspectionComponentBasicInformation.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
   components: {
     baseListLayout, IonAccordionGroup, DamageInspection, BacklogMaintenance,
-    TechnicalInstallationInspection, ModificationInspection, BasicInfomation
+    TechnicalInstallationInspection, ModificationInspection, BasicInformation
   },
   data() {
     return {
@@ -24,10 +24,6 @@ export default {
       backlogMaintenanceData: Object,
       technicalInstallationData: Object,
       modificationsData: Object,
-      testData: {
-        name: "Test Procedure",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
-      },
     }
   },
   mounted() {
@@ -68,7 +64,7 @@ export default {
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
-        <BasicInfomation
+        <BasicInformation
             :address="this.basicInspectionData.address"
             @update:address="updateAddress($event)"
             :date="this.basicInspectionData.date"

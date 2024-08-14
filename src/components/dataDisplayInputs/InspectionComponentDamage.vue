@@ -148,7 +148,7 @@ export default {
     />
   </ion-item>
   <ion-item slot="content" class="newDamage-border" lines="inset">
-    <ion-label>New Damage?</ion-label>
+    <ion-label class="custom-label">New Damage?</ion-label>
     <ion-radio-group :value="newDamage"
                      @ionChange="emitInputChange('update:newDamage', $event)"
                      name="newDamage">
@@ -165,7 +165,7 @@ export default {
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
-    <ion-label>Emergency Action needed?</ion-label>
+    <ion-label class="custom-label">Emergency Action needed?</ion-label>
     <ion-radio-group :value="emergency"
                      @ionChange="emitInputChange('update:emergency', $event)"
                      name="emergency">
@@ -182,16 +182,18 @@ export default {
     </ion-radio-group>
   </ion-item>
   <ion-item slot="content">
-    <ion-textarea label="Comments"
-                  :readonly="readOnly"
-                  :value="comments"
-                  @ionChange="emitInputChange('update:comments', $event)"
-                  label-placement="floating"
-                  :auto-grow="true"
-                  placeholder="Enter your comments"></ion-textarea>
+    <ion-textarea
+        label="Comments"
+        :readonly="readOnly"
+        :value="comments"
+        @ionChange="emitInputChange('update:comments', $event)"
+        label-placement="floating"
+        :auto-grow="true"
+        placeholder="Enter your comments"
+    />
   </ion-item>
   <ion-item slot="content" lines="none" class="last--item">
-    <ion-label>Photos</ion-label>
+    <ion-label class="custom-label">Photos</ion-label>
     <ion-button v-if="!readOnly"
                 name="takePhoto"
                 @click="takePhotoAction"
@@ -213,7 +215,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.select-disabled, .item-select-disabled ion-label {
+.select-disabled, .item-select-disabled .custom-label {
   opacity: 1;
 }
 .custom-placeholder {

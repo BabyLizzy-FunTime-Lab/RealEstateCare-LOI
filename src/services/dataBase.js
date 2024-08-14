@@ -112,7 +112,7 @@ export const dataBase = () => {
     const fetchAllInspections = async (user_id) => {
         let inspectionsFromDB = await axios.get( baseDbUrl + "/inspections?inspectorId=" + user_id)
             .then(result => {
-                // Here we reset the variables that will carry the information and return the fetched inspections
+                // Here we reset the variables that will carry the information and return the fetched inspections,
                 // so they can be processed by the allInspectionsConstructor.
                 allInspectionsBackup.value = result.data;
                 allInspections.value = [];

@@ -49,10 +49,17 @@ npm install -d vue-pdf-embed
 ```
 
 ## Dummy data
-- Data db: Uses [RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/) for dummy data. 
+- Data db: <br/>Uses [RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/) for dummy data. 
 It's my private heroku JSON server. [GitHub](https://github.com/BabyLizzy-FunTime-Lab/JsonRealEstateCare)
-- Media: Images and PDF's are stored and fetched as Base64 encoded strings, on and from 
+- Media: <br/>Images and PDF's are stored and fetched as Base64 encoded strings, on and from 
 [RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/).
 
-
+## Error notes
+- Blocked aria-hidden:<br/> 
+This error appears to originate from the datepicker npm package used in this app. I haven't used the aria-hidden
+attribute in this application.
+- PDF encoding issues:<br/>
+Under the modifications part of an inspection, it is possible to safe and view a pdf. I am getting 
+warnings in the console regarding this process. The component works, but needs more work to resolve
+these issues.
 

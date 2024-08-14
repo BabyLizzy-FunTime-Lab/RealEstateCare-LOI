@@ -6,7 +6,9 @@ import { Camera, CameraResultType, CameraSource, } from '@capacitor/camera';
 export const usePhotoCamera = () => {
     const photos = ref([]);
     const newPhoto= ref();
-
+    /**
+     * Returns a ref() object with the photo filepath, file and webviewPath.
+     */
     const takePhoto = async () => {
         const photo = await Camera.getPhoto({
             resultType: CameraResultType.Uri,

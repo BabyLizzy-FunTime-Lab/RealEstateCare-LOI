@@ -91,7 +91,6 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             if(!inspectionFound) {
                 console.error("No inspection was found with id: " + inspectionId);
             }
-            // console.log(allInspectionsArray);
         },
         resetViewData(inspectionId, inspectionType) {
             const backupDataObject = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
@@ -107,9 +106,7 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                             inspection.address = backupDataObject.address;
                             break;
                         default:
-                            inspection[inspectionType] = cloneDeep(backupDataObject[inspectionType]) ;
-                            // Object.assign(inspection[inspectionType], backupDataObject[inspectionType])
-                            console.log(inspection);
+                            inspection[inspectionType] = cloneDeep(backupDataObject[inspectionType]);
                     }
                 }
             })

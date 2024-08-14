@@ -1,7 +1,9 @@
 <script>
-import {IonList, IonItem, IonInput,
-  IonListHeader, IonLabel, IonButton,
-  IonAlert, IonContent, useIonRouter} from "@ionic/vue";
+import {
+  IonList, IonItem, IonInput,
+  IonListHeader, IonLabel,
+  IonAlert, useIonRouter
+} from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {useLoginStore} from "@/stores/LoginStore.js";
 
@@ -9,8 +11,7 @@ export default {
   name: "LoginForm",
   components: {
     IonList, IonItem, IonInput, IonListHeader,
-    IonLabel, IonButton, IonAlert, IonContent,
-    BaseButton
+    IonLabel, IonAlert, BaseButton
   },
   data() {
     return {
@@ -24,6 +25,10 @@ export default {
     login(username, password) {
       this.$router.replace({path:'/'});
       this.loginStore.loginUser(username, password);
+      // When user and password match, fetch the 2way authentication code.
+      // Then render the 2way authentication form.
+      // If there is a match set loginStatus to true.
+      // On fail, deploy notification. Make sure to include a cancel button.
     }
   }
 }

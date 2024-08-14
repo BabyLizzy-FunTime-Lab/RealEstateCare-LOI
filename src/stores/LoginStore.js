@@ -114,6 +114,6 @@ export const useLoginStore = defineStore('login', {
         },
         getAllBaseDocuments(state) {
             return state.baseSiteInformation.knowledgeBase;
-        }
+        },
     }
 })

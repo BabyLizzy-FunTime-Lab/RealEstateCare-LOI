@@ -37,7 +37,10 @@ export default {
 <base-layout>
   <base-list-layout list-header-name="Settings">
     <ion-item>
-      <ion-toggle :checked="themeToggle" @ionChange="toggleDarkMode" justify="space-between"
+      <ion-toggle
+          :checked="themeToggle"
+          @ionChange="toggleDarkMode"
+          justify="space-between"
       >Dark Mode</ion-toggle>
     </ion-item>
     <ion-item>

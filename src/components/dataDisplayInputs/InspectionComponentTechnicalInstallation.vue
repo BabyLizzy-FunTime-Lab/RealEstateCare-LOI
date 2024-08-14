@@ -24,11 +24,9 @@ export default {
     return {
       inspectionStore: useInspectionStore(),
       loginStore: useLoginStore(),
-      procedure: {
-        default: {
-          name: "Procedure Test",
-          url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1710855728/CV-images/LOI-cursus/pdf/Emergency_Procedure.pdf"
-        }
+      testProcedure: {
+        type: Object,
+        default: null
       },
       takePhoto,
       readOnly: false,
@@ -83,11 +81,11 @@ export default {
     // Here we fetch the 'Test Procedure' pdf document.
     this.loginStore.fetchBaseDocument("Test Procedure")
         .then(document => {
-              this.procedure = document
+              this.testProcedure = document
             }
         )
         .catch(error => {
-              console.log(error);
+              console.error("Failed to get the 'Test procedure' document",error);
             }
         )
   },
@@ -138,7 +136,7 @@ export default {
                   placeholder="Enter statement"/>
   </ion-item>
   <ion-item slot="content">
-    <ion-label>Approved</ion-label>
+    <ion-label class="custom--label">Approved</ion-label>
     <ion-radio-group :value="approved"
                      @ionChange="emitInputChange('update:approved', $event)"
                      name="newDamage">
@@ -156,7 +154,7 @@ export default {
           value="no">No</ion-radio>
     </ion-radio-group>
   </ion-item>
-  <DocumentViewer slot="content" :document-info="procedure" />
+  <DocumentViewer slot="content" :document-info="testProcedure" />
   <ion-item slot="content">
     <ion-textarea
         label="Comments"
@@ -169,7 +167,7 @@ export default {
     />
   </ion-item>
   <ion-item slot="content" lines="none" class="last--item">
-    <ion-label>Photos</ion-label>
+    <ion-label class="custom--label">Photos</ion-label>
     <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
     <PhotoViewer
         v-if="images.length > 0"
@@ -188,7 +186,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.select-disabled, .item-select-disabled ion-label {
+.select-disabled, .item-select-disabled .custom--label {
   opacity: 1;
 }
 .last--item {
