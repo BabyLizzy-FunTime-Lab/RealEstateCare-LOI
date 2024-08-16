@@ -12,6 +12,7 @@ export const useLoginStore = defineStore('login', {
             checkLoginStore: 'Store works',
             loadingStatus: false,
             loginStatus: false,
+            loginStepOne: false,
             userInfo: Object,
             userAvatar: defaultAvatar,
             errorMessage: null,
@@ -19,21 +20,39 @@ export const useLoginStore = defineStore('login', {
         }
     },
     actions: {
+        async fetchTwoWayAuthenticationCode() {
+            return axios.get(baseDbUrl + "/2wayAuthenticator").then(result => {
+                console.log(result.data.generatedCode);
+                return result.data.generatedCode;
+            }).catch(err => {
+                console.error("Fetching 2way Authentication Code failed.", err)
+            })
+        },
+        async TwoWayAuthenticationCheck(inputCode) {
+            const fetchedCode = await this.fetchTwoWayAuthenticationCode();
+            if(inputCode === fetchedCode && this.loginStepOne) {
+                this.loginStatus = true;
+            } else {
+                console.warn("There was a problem verifying the 2way Authentication code.")
+            }
+        },
         async loginUser(inputName, inputPassword) {
             this.loadingStatus = true
 
             // Here we get the general information about the site.
             await this.fetchBaseSiteInformation();
+            await this.fetchTwoWayAuthenticationCode();
 
             // This should happen on the server.
             // Here we fetch the User data if it's available.
             await axios.get(baseDbUrl + "/user_inspector?name=" + inputName + "&password=" + inputPassword)
                 .then(result => {
-                    // The JSON server returns 200 even if it didn't find a match so we have to check the
+                    // The JSON server returns 200 even if it didn't find a match, so we have to check the
                     // return data length to see if any matches were found.
                     if(result.data.length) {
                         let data = result.data[0];
                         this.loginStatus = true;
+                        this.loginStepOne = true;
                         this.userInfo = {
                             id: data.id,
                             name: data.name,
