@@ -36,12 +36,12 @@ export default {
 
 <template>
   <ion-alert
-      :isOpen="loginStore.errorMessage"
+      :isOpen="loginStore.getLoginError.status"
       header="Problem!"
-      sub-header="There was a login error."
-      :message="loginStore.errorMessage"
+      :sub-header="loginStore.getLoginError.subHeader"
+      :message="loginStore.getLoginError.message"
       :buttons="['OK']"
-      @didDismiss="loginStore.setErrorMessage(null)"
+      @didDismiss="loginStore.closeLoginError()"
   />
   <form name="login">
     <ion-list>

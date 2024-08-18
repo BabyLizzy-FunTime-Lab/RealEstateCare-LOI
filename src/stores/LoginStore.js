@@ -15,11 +15,43 @@ export const useLoginStore = defineStore('login', {
             loginStepOne: false,
             userInfo: Object,
             userAvatar: defaultAvatar,
-            errorMessage: null,
+            loginError: {
+                value: {
+                    status: false,
+                    subHeader: String,
+                    message: String
+                },
+                default: null
+            },
             baseSiteInformation: null
         }
     },
     actions: {
+        fetchBaseDbUrl() {
+            return baseDbUrl;
+        },
+        closeLoginError() {
+            this.getLoginError.status = false;
+            this.getLoginError.subHeader = "";
+            this.getLoginError.message = "";
+        },
+        setLoadingStatus(status) {
+            this.loadingStatus = status;
+        },
+        logoutUser() {
+            console.log("Logging out...");
+            this.loginStatus = false;
+            this.loadingStatus = false;
+            this.userInfo = {};
+            this.closeLoginError()
+            // Reset all fetched inspection data here.
+            console.log("Logout complete.");
+        },
+        deployLoginErrorAlert(status, subHeader, message) {
+            this.getLoginError.status = status;
+            this.getLoginError.subHeader = subHeader;
+            this.getLoginError.message = message;
+        },
         async fetchTwoWayAuthenticationCode() {
             return axios.get(baseDbUrl + "/2wayAuthenticator").then(result => {
                 console.log(result.data.generatedCode);
@@ -33,6 +65,11 @@ export const useLoginStore = defineStore('login', {
             if(inputCode === fetchedCode && this.loginStepOne) {
                 this.loginStatus = true;
             } else {
+                this.deployLoginErrorAlert(
+                    true,
+                    "There was a Two Way Authentication issue",
+                    "The entered code in incorrect."
+                );
                 console.warn("There was a problem verifying the 2way Authentication code.")
             }
         },
@@ -62,10 +99,14 @@ export const useLoginStore = defineStore('login', {
                         if(data.avatar !== "") {
                             this.userInfo.avater = defaultAvatar ;
                         }
-                        this.errorMessage = null;
+                        this.getLoginError.status = false;
                         console.log("Login successful");
                     } else {
-                        this.errorMessage = "User was not found or the password is incorrect.";
+                        this.deployLoginErrorAlert(
+                            true,
+                            "There was a login issue",
+                            "User was not found or the password is incorrect."
+                        );
                         console.warn("Login problem: User was not found or password incorrect");
                     }
                     this.loadingStatus = false
@@ -76,23 +117,6 @@ export const useLoginStore = defineStore('login', {
                     this.errorMessage = err.message;
                     console.warn("We got an error on login", this.errorMessage);
                 })
-        },
-        fetchBaseDbUrl() {
-            return baseDbUrl;
-        },
-        setErrorMessage(errValue) {
-            this.errorMessage = errValue;
-        },
-        setLoadingStatus(status) {
-            this.loadingStatus = status;
-        },
-        logoutUser() {
-            console.log("Logging out...");
-            this.loginStatus = false;
-            this.loadingStatus = false;
-            this.userInfo = {};
-            this.errorMessage = null;
-            console.log("Logout complete.");
         },
         async fetchBaseDocument(documentName) {
             return new Promise((resolve, reject) => {
@@ -134,5 +158,8 @@ export const useLoginStore = defineStore('login', {
         getAllBaseDocuments(state) {
             return state.baseSiteInformation.knowledgeBase;
         },
+        getLoginError(state) {
+            return state.loginError;
+        }
     }
 })
