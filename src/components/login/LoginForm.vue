@@ -19,6 +19,7 @@ export default {
       router: useIonRouter(),
       username: "",
       password: "",
+      inputTwoFactorCode: ""
     }
   },
   methods: {
@@ -29,6 +30,9 @@ export default {
       // Then render the 2way authentication form.
       // If there is a match set loginStatus to true.
       // On fail, deploy notification. Make sure to include a cancel button.
+    },
+    twoFactorAuthentication(inputCode) {
+      this.loginStore.twoFactorAuthenticationCheck(inputCode);
     }
   }
 }
@@ -43,7 +47,7 @@ export default {
       :buttons="['OK']"
       @didDismiss="loginStore.closeLoginError()"
   />
-  <form name="login">
+  <form name="loginForm" v-if="!loginStore.getLoginPhase">
     <ion-list>
       <ion-list-header color="primary">
         <ion-label>
@@ -51,20 +55,51 @@ export default {
         </ion-label>
       </ion-list-header>
       <ion-item>
-        <ion-input type="text"
-                   v-model="username"
-                   placeholder="user"
-                   label="username:"
-                   @keyup.enter="login(username, password)"/>
+        <ion-input
+            label="Username:"
+            type="text"
+            v-model="username"
+            placeholder="user"
+            @keyup.enter="login(username, password)"
+        />
       </ion-item>
       <ion-item>
-        <ion-input type="password"
-                   v-model="password"
-                   placeholder="123"
-                   label="password:"
-                   @keyup.enter="login(username, password)"/>
+        <ion-input
+            label="Password:"
+            type="password"
+            v-model="password"
+            placeholder="123"
+            @keyup.enter="login(username, password)"
+        />
       </ion-item>
-      <base-button name="Login" expand="block" @click="login(username, password)"/>
+      <base-button
+          name="Login"
+          expand="block"
+          @click="login(username, password)"
+      />
+    </ion-list>
+  </form>
+  <form name="2FAForm" v-if="loginStore.getLoginPhase">
+    <ion-list>
+      <ion-list-header color="primary">
+        <ion-label>
+          <h2>2-Factor Authentication</h2>
+        </ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-input
+            label="Input Code:"
+            type="password"
+            v-model="inputTwoFactorCode"
+            placeholder="123456"
+            @keyup.enter="twoFactorAuthentication(inputTwoFactorCode)"
+        />
+      </ion-item>
+      <base-button
+          name="login"
+          expand="block"
+          @click="twoFactorAuthentication(inputTwoFactorCode)"
+      />
     </ion-list>
   </form>
 </template>

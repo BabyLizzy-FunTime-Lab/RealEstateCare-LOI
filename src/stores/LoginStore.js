@@ -38,12 +38,13 @@ export const useLoginStore = defineStore('login', {
         setLoadingStatus(status) {
             this.loadingStatus = status;
         },
-        logoutUser() {
+        logoutUser(state) {
             console.log("Logging out...");
-            this.loginStatus = false;
-            this.loadingStatus = false;
-            this.userInfo = {};
-            this.closeLoginError()
+            state.loginStatus = false;
+            state.loadingStatus = false;
+            state.loginStepOne = false;
+            state.userInfo = {};
+            this.closeLoginError();
             // Reset all fetched inspection data here.
             console.log("Logout complete.");
         },
@@ -54,16 +55,18 @@ export const useLoginStore = defineStore('login', {
         },
         async fetchTwoWayAuthenticationCode() {
             return axios.get(baseDbUrl + "/2wayAuthenticator").then(result => {
-                console.log(result.data.generatedCode);
                 return result.data.generatedCode;
             }).catch(err => {
                 console.error("Fetching 2way Authentication Code failed.", err)
             })
         },
-        async TwoWayAuthenticationCheck(inputCode) {
+        async twoFactorAuthenticationCheck(inputCode) {
+            this.loadingStatus = true;
             const fetchedCode = await this.fetchTwoWayAuthenticationCode();
             if(inputCode === fetchedCode && this.loginStepOne) {
+                console.log("Two Factor Authentication Success!!")
                 this.loginStatus = true;
+                this.loadingStatus = false;
             } else {
                 this.deployLoginErrorAlert(
                     true,
@@ -88,7 +91,7 @@ export const useLoginStore = defineStore('login', {
                     // return data length to see if any matches were found.
                     if(result.data.length) {
                         let data = result.data[0];
-                        this.loginStatus = true;
+                        // this.loginStatus = true;
                         this.loginStepOne = true;
                         this.userInfo = {
                             id: data.id,
@@ -99,9 +102,11 @@ export const useLoginStore = defineStore('login', {
                         if(data.avatar !== "") {
                             this.userInfo.avater = defaultAvatar ;
                         }
+                        this.loadingStatus = false;
                         this.getLoginError.status = false;
-                        console.log("Login successful");
+                        console.log("Username & Password match!!");
                     } else {
+                        this.loadingStatus = false;
                         this.deployLoginErrorAlert(
                             true,
                             "There was a login issue",
@@ -109,7 +114,6 @@ export const useLoginStore = defineStore('login', {
                         );
                         console.warn("Login problem: User was not found or password incorrect");
                     }
-                    this.loadingStatus = false
                 })
                 .catch(err => {
                     this.loadingStatus = false;
@@ -160,6 +164,10 @@ export const useLoginStore = defineStore('login', {
         },
         getLoginError(state) {
             return state.loginError;
+        },
+        getLoginPhase(state) {
+            // Step one is true when user and password match.
+            return state.loginStepOne;
         }
     }
 })
