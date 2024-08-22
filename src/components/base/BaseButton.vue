@@ -21,6 +21,7 @@ export default {
 <template>
   <ion-button
       :expand="buttonExpand"
+      type="button"
       fill="solid"
       :color="buttonColor"
   >{{name}}</ion-button>

@@ -4,12 +4,17 @@ import axios from "axios";
 // Default variables.
 const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
+let userInfoStorage = {
+    id: String,
+    name: String,
+    access: String,
+    avatar: null
+};
 // A fetch is needed to get general app information like basic URL and the knowledge base.
 
 export const useLoginStore = defineStore('login', {
     state: () => {
         return {
-            checkLoginStore: 'Store works',
             loadingStatus: false,
             loginStatus: false,
             loginStepOne: false,
@@ -38,12 +43,18 @@ export const useLoginStore = defineStore('login', {
         setLoadingStatus(status) {
             this.loadingStatus = status;
         },
-        logoutUser(state) {
+        logoutUser() {
             console.log("Logging out...");
-            state.loginStatus = false;
-            state.loadingStatus = false;
-            state.loginStepOne = false;
-            state.userInfo = {};
+            this.loginStatus = false;
+            this.loadingStatus = false;
+            this.loginStepOne = false;
+            this.userInfo = {};
+            userInfoStorage = {
+                id: String,
+                name: String,
+                access: String,
+                avatar: null
+            };
             this.closeLoginError();
             // Reset all fetched inspection data here.
             console.log("Logout complete.");
@@ -62,26 +73,36 @@ export const useLoginStore = defineStore('login', {
         },
         async twoFactorAuthenticationCheck(inputCode) {
             this.loadingStatus = true;
-            const fetchedCode = await this.fetchTwoWayAuthenticationCode();
-            if(inputCode === fetchedCode && this.loginStepOne) {
-                console.log("Two Factor Authentication Success!!")
-                this.loginStatus = true;
-                this.loadingStatus = false;
-            } else {
-                this.deployLoginErrorAlert(
-                    true,
-                    "There was a Two Way Authentication issue",
-                    "The entered code in incorrect."
-                );
-                console.warn("There was a problem verifying the 2way Authentication code.")
-            }
+            await this.fetchTwoWayAuthenticationCode().then(result => {
+                if(inputCode === result && this.loginStepOne) {
+                    this.loginStatus = true;
+                    console.log("2-Factor Authentication Success!!")
+                    this.userInfo = {
+                        id: userInfoStorage.id,
+                        name: userInfoStorage.name,
+                        access: userInfoStorage.access,
+                        avatar: userInfoStorage.avatar
+                    }
+                    if(userInfoStorage.avatar !== "") {
+                        this.userInfo.avater = defaultAvatar ;
+                    }
+                    this.loadingStatus = false;
+                } else {
+                    this.loadingStatus = false;
+                    this.deployLoginErrorAlert(
+                        true,
+                        "There was a Two Way Authentication issue",
+                        "The entered code in incorrect."
+                    );
+                    console.warn("There was a problem verifying the 2way Authentication code.")
+                }
+            })
         },
         async loginUser(inputName, inputPassword) {
             this.loadingStatus = true
 
             // Here we get the general information about the site.
             await this.fetchBaseSiteInformation();
-            await this.fetchTwoWayAuthenticationCode();
 
             // This should happen on the server.
             // Here we fetch the User data if it's available.
@@ -90,18 +111,8 @@ export const useLoginStore = defineStore('login', {
                     // The JSON server returns 200 even if it didn't find a match, so we have to check the
                     // return data length to see if any matches were found.
                     if(result.data.length) {
-                        let data = result.data[0];
-                        // this.loginStatus = true;
+                        userInfoStorage = result.data[0];
                         this.loginStepOne = true;
-                        this.userInfo = {
-                            id: data.id,
-                            name: data.name,
-                            access: data.access,
-                            avatar: data.avatar
-                        }
-                        if(data.avatar !== "") {
-                            this.userInfo.avater = defaultAvatar ;
-                        }
                         this.loadingStatus = false;
                         this.getLoginError.status = false;
                         console.log("Username & Password match!!");

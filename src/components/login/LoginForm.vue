@@ -26,10 +26,6 @@ export default {
     login(username, password) {
       this.$router.replace({path:'/'});
       this.loginStore.loginUser(username, password);
-      // When user and password match, fetch the 2way authentication code.
-      // Then render the 2way authentication form.
-      // If there is a match set loginStatus to true.
-      // On fail, deploy notification. Make sure to include a cancel button.
     },
     twoFactorAuthentication(inputCode) {
       this.loginStore.twoFactorAuthenticationCheck(inputCode);
@@ -47,7 +43,7 @@ export default {
       :buttons="['OK']"
       @didDismiss="loginStore.closeLoginError()"
   />
-  <form name="loginForm" v-if="!loginStore.getLoginPhase">
+  <form name="loginForm" @submit.prevent v-if="!loginStore.getLoginPhase">
     <ion-list>
       <ion-list-header color="primary">
         <ion-label>
@@ -79,7 +75,7 @@ export default {
       />
     </ion-list>
   </form>
-  <form name="2FAForm" v-if="loginStore.getLoginPhase">
+  <form name="2FAForm" @submit.prevent v-if="loginStore.getLoginPhase">
     <ion-list>
       <ion-list-header color="primary">
         <ion-label>
@@ -96,10 +92,11 @@ export default {
         />
       </ion-item>
       <base-button
-          name="login"
+          name="Check Code"
           expand="block"
           @click="twoFactorAuthentication(inputTwoFactorCode)"
       />
+<!--      we need a cancel button-->
     </ion-list>
   </form>
 </template>
