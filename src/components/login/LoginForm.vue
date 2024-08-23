@@ -29,6 +29,9 @@ export default {
     },
     twoFactorAuthentication(inputCode) {
       this.loginStore.twoFactorAuthenticationCheck(inputCode);
+    },
+    cancelLogin() {
+      this.loginStore.logoutUser();
     }
   }
 }
@@ -92,11 +95,16 @@ export default {
         />
       </ion-item>
       <base-button
+          name="Cancel Login"
+          button-color="danger"
+          expand="block"
+          @click="cancelLogin"
+      />
+      <base-button
           name="Check Code"
           expand="block"
           @click="twoFactorAuthentication(inputTwoFactorCode)"
       />
-<!--      we need a cancel button-->
     </ion-list>
   </form>
 </template>
