@@ -5,6 +5,7 @@ import {dataBase} from "@/services/dataBase.js";
 import cloneDeep from 'lodash/cloneDeep';
 import clearViewData from "@/mixins/clearViewData.js";
 
+// Used stores
 const loginStore = useLoginStore();
 const notificationStore = useNotificationStore();
 
@@ -191,7 +192,7 @@ export const useInspectionStore = defineStore('inspections', {
             // Remove documentedModsFile from modifications before push.
             const dataCopy = cloneDeep(this.getModificationsViewData);
             const {documentedModsFile, ...readyToSendModificationsData} = dataCopy;
-            // The id is provided by the database when the data is recieved.
+            // The id is provided by the database when the data is received.
             const sendData = {
                 "id": "",
                 "inspectorId": this.fetchUserId(),

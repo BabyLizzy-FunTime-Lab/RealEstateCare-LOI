@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {dataBase} from "@/services/dataBase.js";
+import {sanitizer} from "@/services/sanitizer.js";
 import cloneDeep from 'lodash/cloneDeep';
 
 const loginStore = useLoginStore();
@@ -12,6 +13,8 @@ const {
     pushUpdatesToDataBase,
     fetchAllInspections,
 } = dataBase();
+
+const {inputSanitizer} = sanitizer();
 
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
@@ -53,11 +56,18 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 && propertyName != 'date'
                 && propertyName != 'images'
                 && propertyName != 'documentedModsFile') {
-                // console.log(newValue);
                 newValue = newValue.target.value
+                // Implement input sanitation.
+                newValue = inputSanitizer(newValue);
+            }
+            if(typeof  newValue === 'string'
+                && propertyName != 'delete:image') {
+                // Implement input sanitation.
+                console.log(newValue);
+                newValue = inputSanitizer(newValue);
             }
             // This is needed to update the state.
-            // console.log(newValue);
+            console.log(newValue);
             let inspectionFound = false;
             let allInspectionsArray = this.getAllInspections;
             allInspectionsArray.forEach(inspection => {

@@ -1,9 +1,13 @@
 import {defineStore} from "pinia";
 import axios from "axios";
+import clearViewData from "@/mixins/clearViewData.js";
+// import {useInspectionStore} from "@/stores/InspectionStore.js";
+// const inspectionStore = useInspectionStore();
 
 // Default variables.
 const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
+
 let userInfoStorage = {
     id: String,
     name: String,
@@ -56,7 +60,18 @@ export const useLoginStore = defineStore('login', {
                 avatar: null
             };
             this.closeLoginError();
-            // Reset all fetched inspection data here.
+            // Clear inputs.
+            // clearViewData.methods.clearViewData(
+            //     [
+            //         inspectionStore.getBasicInspectionViewData,
+            //         inspectionStore.getDamageInspectionViewData,
+            //         inspectionStore.getBacklogMaintenanceViewData,
+            //         inspectionStore.getTechnicalInstallationViewData,
+            //         inspectionStore.getModificationsViewData
+            //     ]
+            // );
+            // Fetch inspection data here.
+            // completedTasksStore.fetchAllCompletedTasks();
             console.log("Logout complete.");
         },
         deployLoginErrorAlert(status, subHeader, message) {

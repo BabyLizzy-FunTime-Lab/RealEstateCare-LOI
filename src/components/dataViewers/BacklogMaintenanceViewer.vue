@@ -63,7 +63,7 @@ export default {
                 "updateInspectionData(
                     'backlogMaintenance',
                     inspection.id,
-                    'maintenanceType',
+                    'costIndication',
                     $event.target.value)"
             :images="inspection.images"
             @update:images=
