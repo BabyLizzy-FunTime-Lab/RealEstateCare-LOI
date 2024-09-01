@@ -1,20 +1,7 @@
 import {defineStore} from "pinia";
-import axios from "axios";
 import {dataBase} from "@/services/dataBase.js";
 
-const {getBaseDbUrl} = dataBase();
-
-// Default variables.
-const baseDbUrl = getBaseDbUrl();
-const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
-
-let userInfoStorage = {
-    id: String,
-    name: String,
-    access: String,
-    avatar: null
-};
-// A fetch is needed to get general app information like basic URL and the knowledge base.
+const { fetchBaseSiteInformation, loginNamePassword, fetchTwoWayAuthenticationCode, userInfo} = dataBase();
 
 export const useLoginStore = defineStore('login', {
     state: () => {
@@ -23,7 +10,6 @@ export const useLoginStore = defineStore('login', {
             loginStatus: false,
             loginStepOne: false,
             userInfo: Object,
-            userAvatar: defaultAvatar,
             loginError: {
                 value: {
                     status: false,
@@ -32,7 +18,7 @@ export const useLoginStore = defineStore('login', {
                 },
                 default: null
             },
-            baseSiteInformation: null
+            baseSiteInformation: Object
         }
     },
     actions: {
@@ -50,12 +36,6 @@ export const useLoginStore = defineStore('login', {
             this.loadingStatus = false;
             this.loginStepOne = false;
             this.userInfo = {};
-            userInfoStorage = {
-                id: String,
-                name: String,
-                access: String,
-                avatar: null
-            };
             this.closeLoginError();
             console.log("Logout complete.");
         },
@@ -64,27 +44,20 @@ export const useLoginStore = defineStore('login', {
             this.getLoginError.subHeader = subHeader;
             this.getLoginError.message = message;
         },
-        async fetchTwoWayAuthenticationCode() {
-            return axios.get(baseDbUrl + "/2wayAuthenticator").then(result => {
-                return result.data.generatedCode;
-            }).catch(err => {
-                console.error("Fetching 2way Authentication Code failed.", err)
-            })
-        },
         async twoFactorAuthenticationCheck(inputCode) {
             this.loadingStatus = true;
-            await this.fetchTwoWayAuthenticationCode().then(result => {
+            await fetchTwoWayAuthenticationCode().then(result => {
                 if(inputCode === result && this.loginStepOne) {
                     this.loginStatus = true;
                     console.log("2-Factor Authentication Success!!")
                     this.userInfo = {
-                        id: userInfoStorage.id,
-                        name: userInfoStorage.name,
-                        access: userInfoStorage.access,
-                        avatar: userInfoStorage.avatar
+                        id: userInfo.value.id,
+                        name: userInfo.value.name,
+                        access: userInfo.value.access,
+                        avatar: userInfo.value.avatar
                     }
-                    if(userInfoStorage.avatar !== "") {
-                        this.userInfo.avater = defaultAvatar ;
+                    if(this.userInfo.avatar === "" || this.userInfo.avatar === null) {
+                        this.userInfo.avater = this.baseSiteInformation.defaultAvatar ;
                     }
                     this.loadingStatus = false;
                 } else {
@@ -106,12 +79,12 @@ export const useLoginStore = defineStore('login', {
 
             // This should happen on the server.
             // Here we fetch the User data if it's available.
-            await axios.get(baseDbUrl + "/user_inspector?name=" + inputName + "&password=" + inputPassword)
+            await loginNamePassword(inputName, inputPassword)
                 .then(result => {
                     // The JSON server returns 200 even if it didn't find a match, so we have to check the
                     // return data length to see if any matches were found.
-                    if(result.data.length) {
-                        userInfoStorage = result.data[0];
+                    if(result) {
+                        // userInfoStorage = result;
                         this.loginStepOne = true;
                         this.loadingStatus = false;
                         this.getLoginError.status = false;
@@ -145,8 +118,7 @@ export const useLoginStore = defineStore('login', {
         },
         async fetchBaseSiteInformation() {
             try {
-                const result = await axios.get(baseDbUrl + "/base_site_information");
-                this.baseSiteInformation = result.data;
+                this.baseSiteInformation = await fetchBaseSiteInformation();
             } catch (error) {
                 console.error("Error fetching base site information:", error);
                 throw error;

@@ -5,6 +5,8 @@ import { ref } from 'vue';
 // const loginStore = useLoginStore();
 
 // const baseDbUrl = loginStore.fetchBaseDbUrl();
+
+// This is the base URL to the json server.
 const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
 
 
@@ -12,6 +14,8 @@ export const dataBase = () => {
     // allInspectionsBackup is a copy of the latest all inspections fetch results.
     const allInspectionsBackup = ref();
     const allInspections = ref([]);
+    const userInfo = ref({});
+    const baseSiteInformation = ref();
 
     /**
      * Returns the base url for db access.
@@ -20,13 +24,87 @@ export const dataBase = () => {
     const getBaseDbUrl = () => {
         return baseDbUrl;
     }
+    /**
+     * Creates and object that contains all base site information.
+     * @param {string} defaultAvatar
+     * @param {array} knowledgeBase
+     * @returns {Promise|object}
+     */
+    const createBaseSiteInformation = async (defaultAvatar, knowledgeBase) => {
+        class BaseSiteInformation {
+            constructor(defaultAvatar, knowledgeBase) {
+                this.defaultAvatar = defaultAvatar;
+                this.knowledgeBase = knowledgeBase;
+            }
+        }
+        baseSiteInformation.value = new BaseSiteInformation(defaultAvatar, knowledgeBase);
+        return baseSiteInformation.value;
+    }
+    /**
+     * Creates the user information object.
+     * @param {string} id
+     * @param {string} name
+     * @param {string} access
+     * @param {string} avatar
+     * @returns {Promise|object}
+     */
+    const createUserInfo = async (id, name, access, avatar) => {
+        class UserInfo {
+            constructor(id, name, access, avatar) {
+                this.id = id;
+                this.name = name;
+                this.access = access;
+                this.avatar = avatar;
+            }
+        }
+        userInfo.value = new UserInfo(id, name, access, avatar);
+        return userInfo.value;
+    }
+    const fetchTwoWayAuthenticationCode = async () => {
+        return axios.get(baseDbUrl + "/2wayAuthenticator").then(result => {
+            return result.data.generatedCode;
+        }).catch(err => {
+            console.error("Fetching 2way Authentication Code failed.", err)
+        })
+    }
+    /**
+     * First step of login. Use name and password to get userinfo.
+     * @param {string} name
+     * @param {string} password
+     * @returns {Promise<boolean|Object>}
+     */
+    const loginNamePassword = async (name, password) => {
+        const loginResponse = await axios.get(baseDbUrl + "/user_inspector?name=" + name + "&password=" + password)
+            .then(result => {
+                if(result.data.length) {
+                    return result.data[0];
+                } else {
+                    return false;
+                }
+            }).catch(err => {
+                console.error("loginUser get failed", err);
+                return false;
+            })
 
+        if(loginResponse) {
+            return await createUserInfo(
+                loginResponse.id,
+                loginResponse.name,
+                loginResponse.access,
+                loginResponse.avatar
+            ).then(userInfoObject => {
+                return userInfoObject;
+            });
+        } else {
+            return false;
+        }
+    }
     /**
      * Creates an array of inspection objects.
-     * @param {axios.AxiosResponse<any> | void} db_data
+     * @param {axios.AxiosResponse<array> | void} db_data
      * @return {Promise|array}
      */
-    const allInspectionsConstructor = async (db_data) => {
+    const createAllInspections = async (db_data) => {
         class Inspection {
             constructor(
                 id, inspectorId, date, address,
@@ -104,6 +182,9 @@ export const dataBase = () => {
                 this.images = images;
             }
         }
+        // Here the allInspection variable gets cleared of old data.
+        allInspections.value = [];
+        // Now the new inspection objects are created and stored.
         db_data.forEach(dataObject => {
             let inspection = new Inspection (
                 dataObject.id, dataObject.inspectorId, dataObject.date, dataObject.address,
@@ -125,12 +206,10 @@ export const dataBase = () => {
                 // Here we reset the variables that will carry the information and return the fetched inspections,
                 // so they can be processed by the allInspectionsConstructor.
                 allInspectionsBackup.value = result.data;
-                allInspections.value = [];
                 return result.data;
             }).catch(err => console.error("Inspection fetch failed", err));
-
         // Domain class constructor function.
-        return await allInspectionsConstructor(inspectionsFromDB).then(inspections => {
+        return await createAllInspections(inspectionsFromDB).then(inspections => {
             return inspections
         });
     }
@@ -238,11 +317,32 @@ export const dataBase = () => {
             return err;
         }
     }
+    /**
+     * Fetches base site information from json server. (Knowledge base PDFs and default avatar)
+     * @returns {Promise<object>}
+     */
+    const fetchBaseSiteInformation = async () => {
+        const baseSiteInfo = await axios.get(baseDbUrl + "/base_site_information")
+            .then(result => {
+                return result.data;
+            })
+            .catch(err => {
+                console.error("Error fetching base site information:", err);
+            })
+        return await createBaseSiteInformation(baseSiteInfo.defaultAvatar, baseSiteInfo.knowledgeBase)
+            .then(baseSiteInformation => {
+                return baseSiteInformation;
+            });
+    }
     return {
-        getBaseDbUrl,
         allInspectionsBackup,
+        userInfo,
+        getBaseDbUrl,
+        loginNamePassword,
         pushUpdatesToDataBase,
         pushInspectionToDataBase,
         fetchAllInspections,
+        fetchBaseSiteInformation,
+        fetchTwoWayAuthenticationCode
     }
 }
