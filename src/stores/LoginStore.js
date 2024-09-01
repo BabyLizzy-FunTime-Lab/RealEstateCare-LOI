@@ -1,11 +1,11 @@
 import {defineStore} from "pinia";
 import axios from "axios";
-import clearViewData from "@/mixins/clearViewData.js";
-// import {useInspectionStore} from "@/stores/InspectionStore.js";
-// const inspectionStore = useInspectionStore();
+import {dataBase} from "@/services/dataBase.js";
+
+const {getBaseDbUrl} = dataBase();
 
 // Default variables.
-const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
+const baseDbUrl = getBaseDbUrl();
 const defaultAvatar = "/icons/toolbar/toolbar-default-avatar.svg";
 
 let userInfoStorage = {
@@ -36,9 +36,6 @@ export const useLoginStore = defineStore('login', {
         }
     },
     actions: {
-        fetchBaseDbUrl() {
-            return baseDbUrl;
-        },
         closeLoginError() {
             this.getLoginError.status = false;
             this.getLoginError.subHeader = "";
@@ -60,18 +57,6 @@ export const useLoginStore = defineStore('login', {
                 avatar: null
             };
             this.closeLoginError();
-            // Clear inputs.
-            // clearViewData.methods.clearViewData(
-            //     [
-            //         inspectionStore.getBasicInspectionViewData,
-            //         inspectionStore.getDamageInspectionViewData,
-            //         inspectionStore.getBacklogMaintenanceViewData,
-            //         inspectionStore.getTechnicalInstallationViewData,
-            //         inspectionStore.getModificationsViewData
-            //     ]
-            // );
-            // Fetch inspection data here.
-            // completedTasksStore.fetchAllCompletedTasks();
             console.log("Logout complete.");
         },
         deployLoginErrorAlert(status, subHeader, message) {

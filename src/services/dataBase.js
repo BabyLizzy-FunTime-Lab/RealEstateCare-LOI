@@ -1,15 +1,25 @@
 import axios from "axios";
 import { ref } from 'vue';
-import {useLoginStore} from "@/stores/LoginStore.js";
+// import {useLoginStore} from "@/stores/LoginStore.js";
+//
+// const loginStore = useLoginStore();
 
-const loginStore = useLoginStore();
+// const baseDbUrl = loginStore.fetchBaseDbUrl();
+const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
 
-const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 export const dataBase = () => {
     // allInspectionsBackup is a copy of the latest all inspections fetch results.
     const allInspectionsBackup = ref();
     const allInspections = ref([]);
+
+    /**
+     * Returns the base url for db access.
+     * @return {string}
+     */
+    const getBaseDbUrl = () => {
+        return baseDbUrl;
+    }
 
     /**
      * Creates an array of inspection objects.
@@ -229,6 +239,7 @@ export const dataBase = () => {
         }
     }
     return {
+        getBaseDbUrl,
         allInspectionsBackup,
         pushUpdatesToDataBase,
         pushInspectionToDataBase,

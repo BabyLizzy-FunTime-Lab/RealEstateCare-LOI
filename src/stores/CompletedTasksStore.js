@@ -28,21 +28,21 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             return loginStore.getUserInfo.id;
         },
         async fetchAllCompletedTasks() {
-            let user_id = this.fetchUserId();
-            loginStore.setLoadingStatus(true);
             try {
-                console.log("Fetching all inspections.");
-              let result = await fetchAllInspections(user_id);
-              if(user_id && result) {
+                if(loginStore.loginStatus) {
+                  console.log("Fetching all inspections.");
+                  loginStore.setLoadingStatus(true);
+                  let user_id = this.fetchUserId();
+                  let result = await fetchAllInspections(user_id);
                   loginStore.setLoadingStatus(false);
                   this.allInspectionsBackup = cloneDeep(allInspectionsBackup);
                   // Sorts all data in descending date order.
                   result.sort((a, b) => new Date(b.date) - new Date(a.date));
                   this.allInspections = result;
                   return result;
-              } else {
+                } else {
                   loginStore.setLoadingStatus(false);
-              }
+                }
             } catch (err) {
                 console.error("Error fetching completed tasks:", err);
                 loginStore.setLoadingStatus(false);
