@@ -1,14 +1,8 @@
 import axios from "axios";
 import { ref } from 'vue';
-// import {useLoginStore} from "@/stores/LoginStore.js";
-//
-// const loginStore = useLoginStore();
-
-// const baseDbUrl = loginStore.fetchBaseDbUrl();
 
 // This is the base URL to the json server.
 const baseDbUrl = "https://json-real-estate-care-3167f11da290.herokuapp.com";
-
 
 export const dataBase = () => {
     // allInspectionsBackup is a copy of the latest all inspections fetch results.
@@ -60,12 +54,25 @@ export const dataBase = () => {
         userInfo.value = new UserInfo(id, name, access, avatar);
         return userInfo.value;
     }
-    const fetchTwoWayAuthenticationCode = async () => {
+    /**
+     * Fetches the 2-Factor authentication code from the json server.
+     * @return {Promise<string>}
+     */
+    const fetchTwoFactorAuthenticationCode = async () => {
         return axios.get(baseDbUrl + "/2wayAuthenticator").then(result => {
             return result.data.generatedCode;
         }).catch(err => {
             console.error("Fetching 2way Authentication Code failed.", err)
         })
+    }
+    /**
+     * Checks if the given code is correct and return boolean.
+     * @param {string} inputCode
+     * @return {Promise<boolean>}
+     */
+    const twoFactorAuthenticator = async (inputCode) => {
+        let generatedCode = await fetchTwoFactorAuthenticationCode();
+        return generatedCode === inputCode;
     }
     /**
      * First step of login. Use name and password to get userinfo.
@@ -339,10 +346,11 @@ export const dataBase = () => {
         userInfo,
         getBaseDbUrl,
         loginNamePassword,
+        twoFactorAuthenticator,
         pushUpdatesToDataBase,
         pushInspectionToDataBase,
         fetchAllInspections,
         fetchBaseSiteInformation,
-        fetchTwoWayAuthenticationCode
+        fetchTwoFactorAuthenticationCode
     }
 }

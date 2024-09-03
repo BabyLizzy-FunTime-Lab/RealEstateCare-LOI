@@ -1,7 +1,13 @@
 import {defineStore} from "pinia";
 import {dataBase} from "@/services/dataBase.js";
 
-const { fetchBaseSiteInformation, loginNamePassword, fetchTwoWayAuthenticationCode, userInfo} = dataBase();
+const {
+    fetchBaseSiteInformation,
+    loginNamePassword,
+    twoFactorAuthenticator,
+    fetchAllInspections,
+    userInfo
+} = dataBase();
 
 export const useLoginStore = defineStore('login', {
     state: () => {
@@ -46,16 +52,20 @@ export const useLoginStore = defineStore('login', {
         },
         async twoFactorAuthenticationCheck(inputCode) {
             this.loadingStatus = true;
-            await fetchTwoWayAuthenticationCode().then(result => {
-                if(inputCode === result && this.loginStepOne) {
+            await twoFactorAuthenticator(inputCode).then(result => {
+                // Then clear inputs.
+                if(result) {
                     this.loginStatus = true;
                     console.log("2-Factor Authentication Success!!")
+                    // Call userinfo source userinfo bank.
                     this.userInfo = {
                         id: userInfo.value.id,
                         name: userInfo.value.name,
                         access: userInfo.value.access,
                         avatar: userInfo.value.avatar
                     }
+                    // It's not working.
+                    fetchAllInspections(this.userInfo.id);
                     if(this.userInfo.avatar === "" || this.userInfo.avatar === null) {
                         this.userInfo.avater = this.baseSiteInformation.defaultAvatar ;
                     }
