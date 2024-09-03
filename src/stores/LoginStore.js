@@ -5,7 +5,6 @@ const {
     fetchBaseSiteInformation,
     loginNamePassword,
     twoFactorAuthenticator,
-    fetchAllInspections,
     userInfo
 } = dataBase();
 
@@ -65,7 +64,7 @@ export const useLoginStore = defineStore('login', {
                         avatar: userInfo.value.avatar
                     }
                     // It's not working.
-                    fetchAllInspections(this.userInfo.id);
+                    // We can't call the other stores without breaking the app.
                     if(this.userInfo.avatar === "" || this.userInfo.avatar === null) {
                         this.userInfo.avater = this.baseSiteInformation.defaultAvatar ;
                     }

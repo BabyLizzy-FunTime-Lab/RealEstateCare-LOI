@@ -351,6 +351,5 @@ export const dataBase = () => {
         pushInspectionToDataBase,
         fetchAllInspections,
         fetchBaseSiteInformation,
-        fetchTwoFactorAuthenticationCode
     }
 }
