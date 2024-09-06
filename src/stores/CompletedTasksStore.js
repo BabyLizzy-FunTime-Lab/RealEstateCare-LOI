@@ -5,9 +5,6 @@ import {dataBase} from "@/services/dataBase.js";
 import {sanitizer} from "@/services/sanitizer.js";
 import cloneDeep from 'lodash/cloneDeep';
 
-const loginStore = useLoginStore();
-const notificationStore = useNotificationStore();
-
 const {
     allInspectionsBackup,
     pushUpdatesToDataBase,
@@ -25,9 +22,13 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
     },
     actions: {
         fetchUserId() {
+            // Lazy loading loginStore.
+            const loginStore = useLoginStore();
             return loginStore.getUserInfo.id;
         },
         async fetchAllCompletedTasks() {
+            // Lazy loading loginStore.
+            const loginStore = useLoginStore();
             try {
                 if(loginStore.loginStatus) {
                   console.log("Fetching all inspections.");
@@ -63,11 +64,9 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             if(typeof  newValue === 'string'
                 && propertyName != 'delete:image') {
                 // Implement input sanitation.
-                console.log(newValue);
                 newValue = inputSanitizer(newValue);
             }
             // This is needed to update the state.
-            console.log(newValue);
             let inspectionFound = false;
             let allInspectionsArray = this.getAllInspections;
             allInspectionsArray.forEach(inspection => {
@@ -122,6 +121,9 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             })
         },
         async pushUpdatedData(inspectionId) {
+            // Lazy loading stores.
+            const loginStore = useLoginStore();
+            const notificationStore = useNotificationStore();
             // Start loading bar.
             loginStore.setLoadingStatus(true);
             // Getting the inspection that was updated.

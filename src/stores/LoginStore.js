@@ -8,6 +8,7 @@ const {
     userInfo
 } = dataBase();
 
+
 export const useLoginStore = defineStore('login', {
     state: () => {
         return {
@@ -51,7 +52,7 @@ export const useLoginStore = defineStore('login', {
         },
         async twoFactorAuthenticationCheck(inputCode) {
             this.loadingStatus = true;
-            await twoFactorAuthenticator(inputCode).then(result => {
+            return await twoFactorAuthenticator(inputCode).then(result => {
                 // Then clear inputs.
                 if(result) {
                     this.loginStatus = true;
@@ -69,6 +70,7 @@ export const useLoginStore = defineStore('login', {
                         this.userInfo.avater = this.baseSiteInformation.defaultAvatar ;
                     }
                     this.loadingStatus = false;
+                    return true;
                 } else {
                     this.loadingStatus = false;
                     this.deployLoginErrorAlert(
@@ -77,6 +79,7 @@ export const useLoginStore = defineStore('login', {
                         "The entered code in incorrect."
                     );
                     console.warn("There was a problem verifying the 2way Authentication code.")
+                    return false;
                 }
             })
         },

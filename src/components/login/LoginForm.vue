@@ -6,6 +6,8 @@ import {
 } from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {useLoginStore} from "@/stores/LoginStore.js";
+import {useInspectionStore} from "@/stores/InspectionStore.js";
+import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
 
 export default {
   name: "LoginForm",
@@ -22,13 +24,27 @@ export default {
       inputTwoFactorCode: ""
     }
   },
+  created() {
+    this.inspectionStore = useInspectionStore();
+    this.completedTasksStore = useCompletedTasksStore();
+  },
   methods: {
+    clearViewsFetchData() {
+      // Resets all inputs and fetches all inspections for the new logged in user.
+      this.inspectionStore.clearViewInputs();
+      this.completedTasksStore.fetchAllCompletedTasks();
+    },
     login(username, password) {
       this.$router.replace({path:'/'});
       this.loginStore.loginUser(username, password);
     },
     twoFactorAuthentication(inputCode) {
-      this.loginStore.twoFactorAuthenticationCheck(inputCode);
+      this.loginStore.twoFactorAuthenticationCheck(inputCode).then(success => {
+        if(success) {
+          console.log("let's fetch data and clear inputs!!");
+          this.clearViewsFetchData();
+        }
+      })
     },
     cancelLogin() {
       this.loginStore.logoutUser();

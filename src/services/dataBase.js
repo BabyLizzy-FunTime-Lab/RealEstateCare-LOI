@@ -12,13 +12,6 @@ export const dataBase = () => {
     const baseSiteInformation = ref();
 
     /**
-     * Returns the base url for db access.
-     * @return {string}
-     */
-    const getBaseDbUrl = () => {
-        return baseDbUrl;
-    }
-    /**
      * Creates and object that contains all base site information.
      * @param {string} defaultAvatar
      * @param {array} knowledgeBase
@@ -92,7 +85,6 @@ export const dataBase = () => {
                 console.error("loginUser get failed", err);
                 return false;
             })
-
         if(loginResponse) {
             return await createUserInfo(
                 loginResponse.id,
@@ -113,9 +105,15 @@ export const dataBase = () => {
      */
     const createAllInspections = async (db_data) => {
         class Inspection {
-            constructor(
-                id, inspectorId, date, address,
-                damageInspection, backlogMaintenance, technicalInstallationInspection, modifications
+            constructor (
+                id,
+                inspectorId,
+                date,
+                address,
+                damageInspection,
+                backlogMaintenance,
+                technicalInstallationInspection,
+                modifications
             ) {
                 this.id = id;
                 this.inspectorId = inspectorId;
@@ -143,9 +141,16 @@ export const dataBase = () => {
             }
 
         }
-
         class DamageInspection {
-            constructor(location, newDamage, selectedDamageTypeOption, damageType, emergency, comments, images) {
+            constructor (
+                location,
+                newDamage,
+                selectedDamageTypeOption,
+                damageType,
+                emergency,
+                comments,
+                images
+            ) {
                 this.location = location;
                 this.newDamage = newDamage;
                 this.selectedDamageTypeOption = selectedDamageTypeOption;
@@ -155,9 +160,14 @@ export const dataBase = () => {
                 this.images = images;
             }
         }
-
         class BacklogMaintenance {
-            constructor(location, maintenanceType, emergency, costIndication, images) {
+            constructor (
+                location,
+                maintenanceType,
+                emergency,
+                costIndication,
+                images
+            ) {
                 this.location = location;
                 this.maintenanceType = maintenanceType;
                 this.emergency = emergency;
@@ -165,9 +175,15 @@ export const dataBase = () => {
                 this.images = images;
             }
         }
-
         class TechnicalInstallationInspection {
-            constructor(location, installationType, clientStatement, approved, comments, images) {
+            constructor (
+                location,
+                installationType,
+                clientStatement,
+                approved,
+                comments,
+                images
+            ) {
                 this.location = location;
                 this.installationType = installationType;
                 this.clientStatement = clientStatement;
@@ -176,9 +192,17 @@ export const dataBase = () => {
                 this.images = images;
             }
         }
-
         class Modifications {
-            constructor(location, documentedModsDocName, documentedModsUrl, modifiedBy, modDescription, requiredAction, comments, images) {
+            constructor (
+                location,
+                documentedModsDocName,
+                documentedModsUrl,
+                modifiedBy,
+                modDescription,
+                requiredAction,
+                comments,
+                images
+            ) {
                 this.location = location;
                 this.documentedModsDocName = documentedModsDocName;
                 this.documentedModsUrl = documentedModsUrl;
@@ -344,7 +368,6 @@ export const dataBase = () => {
     return {
         allInspectionsBackup,
         userInfo,
-        getBaseDbUrl,
         loginNamePassword,
         twoFactorAuthenticator,
         pushUpdatesToDataBase,

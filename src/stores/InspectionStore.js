@@ -5,10 +5,6 @@ import {dataBase} from "@/services/dataBase.js";
 import cloneDeep from 'lodash/cloneDeep';
 import clearViewData from "@/mixins/clearViewData.js";
 
-// Used stores
-const loginStore = useLoginStore();
-const notificationStore = useNotificationStore();
-
 const {pushInspectionToDataBase} = dataBase();
 
 export const useInspectionStore = defineStore('inspections', {
@@ -65,6 +61,8 @@ export const useInspectionStore = defineStore('inspections', {
     },
     actions: {
         fetchUserId() {
+            // Lazy loading loginStore.
+            const loginStore = useLoginStore();
             return loginStore.getUserInfo.id;
         },
         stageNewPhoto(newPhoto) {
@@ -83,6 +81,18 @@ export const useInspectionStore = defineStore('inspections', {
             if(findPhoto !== -1) {
                 viewData.images.splice(findPhoto, 1);
             }
+        },
+        clearViewInputs() {
+            clearViewData.methods.clearViewData(
+                [
+                    this.getBasicInspectionViewData,
+                    this.getDamageInspectionViewData,
+                    this.getBacklogMaintenanceViewData,
+                    this.getTechnicalInstallationViewData,
+                    this.getModificationsViewData
+                ]
+            );
+            console.log("clearing inputs.")
         },
         updateInputView(newData, viewData, propertyName) {
             // This is a good spot to implement input validation.
@@ -187,6 +197,10 @@ export const useInspectionStore = defineStore('inspections', {
         },
         // Here we bring the data together and pass it to the uploadToDataBase method.
         pushInspectionViewData() {
+            // Lazy loading stores.
+            const loginStore = useLoginStore();
+            const notificationStore = useNotificationStore();
+
             loginStore.setLoadingStatus(true);
             console.log("Pushing New Inspection.");
             // Remove documentedModsFile from modifications before push.
@@ -211,15 +225,7 @@ export const useInspectionStore = defineStore('inspections', {
                         loginStore.setLoadingStatus(false);
                         // Once the push is complete, empty the inputs and notify success.
                         notificationStore.setNotification("Data save", "Success!");
-                        clearViewData.methods.clearViewData(
-                            [
-                                this.getBasicInspectionViewData,
-                                this.getDamageInspectionViewData,
-                                this.getBacklogMaintenanceViewData,
-                                this.getTechnicalInstallationViewData,
-                                this.getModificationsViewData
-                            ]
-                        );
+                        this.clearViewInputs();
                     } else {
                         // End loading bar.
                         loginStore.setLoadingStatus(false);
