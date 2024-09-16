@@ -15,7 +15,9 @@ export default {
   data() {
     return {
       readOnly: false,
-      dateSelected: null
+      dateSelected: null,
+      dynamicDatePickerHeight: 'inherit',
+      dynamicDatePickerPadding: '1em'
     }
   },
   props: {
@@ -67,7 +69,33 @@ export default {
     reset() {
       this.resetDatePicker();
       this.emitInputChange('reset:basicInformation');
+    },
+    setDatePickerStyleOpen() {
+      if(this.useAsDataViewer) {
+        console.log('setOpen')
+        this.dynamicDatePickerHeight = '25em';
+        this.dynamicDatePickerPadding = '0em';
+        console.log(this.dynamicDatePickerHeight)
+      } else {
+        this.dynamicDatePickerHeight = '37em';
+        this.dynamicDatePickerPadding = '0em';
+      }
+    },
+    setDatePickerStyleClosed() {
+      this.dynamicDatePickerHeight = '6em';
+      this.dynamicDatePickerPadding = '1em';
     }
+  },
+  computed: {
+    dateFilter() {
+      return this.date.split('T')[0];
+    },
+    dynamicDatePickerStyles() {
+      return {
+        '--custom-datepicker-height': this.dynamicDatePickerHeight,
+        '--custom-datepicker-padding': this.dynamicDatePickerPadding
+      };
+    },
   },
   watch: {
     resetDate(newValue, oldValue) {
@@ -86,11 +114,6 @@ export default {
   },
   mounted() {
     this.readOnly = this.useAsDataViewer
-  },
-  computed: {
-    dateFilter() {
-      return this.date.split('T')[0];
-    },
   },
   emits: [
     'update:date', 'update:address', 'save:data', 'update:readOnlyToggle',
@@ -142,7 +165,7 @@ export default {
           label-placement="floating"
       />
     </ion-item>
-    <ion-item class="last--item" slot="content" lines="none">
+    <ion-item class="datePicker--item" slot="content" lines="none" :style="dynamicDatePickerStyles">
       <ion-input
           label="Date"
           v-if="readOnly"
@@ -153,15 +176,19 @@ export default {
       />
       <ion-label v-if="!readOnly" label-placement="floating">Date</ion-label>
       <VueDatePicker
+          class="datePicker"
           placeholder="Click to pick a date."
           v-model="dateSelected"
           utc
           v-if="!readOnly"
-          :teleport="true"
+          teleport-center
           @update:model-value="emitInputChange('update:date', dateSelected)"
+          @open="setDatePickerStyleOpen"
+          @closed="setDatePickerStyleClosed"
       />
     </ion-item>
     <BaseButton
+        class="reset--button"
         v-if="useAsDataViewer && !readOnly"
         slot="content"
         name="Reset Basic Information"
@@ -171,7 +198,12 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.last--item {
-  padding-bottom: 1em;
+.datePicker--item {
+  padding-bottom: var(--custom-datepicker-padding);
+  height: var(--custom-datepicker-height);
+  z-index: 1001;
+}
+.reset--button {
+  margin-top: 1em;
 }
 </style>
