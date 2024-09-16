@@ -1,6 +1,6 @@
 <script>
 import {
-  IonItem, IonLabel, IonInput
+  IonItem, IonModal, IonContent, IonInput, IonTitle, IonButton, IonHeader, IonToolbar, IonButtons
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
@@ -9,15 +9,17 @@ import BaseButton from "@/components/base/BaseButton.vue";
 export default {
   name: "AddressDate",
   components: {
-    BaseButton, BaseAccordionLayout,
-    VueDatePicker, IonItem, IonLabel, IonInput
+    IonButtons, IonToolbar, IonHeader, IonButton, IonTitle,
+    BaseButton, BaseAccordionLayout, IonModal,
+    VueDatePicker, IonItem, IonContent, IonInput
   },
   data() {
     return {
       readOnly: false,
       dateSelected: null,
       dynamicDatePickerHeight: 'inherit',
-      dynamicDatePickerPadding: '1em'
+      dynamicDatePickerPadding: '1em',
+      openCloseDatePicker: false,
     }
   },
   props: {
@@ -70,32 +72,28 @@ export default {
       this.resetDatePicker();
       this.emitInputChange('reset:basicInformation');
     },
-    setDatePickerStyleOpen() {
-      if(this.useAsDataViewer) {
-        console.log('setOpen')
-        this.dynamicDatePickerHeight = '25em';
-        this.dynamicDatePickerPadding = '0em';
-        console.log(this.dynamicDatePickerHeight)
-      } else {
-        this.dynamicDatePickerHeight = '37em';
-        this.dynamicDatePickerPadding = '0em';
-      }
+    toggleDatePicker() {
+      this.openCloseDatePicker = !this.openCloseDatePicker;
     },
-    setDatePickerStyleClosed() {
-      this.dynamicDatePickerHeight = '6em';
-      this.dynamicDatePickerPadding = '1em';
+    closeDatePicker() {
+      this.openCloseDatePicker = false;
     }
   },
   computed: {
     dateFilter() {
-      return this.date.split('T')[0];
+      if(this.date) {
+        return this.date.split('T')[0];
+      } else {
+        return null;
+      }
     },
-    dynamicDatePickerStyles() {
-      return {
-        '--custom-datepicker-height': this.dynamicDatePickerHeight,
-        '--custom-datepicker-padding': this.dynamicDatePickerPadding
-      };
-    },
+    datePickerModalButton() {
+      if(this.date) {
+        return "Ready";
+      } else {
+        return "Close";
+      }
+    }
   },
   watch: {
     resetDate(newValue, oldValue) {
@@ -165,27 +163,38 @@ export default {
           label-placement="floating"
       />
     </ion-item>
-    <ion-item class="datePicker--item" slot="content" lines="none" :style="dynamicDatePickerStyles">
+    <ion-item class="datePicker--item" slot="content" lines="none">
       <ion-input
           label="Date"
-          v-if="readOnly"
           :readonly="readOnly"
           :value="dateFilter"
           type="text"
+          placeholder="Click to pick a date."
           label-placement="floating"
       />
-      <ion-label v-if="!readOnly" label-placement="floating">Date</ion-label>
-      <VueDatePicker
-          class="datePicker"
-          placeholder="Click to pick a date."
-          v-model="dateSelected"
-          utc
-          v-if="!readOnly"
-          teleport-center
-          @update:model-value="emitInputChange('update:date', dateSelected)"
-          @open="setDatePickerStyleOpen"
-          @closed="setDatePickerStyleClosed"
-      />
+      <BaseButton v-if="!readOnly" name="Pick a Date" @click="toggleDatePicker"/>
+      <ion-modal :is-open="openCloseDatePicker" can-dismiss="true" @did-dismiss="closeDatePicker">
+        <ion-header>
+          <ion-toolbar color="primary">
+            <ion-title slot="start">Date select</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="solid" color="secondary" @click="toggleDatePicker">{{ datePickerModalButton }}</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <VueDatePicker
+              text-input auto-apply
+              :enable-time-picker="false"
+              class="datePicker"
+              :inline="{input:true}"
+              v-model="dateSelected"
+              utc
+              @update:model-value="emitInputChange('update:date', dateSelected)"
+              @closed="toggleDatePicker"
+          />
+        </ion-content>
+      </ion-modal>
     </ion-item>
     <BaseButton
         class="reset--button"
@@ -198,10 +207,12 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.datePicker--item {
-  padding-bottom: var(--custom-datepicker-padding);
-  height: var(--custom-datepicker-height);
-  z-index: 1001;
+.dp__flex_display {
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  row-gap: 1em;
 }
 .reset--button {
   margin-top: 1em;
