@@ -62,7 +62,8 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 newValue = inputSanitizer(newValue);
             }
             if(typeof  newValue === 'string'
-                && propertyName != 'delete:image') {
+                && propertyName != 'delete:image'
+                && propertyName != 'date') {
                 // Implement input sanitation.
                 newValue = inputSanitizer(newValue);
             }
