@@ -2,12 +2,13 @@
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 defineCustomElements(window);
 
-import { createApp } from 'vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 import { createPinia } from "pinia";
-import App from './App.vue'
+import { IonicVue } from '@ionic/vue';
+
 import router from './router';
 
-import { IonicVue } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -33,9 +34,9 @@ import './theme/variables.css';
 import BaseLayout from "@/components/base/BaseLayout.vue";
 
 const app = createApp(App)
-  .use(IonicVue)
-  .use(router)
-  .use(createPinia());
+    .use(createPinia())
+    .use(IonicVue)
+    .use(router);
 
 app.component('base-layout', BaseLayout);
 

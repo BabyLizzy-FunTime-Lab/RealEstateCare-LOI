@@ -1,16 +1,19 @@
 <script>
-import {IonList, IonItem, IonInput,
-  IonListHeader, IonLabel, IonButton,
-  IonAlert, IonContent, useIonRouter} from "@ionic/vue";
+import {
+  IonList, IonItem, IonInput,
+  IonListHeader, IonLabel,
+  IonAlert, useIonRouter
+} from "@ionic/vue";
 import BaseButton from "@/components/base/BaseButton.vue";
 import {useLoginStore} from "@/stores/LoginStore.js";
+import {useInspectionStore} from "@/stores/InspectionStore.js";
+import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
 
 export default {
   name: "LoginForm",
   components: {
     IonList, IonItem, IonInput, IonListHeader,
-    IonLabel, IonButton, IonAlert, IonContent,
-    BaseButton
+    IonLabel, IonAlert, BaseButton
   },
   data() {
     return {
@@ -18,12 +21,33 @@ export default {
       router: useIonRouter(),
       username: "",
       password: "",
+      inputTwoFactorCode: ""
     }
   },
+  created() {
+    this.inspectionStore = useInspectionStore();
+    this.completedTasksStore = useCompletedTasksStore();
+  },
   methods: {
+    clearViewsFetchData() {
+      // Resets all inputs and fetches all inspections for the new logged in user.
+      this.inspectionStore.clearViewInputs();
+      this.completedTasksStore.fetchAllCompletedTasks();
+    },
     login(username, password) {
       this.$router.replace({path:'/'});
       this.loginStore.loginUser(username, password);
+    },
+    twoFactorAuthentication(inputCode) {
+      this.loginStore.twoFactorAuthenticationCheck(inputCode).then(success => {
+        if(success) {
+          console.log("let's fetch data and clear inputs!!");
+          this.clearViewsFetchData();
+        }
+      })
+    },
+    cancelLogin() {
+      this.loginStore.logoutUser();
     }
   }
 }
@@ -31,14 +55,14 @@ export default {
 
 <template>
   <ion-alert
-      :isOpen="loginStore.errorMessage"
+      :isOpen="loginStore.getLoginError.status"
       header="Problem!"
-      sub-header="There was a login error."
-      :message="loginStore.errorMessage"
+      :sub-header="loginStore.getLoginError.subHeader"
+      :message="loginStore.getLoginError.message"
       :buttons="['OK']"
-      @didDismiss="loginStore.setErrorMessage(null)"
+      @didDismiss="loginStore.closeLoginError()"
   />
-  <form name="login">
+  <form name="loginForm" @submit.prevent v-if="!loginStore.getLoginPhase">
     <ion-list>
       <ion-list-header color="primary">
         <ion-label>
@@ -46,20 +70,57 @@ export default {
         </ion-label>
       </ion-list-header>
       <ion-item>
-        <ion-input type="text"
-                   v-model="username"
-                   placeholder="user"
-                   label="username:"
-                   @keyup.enter="login(username, password)"/>
+        <ion-input
+            label="Username:"
+            type="text"
+            v-model="username"
+            placeholder="user"
+            @keyup.enter="login(username, password)"
+        />
       </ion-item>
       <ion-item>
-        <ion-input type="password"
-                   v-model="password"
-                   placeholder="123"
-                   label="password:"
-                   @keyup.enter="login(username, password)"/>
+        <ion-input
+            label="Password:"
+            type="password"
+            v-model="password"
+            placeholder="123"
+            @keyup.enter="login(username, password)"
+        />
       </ion-item>
-      <base-button name="Login" expand="block" @click="login(username, password)"/>
+      <base-button
+          name="Login"
+          expand="block"
+          @click="login(username, password)"
+      />
+    </ion-list>
+  </form>
+  <form name="2FAForm" @submit.prevent v-if="loginStore.getLoginPhase">
+    <ion-list>
+      <ion-list-header color="primary">
+        <ion-label>
+          <h2>2-Factor Authentication</h2>
+        </ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-input
+            label="Input Code:"
+            type="password"
+            v-model="inputTwoFactorCode"
+            placeholder="123456"
+            @keyup.enter="twoFactorAuthentication(inputTwoFactorCode)"
+        />
+      </ion-item>
+      <base-button
+          name="Cancel Login"
+          button-color="danger"
+          expand="block"
+          @click="cancelLogin"
+      />
+      <base-button
+          name="Check Code"
+          expand="block"
+          @click="twoFactorAuthentication(inputTwoFactorCode)"
+      />
     </ion-list>
   </form>
 </template>
@@ -78,7 +139,7 @@ ion-list-header {
 }
 ion-button {
   margin-top: 2em;
-  width: 30%;
+  max-width: 20em;
   margin-left: auto;
   margin-right: auto;
 }

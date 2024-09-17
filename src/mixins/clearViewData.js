@@ -2,7 +2,6 @@ export default {
     methods: {
         /**
          * Used to clear the viewData after it's been pushed to the database.
-         * @param {string} date
          * @param {array} viewDataAll
          * @return {void}
          */

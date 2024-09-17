@@ -50,7 +50,6 @@ export default {
     pushUpdatedData() {
       this.completedActionStore.pushUpdatedData(this.inspection.id).then(result => {
         if(result === "success") {
-          console.log("derp");
           this.readOnlyToggle();
           this.pushSuccess = true;
           this.completedActionStore.fetchAllCompletedTasks();

@@ -5,8 +5,6 @@ import {
 } from "@ionic/vue";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
 
-// Let not uee props and give this direct access to the notification store.
-// If a notification is needed all we need is access to the store.
 export default {
   name: "BaseNotificationModal",
   components: {

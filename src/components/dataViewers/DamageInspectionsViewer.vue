@@ -21,10 +21,6 @@ export default {
       console.log(inspectionId);
       console.log(newValue);
       this.completedActionStore.updateInspectionData(inspectionType, inspectionId, propertyName, newValue)
-    },
-    pushChangesToDb(inspectionId) {
-      // This triggers a push of the data object with the inspection id.
-      this.completedActionStore.pushUpdatedData(inspectionId, "damageInspections");
     }
   },
   watch: {
@@ -109,7 +105,6 @@ export default {
                     'delete:image',
                     $event)"
             @cancel:updates="this.$emit('cancel:updates')"
-            @save:data-updates="pushChangesToDb(inspection.id)"
         />
       </ion-accordion-group>
     </base-accordion-layout>

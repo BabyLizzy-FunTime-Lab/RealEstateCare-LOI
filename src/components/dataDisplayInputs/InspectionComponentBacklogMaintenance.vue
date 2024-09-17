@@ -93,7 +93,7 @@ export default {
                type="text"/>
   </ion-item>
   <ion-item slot="content">
-    <ion-label>Emergency Action needed?</ion-label>
+    <ion-label class="custom-label">Emergency Action needed?</ion-label>
     <ion-radio-group :value="emergency"
                      @ionChange="emitInputChange('update:emergency', $event)"
                      name="emergency">
@@ -126,7 +126,7 @@ export default {
     </ion-select>
   </ion-item>
   <ion-item slot="content" lines="none" class="last--item">
-    <ion-label>Photos</ion-label>
+    <ion-label class="custom-label">Photos</ion-label>
     <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
     <PhotoViewer
         v-if="images.length > 0"
@@ -145,7 +145,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.select-disabled, .item-select-disabled ion-label {
+.select-disabled, .item-select-disabled .custom-label {
   opacity: 1;
 }
 .last--item {

@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <div id="thumbnail--container">
+  <div class="thumbnail--container">
     <ImageThumbnailViewer
         v-for="(photo, index) in photos"
         :read-only="readOnly"
@@ -34,7 +34,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-#thumbnail--container {
+.thumbnail--container {
   width: 100%;
   margin-bottom: .5em;
   display: grid;

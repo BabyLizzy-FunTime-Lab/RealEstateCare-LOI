@@ -153,36 +153,44 @@ export default {
 
 <template>
 <BaseAccordionLayout :header-name="headerName" :inspection-id="inspectionId">
-  <ion-item id="documentedMods" slot="content" lines="none">
-    <ion-label >Documented mods</ion-label>
-    <ion-buttons v-if="documentedModsFile || documentedModsUrl">
-      <BaseButton name="View" @click="viewPDF()"/>
+  <ion-item class="documentedMods" slot="content" lines="none">
+    <ion-label class="custom-label" >Documented mods</ion-label>
+    <ion-buttons class="documentedMods__button-container" v-if="documentedModsFile || documentedModsUrl">
+      <BaseButton name="View" @click="viewPDF"/>
       <BaseButton v-if="!showChoosePDF && !readOnly" name="Update" @click="toggleChoosePDF"/>
     </ion-buttons>
   </ion-item>
-  <ion-item id="documentedModsFiles" slot="content">
-    <ion-label v-if="documentedModsFile || documentedModsUrl">
+  <ion-item class="documentedModsFiles" slot="content">
+    <ion-label class="custom-label documentedModsFiles__label" v-if="documentedModsFile || documentedModsUrl">
       <h3>Selected PDF Title:</h3>
       <p>{{pdfName}}</p>
     </ion-label>
-    <ion-input  v-if="!documentedModsUrl || showChoosePDF"
-        label="Upload PDF" label-placement="stacked"
-        type="file" accept="application/pdf"
+    <ion-input
+        v-if="!documentedModsUrl || showChoosePDF"
+        label="Upload PDF"
+        label-placement="stacked"
+        type="file"
+        accept="application/pdf"
         @change="emitNewPDF('update:documentedMods', $event)"
     />
     <pdf-viewer-modal
-        :pdf-url="pdfUrl" :pdf-file="documentedModsFile" :pdf-name="documentedModsDocName"
-        :is-open="isPdfModalOpen" @close:modal="toggleOnOff('isPdfModalOpen')"
+        :pdf-url="pdfUrl"
+        :pdf-file="documentedModsFile"
+        :pdf-name="documentedModsDocName"
+        :is-open="isPdfModalOpen"
+        @close:modal="toggleOnOff('isPdfModalOpen')"
     />
   </ion-item>
   <ion-item slot="content">
-    <ion-input label="Location"
-               :readonly="readOnly"
-               :value="location"
-               @input="emitInputChange('update:location', $event)"
-               placeholder="Input address"
-               label-placement="floating"
-               type="text"/>
+    <ion-input
+        label="Location"
+        :readonly="readOnly"
+        :value="location"
+        @input="emitInputChange('update:location', $event)"
+        placeholder="Input address"
+        label-placement="floating"
+        type="text"
+    />
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="modifiedBy"
@@ -196,13 +204,15 @@ export default {
     </ion-select>
   </ion-item>
   <ion-item slot="content">
-    <ion-textarea label="Mod description"
-                  :readonly="readOnly"
-                  :value="modDescription"
-                  @ionChange="emitInputChange('update:modDescription', $event)"
-                  label-placement="floating"
-                  :auto-grow="true"
-                  placeholder="Enter the mod description"></ion-textarea>
+    <ion-textarea
+        label="Mod description"
+        placeholder="Enter the mod description"
+        :readonly="readOnly"
+        :value="modDescription"
+        @ionChange="emitInputChange('update:modDescription', $event)"
+        label-placement="floating"
+        :auto-grow="true"
+    />
   </ion-item>
   <ion-item slot="content">
     <ion-select :value="requiredAction"
@@ -218,17 +228,23 @@ export default {
     </ion-select>
   </ion-item>
   <ion-item slot="content">
-    <ion-textarea label="Comments"
-                  :value="comments"
-                  :readonly="readOnly"
-                  @ionChange="emitInputChange('update:comments', $event)"
-                  label-placement="floating"
-                  :auto-grow="true"
-                  placeholder="Enter your comments"></ion-textarea>
+    <ion-textarea
+        label="Comments"
+        :value="comments"
+        :readonly="readOnly"
+        @ionChange="emitInputChange('update:comments', $event)"
+        label-placement="floating"
+        :auto-grow="true"
+        placeholder="Enter your comments"
+    />
   </ion-item>
   <ion-item slot="content" lines="none" class="last--item">
-    <ion-label>Photos</ion-label>
-    <ion-button v-if="!readOnly" name="takePhoto" @click="takePhotoAction" color="primary">Take Photo</ion-button>
+    <ion-label class="custom-label">Photos</ion-label>
+    <ion-button
+        name="takePhoto"
+        v-if="!readOnly"
+        @click="takePhotoAction"
+        color="primary">Take Photo</ion-button>
     <PhotoViewer
         v-if="images.length > 0"
         :read-only="readOnly"
@@ -237,18 +253,18 @@ export default {
     />
   </ion-item>
   <BaseButton
+      name="Reset Modification Inspection"
       v-if="useAsDataViewer && !readOnly"
       slot="content"
-      name="Reset Modification Inspection"
       @click="emitInputChange('reset:modifications')"
   />
 </BaseAccordionLayout>
 </template>
 
 <style scoped lang="scss">
-#documentedMods {
+.documentedMods {
   height: 2.4em;
-  ion-buttons {
+  .documentedMods__button-container {
     justify-content: center;
     align-items: center;
     column-gap: .2em;
@@ -257,12 +273,10 @@ export default {
     }
   }
 }
-#documentedModsFiles {
-  ion-label {
-    margin-bottom: 0;
-  }
+.documentedModsFiles__label {
+  margin-bottom: 0;
 }
-.select-disabled, .item-select-disabled ion-label {
+.select-disabled, .item-select-disabled .custom-label {
   opacity: 1;
 }
 .last--item {

@@ -2,16 +2,16 @@ import {defineStore} from "pinia";
 import {useLoginStore} from "@/stores/LoginStore.js";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {dataBase} from "@/services/dataBase.js";
+import {sanitizer} from "@/services/sanitizer.js";
 import cloneDeep from 'lodash/cloneDeep';
-
-const loginStore = useLoginStore();
-const notificationStore = useNotificationStore();
 
 const {
     allInspectionsBackup,
     pushUpdatesToDataBase,
     fetchAllInspections,
 } = dataBase();
+
+const {inputSanitizer} = sanitizer();
 
 export const useCompletedTasksStore = defineStore('CompletedTasks', {
     state: () => {
@@ -22,24 +22,28 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
     },
     actions: {
         fetchUserId() {
+            // Lazy loading loginStore.
+            const loginStore = useLoginStore();
             return loginStore.getUserInfo.id;
         },
         async fetchAllCompletedTasks() {
-            let user_id = this.fetchUserId();
-            loginStore.setLoadingStatus(true);
+            // Lazy loading loginStore.
+            const loginStore = useLoginStore();
             try {
-              let result = await fetchAllInspections(user_id);
-              if(user_id && result) {
+                if(loginStore.loginStatus) {
+                  console.log("Fetching all inspections.");
+                  loginStore.setLoadingStatus(true);
+                  let user_id = this.fetchUserId();
+                  let result = await fetchAllInspections(user_id);
                   loginStore.setLoadingStatus(false);
                   this.allInspectionsBackup = cloneDeep(allInspectionsBackup);
                   // Sorts all data in descending date order.
                   result.sort((a, b) => new Date(b.date) - new Date(a.date));
                   this.allInspections = result;
-                  console.log(this.allInspections);
                   return result;
-              } else {
+                } else {
                   loginStore.setLoadingStatus(false);
-              }
+                }
             } catch (err) {
                 console.error("Error fetching completed tasks:", err);
                 loginStore.setLoadingStatus(false);
@@ -53,11 +57,16 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
                 && propertyName != 'date'
                 && propertyName != 'images'
                 && propertyName != 'documentedModsFile') {
-                console.log(newValue);
                 newValue = newValue.target.value
+                // Implement input sanitation.
+                newValue = inputSanitizer(newValue);
+            }
+            if(typeof  newValue === 'string'
+                && propertyName != 'delete:image') {
+                // Implement input sanitation.
+                newValue = inputSanitizer(newValue);
             }
             // This is needed to update the state.
-            console.log(newValue);
             let inspectionFound = false;
             let allInspectionsArray = this.getAllInspections;
             allInspectionsArray.forEach(inspection => {
@@ -91,41 +100,39 @@ export const useCompletedTasksStore = defineStore('CompletedTasks', {
             if(!inspectionFound) {
                 console.error("No inspection was found with id: " + inspectionId);
             }
-            console.log(allInspectionsArray);
         },
         resetViewData(inspectionId, inspectionType) {
             const backupDataObject = this.allInspectionsBackup.find(( {id} ) => id === inspectionId);
             this.getAllInspections.forEach((inspection, index) => {
                 if(inspection.id === inspectionId) {
+                    console.log("Resetting Information");
                     switch (inspectionType) {
                         case 'all_data':
                             this.getAllInspections[index] = cloneDeep(backupDataObject);
-                            // inspection = backupDataObject;
-                            console.log(this.getAllInspections[index]);
                             break;
                         case 'basic_information':
-                            console.log(backupDataObject);
                             inspection.date = backupDataObject.date;
                             inspection.address = backupDataObject.address;
                             break;
                         default:
-                            inspection[inspectionType] = cloneDeep(backupDataObject[inspectionType]) ;
-                            // Object.assign(inspection[inspectionType], backupDataObject[inspectionType])
-                            console.log(inspection);
+                            inspection[inspectionType] = cloneDeep(backupDataObject[inspectionType]);
                     }
                 }
             })
         },
         async pushUpdatedData(inspectionId) {
+            // Lazy loading stores.
+            const loginStore = useLoginStore();
+            const notificationStore = useNotificationStore();
             // Start loading bar.
             loginStore.setLoadingStatus(true);
             // Getting the inspection that was updated.
             const dataToSend = this.getAllInspections.find(( {id} ) => id === inspectionId);
             let returnMessage = "";
+            console.log("Pushing Inspection Updates.");
             // Starting push.
             await pushUpdatesToDataBase(inspectionId, dataToSend)
                 .then(response => {
-                    console.log(response);
                     // Axios returns a different object when errors happen.
                     if(response.name === "AxiosError") {
                         // console.log(response);

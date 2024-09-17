@@ -5,14 +5,14 @@ import DamageInspection from "@/components/dataDisplayInputs/InspectionComponent
 import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
 import TechnicalInstallationInspection from "@/components/dataDisplayInputs/InspectionComponentTechnicalInstallation.vue";
 import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
-import BasicInfomation from "@/components/dataDisplayInputs/InspectionComponentBasicInformation.vue";
+import BasicInformation from "@/components/dataDisplayInputs/InspectionComponentBasicInformation.vue";
 import {useInspectionStore} from "@/stores/InspectionStore.js";
 
 export default {
   name: "ScheduledView",
   components: {
     baseListLayout, IonAccordionGroup, DamageInspection, BacklogMaintenance,
-    TechnicalInstallationInspection, ModificationInspection, BasicInfomation
+    TechnicalInstallationInspection, ModificationInspection, BasicInformation
   },
   data() {
     return {
@@ -24,10 +24,6 @@ export default {
       backlogMaintenanceData: Object,
       technicalInstallationData: Object,
       modificationsData: Object,
-      testData: {
-        name: "Test Procedure",
-        url: "https://res.cloudinary.com/babylizzyevee/image/upload/v1711289986/CV-images/LOI-cursus/pdf/Test_Procedure.pdf"
-      },
     }
   },
   mounted() {
@@ -39,35 +35,25 @@ export default {
   },
   methods: {
     pushInspectionViewData() {
-      console.log("starting data push.");
+      console.log("Starting data push.");
       this.inspectionStore.pushInspectionViewData();
     },
     updateDamageInspectionViewData($event, inputName) {
-      // Am I being too redundant here?
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateDamageInspectionViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateBacklogMaintenanceViewData($event, inputName) {
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateBacklogMaintenanceViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateTechnicalInstallationViewData($event, inputName) {
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateTechnicalInstallationViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateModificationsViewData($event, inputName) {
-      console.log("Requesting update of " + inputName + " in staging state.");
       this.inspectionStore.updateModificationsViewData($event, inputName);
-      console.log("Requesting finished");
     },
     updateAddress($event) {
       this.inspectionStore.updateAddressViewData($event);
     },
     updateDate($event) {
-      console.log($event);
       this.inspectionStore.updateDateViewData($event);
     }
   }
@@ -78,7 +64,7 @@ export default {
   <base-layout>
     <base-list-layout list-header-name="Scheduled Tasks">
       <ion-accordion-group :multiple="true">
-        <BasicInfomation
+        <BasicInformation
             :address="this.basicInspectionData.address"
             @update:address="updateAddress($event)"
             :date="this.basicInspectionData.date"

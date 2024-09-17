@@ -54,10 +54,10 @@ export default {
 </script>
 
 <template>
-  <ion-modal :is-open="isOpen" can-dismiss="true">
+  <ion-modal class="pdfViewer" :is-open="isOpen" can-dismiss="true">
     <ion-header>
       <ion-toolbar color="primary">
-        <ion-title slot="start">
+        <ion-title class="pdfViewer__title" slot="start">
           <ion-label>
             <h2>Document Title: </h2>
             <p>{{filename}}</p>
@@ -69,21 +69,21 @@ export default {
       </ion-toolbar>
     </ion-header>
     <ion-content id="image--wrapper">
-      <VuePdfEmbed :source="pdfUrl"/>
+      <VuePdfEmbed class="pdfViewer__pdf" :source="pdfUrl"/>
     </ion-content>
   </ion-modal>
 </template>
 
 <style scoped lang="scss">
-ion-modal {
+.pdfViewer {
   --ion-background-color: var(--ion-color-modal-dark-background);
   --height: 100%;
   --width: 100vw;
   --max-width: 40em;
-  ion-title {
+  .pdfViewer__title {
     max-width: 75%;
   }
-  VuePdfEmbed {
+  .pdfViewer__pdf {
     width: 100%;
   }
 }

@@ -1,6 +1,6 @@
 <script>
 import {
-  IonItem, IonLabel, IonInput
+  IonItem, IonModal, IonContent, IonInput, IonTitle, IonButton, IonHeader, IonToolbar, IonButtons
 } from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import VueDatePicker from '@vuepic/vue-datepicker';
@@ -9,13 +9,17 @@ import BaseButton from "@/components/base/BaseButton.vue";
 export default {
   name: "AddressDate",
   components: {
-    BaseButton, BaseAccordionLayout,
-    VueDatePicker, IonItem, IonLabel, IonInput
+    IonButtons, IonToolbar, IonHeader, IonButton, IonTitle,
+    BaseButton, BaseAccordionLayout, IonModal,
+    VueDatePicker, IonItem, IonContent, IonInput
   },
   data() {
     return {
       readOnly: false,
-      dateSelected: null
+      dateSelected: null,
+      dynamicDatePickerHeight: 'inherit',
+      dynamicDatePickerPadding: '1em',
+      openCloseDatePicker: false,
     }
   },
   props: {
@@ -62,12 +66,33 @@ export default {
       this.emitInputChange('cancel:allUpdates');
     },
     pushAllUpdates() {
-      // this.resetDatePicker();
       this.emitInputChange('push:allUpdates');
     },
     reset() {
       this.resetDatePicker();
       this.emitInputChange('reset:basicInformation');
+    },
+    toggleDatePicker() {
+      this.openCloseDatePicker = !this.openCloseDatePicker;
+    },
+    closeDatePicker() {
+      this.openCloseDatePicker = false;
+    }
+  },
+  computed: {
+    dateFilter() {
+      if(this.date) {
+        return this.date.split('T')[0];
+      } else {
+        return null;
+      }
+    },
+    datePickerModalButton() {
+      if(this.date) {
+        return "Ready";
+      } else {
+        return "Close";
+      }
     }
   },
   watch: {
@@ -87,11 +112,6 @@ export default {
   },
   mounted() {
     this.readOnly = this.useAsDataViewer
-  },
-  computed: {
-    dateFilter() {
-      return this.date.split('T')[0];
-    },
   },
   emits: [
     'update:date', 'update:address', 'save:data', 'update:readOnlyToggle',
@@ -143,26 +163,43 @@ export default {
           label-placement="floating"
       />
     </ion-item>
-    <ion-item class="last--item" slot="content" lines="none">
+    <ion-item class="datePicker--item" slot="content" lines="none">
       <ion-input
           label="Date"
-          v-if="readOnly"
-          :readonly="readOnly"
+          :readonly="true"
           :value="dateFilter"
           type="text"
           label-placement="floating"
       />
-      <ion-label v-if="!readOnly" label-placement="floating">Date</ion-label>
-      <VueDatePicker
-          placeholder="Click to pick a date."
-          v-model="dateSelected"
-          utc
-          v-if="!readOnly"
-          :teleport="true"
-          @update:model-value="emitInputChange('update:date', dateSelected)"
-      />
+      <BaseButton v-if="!readOnly" name="Pick a Date" @click="toggleDatePicker"/>
+      <ion-modal :is-open="openCloseDatePicker" can-dismiss="true" @did-dismiss="closeDatePicker">
+        <ion-header>
+          <ion-toolbar color="primary">
+            <ion-title slot="start">Date select</ion-title>
+            <ion-buttons slot="end">
+              <ion-button
+                  fill="solid"
+                  color="secondary"
+                  @click="toggleDatePicker">{{ datePickerModalButton }}</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <VueDatePicker
+              text-input auto-apply
+              :enable-time-picker="false"
+              class="datePicker"
+              :inline="{input:true}"
+              v-model="dateSelected"
+              utc
+              @update:model-value="emitInputChange('update:date', dateSelected)"
+              @closed="toggleDatePicker"
+          />
+        </ion-content>
+      </ion-modal>
     </ion-item>
     <BaseButton
+        class="reset--button"
         v-if="useAsDataViewer && !readOnly"
         slot="content"
         name="Reset Basic Information"
@@ -172,7 +209,14 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.last--item {
-  padding-bottom: 1em;
+.dp__flex_display {
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  row-gap: 1em;
+}
+.reset--button {
+  margin-top: 1em;
 }
 </style>

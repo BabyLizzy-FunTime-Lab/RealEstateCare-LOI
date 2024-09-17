@@ -44,9 +44,9 @@ export default {
 </script>
 
 <template>
-  <ion-thumbnail :image="image" @click="openModal">
-    <ion-img class="test" :src="image"></ion-img>
-    <ion-modal :is-open="isModalOpen" can-dismiss="true">
+  <ion-thumbnail class="imageThumbnail" :image="image" @click="openModal">
+    <ion-img :src="image"></ion-img>
+    <ion-modal class="imageThumbnail--imageViewer" :is-open="isModalOpen" can-dismiss="true">
       <ion-header>
         <ion-toolbar color="primary">
           <ion-buttons slot="start">
@@ -57,30 +57,28 @@ export default {
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content :scrollX="true" :scrollY="true" id="image--wrapper">
-        <ion-img :src="image"/>
+      <ion-content :scrollX="true" :scrollY="true" >
+        <ion-img class="imageViewer__image" :src="image"/>
       </ion-content>
     </ion-modal>
   </ion-thumbnail>
 </template>
 
 <style scoped lang="scss">
-ion-modal {
+.imageThumbnail {
+  --size: 8em;
+  max-width: 20vw;
+  max-height: 20vw;
+}
+.imageThumbnail--imageViewer {
   --ion-background-color: var(--ion-color-modal-dark-background);
   --width: 100vw;
   --max-width: 80em;
   --height: 100%;
   --max-height: 50em;
 }
-#image--wrapper {
-  ion-img {
-    height: 100%;
-    background-color: transparent;
-  }
-}
-ion-thumbnail {
-  --size: 8em;
-  max-width: 20vw;
-  max-height: 20vw;
+.imageViewer__image {
+  height: 100%;
+  background-color: transparent;
 }
 </style>

@@ -19,10 +19,6 @@ export default {
     updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
       // This calls for a state update with the new value.
       this.completedActionStore.updateInspectionData(inspectionType, inspectionId, propertyName, newValue)
-    },
-    pushChangesToDb(inspectionId) {
-      // This triggers a push of the data object with the inspection id.
-      this.completedActionStore.pushUpdatedData(inspectionId, "backlogMaintenance");
     }
   },
   emits: [
@@ -67,7 +63,7 @@ export default {
                 "updateInspectionData(
                     'backlogMaintenance',
                     inspection.id,
-                    'maintenanceType',
+                    'costIndication',
                     $event.target.value)"
             :images="inspection.images"
             @update:images=
@@ -83,7 +79,6 @@ export default {
                     'delete:image',
                     $event)"
             @cancel:updates="this.$emit('cancel:updates')"
-            @save:data-updates="pushChangesToDb(inspection.id)"
         />
       </ion-accordion-group>
     </base-accordion-layout>

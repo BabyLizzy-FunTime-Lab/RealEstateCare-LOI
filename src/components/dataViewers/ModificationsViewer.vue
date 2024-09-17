@@ -3,11 +3,10 @@ import {IonAccordionGroup} from "@ionic/vue";
 import BaseAccordionLayout from "@/components/base/BaseAccordionLayout.vue";
 import ModificationInspection from "@/components/dataDisplayInputs/InspectionComponentModification.vue";
 import {useCompletedTasksStore} from "@/stores/CompletedTasksStore.js";
-import BacklogMaintenance from "@/components/dataDisplayInputs/InspectionComponentBacklogMaintenance.vue";
 
 export default {
   name: "ModificationsViewer",
-  components: {BacklogMaintenance, IonAccordionGroup, BaseAccordionLayout, ModificationInspection},
+  components: {IonAccordionGroup, BaseAccordionLayout, ModificationInspection},
   data() {
     return {
       completedActionStore: useCompletedTasksStore(),
@@ -20,10 +19,6 @@ export default {
     updateInspectionData(inspectionType, inspectionId, propertyName, newValue) {
       // This calls for a state update with the new value.
       this.completedActionStore.updateInspectionData(inspectionType, inspectionId, propertyName, newValue)
-    },
-    pushChangesToDb(inspectionId) {
-      // This triggers a push of the data object with the inspection id.
-      this.completedActionStore.pushUpdatedData(inspectionId, "modifications");
     }
   },
   emits: [
@@ -98,7 +93,6 @@ export default {
                     inspection.id,
                     'delete:image',
                     $event)"
-            @save:data-updates="pushChangesToDb(inspection.id)"
         />
       </ion-accordion-group>
     </base-accordion-layout>
