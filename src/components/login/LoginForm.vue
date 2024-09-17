@@ -139,7 +139,7 @@ ion-list-header {
 }
 ion-button {
   margin-top: 2em;
-  width: 30%;
+  max-width: 20em;
   margin-left: auto;
   margin-right: auto;
 }

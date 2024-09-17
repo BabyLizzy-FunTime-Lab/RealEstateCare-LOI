@@ -166,10 +166,9 @@ export default {
     <ion-item class="datePicker--item" slot="content" lines="none">
       <ion-input
           label="Date"
-          :readonly="readOnly"
+          :readonly="true"
           :value="dateFilter"
           type="text"
-          placeholder="Click to pick a date."
           label-placement="floating"
       />
       <BaseButton v-if="!readOnly" name="Pick a Date" @click="toggleDatePicker"/>
@@ -178,7 +177,10 @@ export default {
           <ion-toolbar color="primary">
             <ion-title slot="start">Date select</ion-title>
             <ion-buttons slot="end">
-              <ion-button fill="solid" color="secondary" @click="toggleDatePicker">{{ datePickerModalButton }}</ion-button>
+              <ion-button
+                  fill="solid"
+                  color="secondary"
+                  @click="toggleDatePicker">{{ datePickerModalButton }}</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>

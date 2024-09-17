@@ -4,8 +4,10 @@ import {useNotificationStore} from "@/stores/NotificationStore.js";
 import {dataBase} from "@/services/dataBase.js";
 import cloneDeep from 'lodash/cloneDeep';
 import clearViewData from "@/mixins/clearViewData.js";
+import {sanitizer} from "@/services/sanitizer.js";
 
 const {pushInspectionToDataBase} = dataBase();
+const {inputSanitizer} = sanitizer();
 
 export const useInspectionStore = defineStore('inspections', {
     state: () => {
@@ -95,19 +97,20 @@ export const useInspectionStore = defineStore('inspections', {
             console.log("clearing inputs.")
         },
         updateInputView(newData, viewData, propertyName) {
-            // This is a good spot to implement input validation.
             // If it received an event object, it will seek the target.value
+            // Text inputs are sanitized of special characters.
             if(typeof newData === 'object' && newData !== null && propertyName != "date") {
-                viewData[propertyName] = newData.target.value
+                viewData[propertyName] = inputSanitizer(newData.target.value);
             } else {
-                viewData[propertyName] = newData
+                viewData[propertyName] = inputSanitizer(newData);
             }
         },
         updateDateViewData(newData) {
             this.getBasicInspectionViewData.date = newData;
         },
         updateAddressViewData(newData) {
-            this.getBasicInspectionViewData.address = newData.target.value;
+            // The address is sanitized of special characters.
+            this.getBasicInspectionViewData.address = inputSanitizer(newData.target.value);
         },
         updateDamageInspectionViewData(data, inputName) {
             if(inputName === 'takePhoto' || inputName === 'deletePhoto' || inputName === 'selectedDamageTypeOption') {

@@ -6,7 +6,7 @@ export const sanitizer = () => {
      * @return {string}
      */
     const inputSanitizer = (characterString) => {
-        return characterString.normalize("NFD").replace(/[^a-zA-Z0-9\s\u00C0-\u017F\-+]/g, '');
+        return characterString.normalize("NFD").replace(/[^a-zA-Z0-9\s\u00C0-\u017F\-+.,]/g, '');
     };
 
     return {
