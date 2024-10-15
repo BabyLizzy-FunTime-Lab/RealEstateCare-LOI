@@ -5,6 +5,11 @@
 This prototype is a made for a fictitious real estate company. Its purpose is to help property inspectors document 
 property inspections. This project is build with [Ionic/Vue](https://ionicframework.com/docs/vue/overview).
 
+## Online version
+The [online version](https://real-estate-care-garcia.netlify.app/) is deployed from the 
+[GitHub main branch](https://github.com/BabyLizzy-FunTime-Lab/RealEstateCare-LOI)  via 
+[netlify](https://www.netlify.com/).
+
 ## Install project
 ```sh
 npm install
