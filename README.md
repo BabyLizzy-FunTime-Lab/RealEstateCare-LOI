@@ -2,7 +2,8 @@
 # Project Title: Real Estate Care
 
 ### Description
-This project is build with [Ionic/vue](https://ionicframework.com/docs/vue/overview).
+This prototype is a made for a fictitious real estate company. Its purpose is to help property inspectors document 
+property inspections. This project is build with [Ionic/Vue](https://ionicframework.com/docs/vue/overview).
 
 ## Install project
 ```sh
