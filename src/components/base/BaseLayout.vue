@@ -78,9 +78,9 @@ export default {
     <ion-footer>
       <ion-toolbar class="toolbar--bottom">
         <ion-buttons>
-          <base-layout-bottom-toolbar-button label="Active Task" :icon="build" path="/scheduled"/>
+          <base-layout-bottom-toolbar-button label="Scheduled" :icon="build" path="/scheduled"/>
           <base-layout-bottom-toolbar-button label="Search" :icon="search" path="/completed"/>
-          <base-layout-bottom-toolbar-button label="Information" :icon="alertCircle" path="/knowledge-base"/>
+          <base-layout-bottom-toolbar-button label="Knowledge" :icon="alertCircle" path="/knowledge-base"/>
         </ion-buttons>
       </ion-toolbar>
     </ion-footer>

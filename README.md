@@ -4,30 +4,35 @@
 ### Description
 This project is build with [Ionic/vue](https://ionicframework.com/docs/vue/overview).
 
+## Install project
+```sh
+npm install
+```
+
+## Demo user account
+Two demo accounts were made for testing purposes.
+- Username: user
+- Password: 123
+  <br/>--
+- Username: Luisa
+- Password: abc
+
+The 2-factor authentication code is always: 123456
+
+## Start App
+```sh
+ionic serve
+```
+
 ## State Management
 State Management is done with [Pinia](https://pinia.vuejs.org/).
 
 ## Typescript disabled
 This project was build with plain JS.
 
-## Latest app version is on the main branch
-
-## Install project
-```sh
-npm install
-```
-
 ## Ionic CLI is needed
 ```sh
 npm install -g @ionic/cli@latest
-```
-## Demo user account
-- Username: user
-- Password: 123
-
-## Start server
-```sh
-ionic serve
 ```
 
 ## HTTP Client
@@ -52,7 +57,7 @@ npm install -d vue-pdf-embed
 - Data db: <br/>Uses [RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/) for dummy data. 
 It's my private [Heroku](https://www.heroku.com/home) JSON server. [GitHub](https://github.com/BabyLizzy-FunTime-Lab/JsonRealEstateCare)
 - Media: <br/>Images and PDF's are stored and fetched as Base64 encoded strings, on and from 
-[RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/). Some of the demo data gets served from my [Cloudinary](https://cloudinary.com/) account.
+[RealEstateCareJSON](https://json-real-estate-care-3167f11da290.herokuapp.com/). Some of the demo media is served from my [Cloudinary](https://cloudinary.com/) account.
 
 ## 2-Factor Authentication and login are simulated
 At login one must input a simple code to simulate a 2Way Authentication. 
@@ -85,12 +90,22 @@ actions taken and it also provides convenient context sensitive actions. This in
 button" when updating data and dynamically generated success and fail alerts. I also gave special attention to providing 
 the user with a familiar experience and to consistency in style and views.
 
-## Style guides and best practices Ionic & Vue.js 
+## Style guides and best practices Ionic & Vue.js
 I endeavoured to follow the style guides and best practices of both Ionic and Vue.js as closely as possible.
 Close attention was given to naming conventions and coding conventions. I also stuck to the theming style of ionic
 by altering the css without changing the structure. I also used the style guides provided by Vue.js. 
 Any changes made to the style where made in scoped scss and using custom names for the modified elements.
- 
+
+## Missing features
+These features were not completed because they lay outside the parameters of the assigment. However, they wil be 
+included in future versions of the RealEstateCare app.
+- Notification bell button: <br/> The nav bar has a notification bell. Its purpose is to alert the user of actions that 
+haven't yet been taken. For example, saving new inspection data. 
+- Navbar Settings button & Settings home view tile button: <br/> The settings buttons on the nav-bar and home view lead 
+to a settings view but the settings are not operational.
+- Footer search button: <br/> The footer includes a search button. The search button leads to the "completed tasks" view
+but it does not provide a search function. 
+
 ## Error notes
 - Blocked aria-hidden:<br/> 
 This error appears to originate from the datepicker npm package used in this app. I haven't used the aria-hidden
