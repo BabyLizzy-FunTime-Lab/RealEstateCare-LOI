@@ -10,6 +10,11 @@ property inspections. This project is build with [Ionic/Vue](https://ionicframew
 npm install
 ```
 
+## Start App
+```sh
+ionic serve
+```
+
 ## Demo user account
 Two demo accounts were made for testing purposes.
 - Username: user
@@ -19,11 +24,6 @@ Two demo accounts were made for testing purposes.
 - Password: abc
 
 The 2-factor authentication code is always: 123456
-
-## Start App
-```sh
-ionic serve
-```
 
 ## State Management
 State Management is done with [Pinia](https://pinia.vuejs.org/).
